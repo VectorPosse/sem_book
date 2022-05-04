@@ -1,0 +1,16 @@
+--- 
+title: "Structural Equation Modeling for Undergraduates"
+author: "Jonathan Amburgey and Sean Raleigh, Westminster College"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+description: "A textbook on Structural Equation Modeling written for undergraduates with minimal statistics prerequisites."
+---
+
+# Introduction {-}
+
