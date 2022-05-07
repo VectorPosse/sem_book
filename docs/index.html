@@ -83,49 +83,33 @@
 <p>The prerequisite for our class is an intro stats class that covers pretty standard material for such a course: hypothesis testing and confidence intervals for one and two proportions, one and two means (and paired means), ANOVA, chi-squared, and simple linear regression. We also benefit in that our intro course introduces students to R. (For those lacking R background, the first four modules <a href="https://github.com/VectorPosse/Intro_Stats">here</a> [FIX THIS LINK ONCE THE DATA 220 BOOK IS ALSO FULLY ONLINE] should suffice as a basic introduction to R and R Markdown sufficient for success in this course.)</p>
 <p>To respect our students, we made some very deliberate choices about the way our book would be structured.</p>
 <ul>
-<li>
-<em>Make the book free and open source.</em>
+<li><em>Make the book free and open source.</em></li>
+</ul>
+<p>Students have enough trouble in their lives and shouldn’t be exposed to the extortionate practices of most textbook publishers. Not only is this book freely available online, it’s also published under a permissive open source license (the <a href="https://opensource.org/licenses/MIT">MIT license</a>) that allows folks to “use, copy, modify, merge, publish, distribute, sublicense, and/or sell” their own versions of the book as desired. Furthermore, any derivative of the book must also abide by the same open standards. So our book is both <em>libre</em> and <em>gratis</em> (or, in more common parlance, “free as in speech” and “free as in beer”).</p>
 <ul>
-<li>Students have enough trouble in their lives and shouldn’t be exposed to the extortionate practices of most textbook publishers. Not only is this book freely available online, it’s also published under a permissive open source license (the <a href="https://opensource.org/licenses/MIT">MIT license</a>) that allows folks to “use, copy, modify, merge, publish, distribute, sublicense, and/or sell” their own versions of the book as desired. Furthermore, any derivative of the book must also abide by the same open standards. So our book is both <em>libre</em> and <em>gratis</em> (or, in more common parlance, “free as in speech” and “free as in beer”).</li>
+<li><em>Start from scratch.</em></li>
 </ul>
-</li>
-<li>
-<em>Start from scratch.</em>
+<p>Explain everything from the beginning in terms that are as simple as possible. Some of the first few chapters may look like review for students. Even if it is, of course, that review gives students confidence to tackle upcoming new material. But you might be surprised at some of the novel ways we explain seemingly familiar concepts. All the exposition has an eye toward direct application in later chapters, so what might seem a little idiosyncratic at first is motivated by a desire to smooth the pathways into later concepts.</p>
 <ul>
-<li>Explain everything from the beginning in terms that are as simple as possible. Some of the first few chapters may look like review for students. Even if it is, of course, that review gives students confidence to tackle upcoming new material. But you might be surprised at some of the novel ways we explain seemingly familiar concepts. All the exposition has an eye toward direct application in later chapters, so what might seem a little idiosyncratic at first is motivated by a desire to smooth the pathways into later concepts.</li>
+<li><em>Incorporate active learning into everything.</em></li>
 </ul>
-</li>
-<li>
-<em>Incorporate active learning into everything.</em>
+<p>The chapters are structured to work as templates for classroom experiences. They intersperse conceptual explanation with activities designed to reinforce those concepts and lead students to important conclusions.</p>
 <ul>
-<li>The chapters are structured to work as templates for classroom experiences. They intersperse conceptual explanation with activities designed to reinforce those concepts and lead students to important conclusions.</li>
+<li><em>Do the math and do it well.</em></li>
 </ul>
-</li>
-<li>
-<em>Do the math and do it well.</em>
+<p>One common thread we see in a lot of SEM books is a tendency to sweep most of the math under the rug. The intention comes from a good place; mathematics can appear intimidating and, therefore, may seem to serve as a deterrent to learning. To be sure, there are some complex mathematical ideas in SEM that are inaccessible to our audience. At the same time—and, in fairness, this may be due to Sean’s bias as a mathematician—we truly believe that the mathematics, carefully explained, can illuminate student understanding. The more mathy sections may need additional instructor support for students without a strong math background. But all it takes is some relatively straightforward algebra to nail down some concepts that most books ignore. A good example of this is investing time in the rules for manipulating variances and covariances. This allows students to calculate the “model-implied matrix” that is only cryptically referenced in most textbooks. However, we do skip the math sometimes. For example, a lot of the math behind model fit indices is left unexplained. At the very least, we hope to be transparent about our choices to include or exclude certain mathematical details.</p>
 <ul>
-<li>One common thread we see in a lot of SEM books is a tendency to sweep most of the math under the rug. The intention comes from a good place; mathematics can appear intimidating and, therefore, may seem to serve as a deterrent to learning. To be sure, there are some complex mathematical ideas in SEM that are inaccessible to our audience. At the same time—and, in fairness, this may be due to Sean’s bias as a mathematician—we truly believe that the mathematics, carefully explained, can illuminate student understanding. The more mathy sections may need additional instructor support for students without a strong math background. But all it takes is some relatively straightforward algebra to nail down some concepts that most books ignore. A good example of this is investing time in the rules for manipulating variances and covariances. This allows students to calculate the “model-implied matrix” that is only cryptically referenced in most textbooks. However, we do skip the math sometimes. For example, a lot of the math behind model fit indices is left unexplained. At the very least, we hope to be transparent about our choices to include or exclude certain mathematical details.</li>
+<li><em>Use “easy” data.</em></li>
 </ul>
-</li>
-<li>
-<em>Use “easy” data.</em>
+<p>Finding data is hard, so we rely a lot on data sets that other textbooks and R package authors make available (with due attribution, of course). To keep things simple for this course, we work almost exclusively with numerical (quantitative) data. [MODIFY THIS IF WE END UP WORKING WITH BINARY CATEGORICAL EXOGENOUS VARIABLES (CODED 0/1) AT SOME POINT.]</p>
 <ul>
-<li>Finding data is hard, so we rely a lot on data sets that other textbooks and R package authors make available (with due attribution, of course). To keep things simple for this course, we work almost exclusively with numerical (quantitative) data. [MODIFY THIS IF WE END UP WORKING WITH BINARY CATEGORICAL EXOGENOUS VARIABLES (CODED 0/1) AT SOME POINT.]</li>
+<li><em>Be careful about diagrams.</em></li>
 </ul>
-</li>
-<li>
-<em>Be careful about diagrams.</em>
+<p>Learning about complex models induces a sizable cognitive load. Shortcuts in diagrams tend to confuse students. For example, if error terms are truly latent variables, they should be drawn as circles or ellipses and not hidden, even if an advanced practitioner “knows” they’re there. Variances and covariances among exogenous variables should always appear as well. We take the time to build up a consistent pictographic representation of every part of a model. (Each chapter is introduced with an archetypal diagram that illustrates that chapter’s content.) Then we stick to that representation throughout the book.</p>
 <ul>
-<li>Learning about complex models induces a sizable cognitive load. Shortcuts in diagrams tend to confuse students. For example, if error terms are truly latent variables, they should be drawn as circles or ellipses and not hidden, even if an advanced practitioner “knows” they’re there. Variances and covariances among exogenous variables should always appear as well. We take the time to build up a consistent pictographic representation of every part of a model. (Each chapter is introduced with an archetypal diagram that illustrates that chapter’s content.) Then we stick to that representation throughout the book.</li>
+<li><em>Be careful about notation.</em></li>
 </ul>
-</li>
-<li>
-<em>Be careful about notation.</em>
-<ul>
-<li>While it may be the industry standard, LISREL notation is needlessly complex for undergraduate students. We take a consistent and simple approach to notation that represents all variables using UPPERCASE names and all path values using lowercase names. Abstract variables tend to be called something like X when exogenous and Y when endogenous. Real-world variables have contextually meaningful names. For those interested in reading the research literature, we have included an appendix describing LISREL notation.</li>
-</ul>
-</li>
-</ul>
+<p>While it may be the industry standard, LISREL notation is needlessly complex for undergraduate students. We take a consistent and simple approach to notation that represents all variables using UPPERCASE names and all path values using lowercase names. Abstract variables tend to be called something like X when exogenous and Y when endogenous. Real-world variables have contextually meaningful names. For those interested in reading the research literature, we have included an appendix describing LISREL notation.</p>
 </div>
 <div id="course-structure" class="section level2 unnumbered">
 <h2>Course structure<a class="anchor" aria-label="anchor" href="#course-structure"><i class="fas fa-link"></i></a>
