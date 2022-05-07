@@ -1,1 +1,5 @@
-# Simple regression
+# Simple regression {#simple}
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/simple_regression.png")
+```

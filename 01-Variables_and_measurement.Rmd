@@ -1,8 +1,17 @@
 # Variables and measurement {#variables}
 
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/variable.png")
+```
+
 
 ## TEST
 
 ::: {.rmdnote}
 Note here
 :::
+
+```{r}
+2 + 2
+```
+

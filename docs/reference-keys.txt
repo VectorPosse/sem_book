@@ -2,8 +2,8 @@ variables
 test
 variance
 covariance
-simple-regression
-multiple-regression
+simple
+multiple
 mediation
 path-analysis
 latent-variables

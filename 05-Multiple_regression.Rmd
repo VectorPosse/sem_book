@@ -1,1 +1,2 @@
-# Multiple regression
+# Multiple regression {#multiple}
+

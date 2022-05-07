@@ -12,3 +12,7 @@ pre {
 pre code {
   white-space: inherit;
 }
+
+div.inline-figure {
+    border: none;
+}

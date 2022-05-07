@@ -12,6 +12,10 @@ github-repo: VectorPosse/sem_book
 description: "A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites."
 ---
 
+```{r, include = FALSE}
+options(knitr.graphics.auto_pdf = TRUE)
+```
+
 # Introduction {-}
 
 Welcome to our book on structural equation modeling!
