@@ -28,7 +28,7 @@ We repeated the experiment with some modifications to our materials and pedagogy
 
 We decided that we could write our own textbook that would fill this hole in the literature. The book that follows is the fruit of our efforts.
 
-Sean was granted sabbatical in Spring 2020 and proposed to use that time to start writing the book in preparation for running the May Term course again in May 2020. And, well, we all know how that went...
+Sean was granted sabbatical in Spring 2020 and proposed to use that time to start writing the book in preparation for running the May Term course again in May, 2020. And, well, we all know how that went...
 
 Once the pandemic subsided enough for us to offer the course in person again, we attempted it again in May, 2022. [TO BE CONTINUED]
 
@@ -42,7 +42,7 @@ The prerequisite for our class is an intro stats class that covers pretty standa
 To respect our students, we made some very deliberate choices about the way our book would be structured.
 
 * *Make the book free and open source.*
-  - Students have enough trouble in their lives and shouldn't be exposed to the extortionate practices of most textbook publishers. Not only is this book freely available online, it's also published under a permissive open source license (the [MIT license.](https://opensource.org/licenses/MIT)) that allows folks to "use, copy, modify, merge, publish, distribute, sublicense, and/or sell" their own versions of the book as desired. Furthermore, any derivative of the book must also abide by the same open standards. So our book is both *libre* and *gratis* (or, in more common parlance, "free as in speech" and "free as in beer").
+  - Students have enough trouble in their lives and shouldn't be exposed to the extortionate practices of most textbook publishers. Not only is this book freely available online, it's also published under a permissive open source license (the [MIT license](https://opensource.org/licenses/MIT)) that allows folks to "use, copy, modify, merge, publish, distribute, sublicense, and/or sell" their own versions of the book as desired. Furthermore, any derivative of the book must also abide by the same open standards. So our book is both *libre* and *gratis* (or, in more common parlance, "free as in speech" and "free as in beer").
 
 * *Start from scratch.*
   - Explain everything from the beginning in terms that are as simple as possible. Some of the first few chapters may look like review for students. Even if it is, of course, that review gives students confidence to tackle upcoming new material. But you might be surprised at some of the novel ways we explain seemingly familiar concepts. All the exposition has an eye toward direct application in later chapters, so what might seem a little idiosyncratic at first is motivated by a desire to smooth the pathways into later concepts.
