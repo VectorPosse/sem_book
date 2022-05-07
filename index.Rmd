@@ -1,5 +1,5 @@
 --- 
-title: "Structural Equation Modeling for Undergraduates"
+title: "Demystifying Structural Equation Modeling"
 author: "Jonathan Amburgey and Sean Raleigh, Westminster College"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
