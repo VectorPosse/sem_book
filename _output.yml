@@ -18,3 +18,7 @@ bookdown::epub_book: default
 bookdown::bs4_book:
   css: style.css
   download: ["pdf", "epub"]
+  repo:
+    base: https://github.com/VectorPosse/sem_book
+    branch: main
+    subdir: docs
