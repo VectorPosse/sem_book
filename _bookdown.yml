@@ -4,3 +4,7 @@ language:
     chapter_name: "Chapter "
 delete_merged_file: true
 output_dir: "docs"
+# new_session slows things down
+# keep it off for fast preview
+# and turn it on for final product
+#new_session: yes
