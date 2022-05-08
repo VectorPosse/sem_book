@@ -21,4 +21,3 @@ bookdown::bs4_book:
   repo:
     base: https://github.com/VectorPosse/sem_book
     branch: main
-    subdir: docs

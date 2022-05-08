@@ -3,7 +3,6 @@ title: "Demystifying Structural Equation Modeling"
 author: "Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
-output: bookdown::gitbook
 documentclass: book
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
