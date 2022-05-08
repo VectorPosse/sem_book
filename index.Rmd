@@ -19,6 +19,10 @@ options(knitr.graphics.auto_pdf = TRUE)
 
 Welcome to our book on structural equation modeling!
 
+If you want, you can also download this book as a <a href="https://vectorposse.github.io/sem_book/sem_book.pdf" target="_blank">PDF</a> or <a href="https://vectorposse.github.io/sem_book/sem_book.epub" target="_blank">EPUB</a> file.
+
+
+
 ## Some history {-}
 
 In 2016, Jonathan and Sean embarked upon a bold experiment, asking the question, "Is is possible to teach structural equation modeling (SEM) to undergraduates with little statistical background?" To make things even more exciting, we attempted to do so in a special topics course lasting only one month during our May Term at Westminster College (Salt Lake City, UT).
@@ -32,6 +36,7 @@ We decided that we could write our own textbook that would fill this hole in the
 Sean was granted sabbatical in Spring 2020 and proposed to use that time to start writing the book in preparation for running the May Term course again in May, 2020. And, well, we all know how that went...
 
 Once the pandemic subsided enough for us to offer the course in person again, we attempted it again in May, 2022. [TO BE CONTINUED]
+
 
 ## Our philosophy {-}
 
@@ -57,7 +62,7 @@ The chapters are structured to work as templates for classroom experiences. They
 
 One common thread we see in a lot of SEM books is a tendency to sweep most of the math under the rug. The intention comes from a good place; mathematics can appear intimidating and, therefore, may seem to serve as a deterrent to learning. To be sure, there are some complex mathematical ideas in SEM that are inaccessible to our audience. At the same time---and, in fairness, this may be due to Sean's bias as a mathematician---we truly believe that the mathematics, carefully explained, can illuminate student understanding. The more mathy sections may need additional instructor support for students without a strong math background. But all it takes is some relatively straightforward algebra to nail down some concepts that most books ignore. A good example of this is investing time in the rules for manipulating variances and covariances. This allows students to calculate the "model-implied matrix" that is only cryptically referenced in most textbooks. However, we do skip the math sometimes. For example, a lot of the math behind model fit indices is left unexplained. At the very least, we hope to be transparent about our choices to include or exclude certain mathematical details.
 
--   *Use "easy" data.*
+-   *Use "nice" data.*
 
 Finding data is hard, so we rely a lot on data sets that other textbooks and R package authors make available (with due attribution, of course). To keep things simple for this course, we work almost exclusively with numerical (quantitative) data. [MODIFY THIS IF WE END UP WORKING WITH BINARY CATEGORICAL EXOGENOUS VARIABLES (CODED 0/1) AT SOME POINT.]
 
