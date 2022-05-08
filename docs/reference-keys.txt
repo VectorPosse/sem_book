@@ -10,3 +10,4 @@ latent-variables
 confirmatory-factor-analysis
 structural-equation-models
 structural-causal-models
+lisrel-notation

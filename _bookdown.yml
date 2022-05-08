@@ -8,3 +8,17 @@ output_dir: "docs"
 # keep it off for fast preview
 # and turn it on for final product
 #new_session: yes
+rmd_files:
+- index.Rmd
+- 01-Variables_and_measurement.Rmd
+- 02-Variance.Rmd
+- 03-Covariance.Rmd
+- 04-Simple_regression.Rmd
+- 05-Multiple_regression.Rmd
+- 06-Mediation.Rmd
+- 07-Path_analysis.Rmd
+- 08-Latent_variables.Rmd
+- 09-Confirmatory_factor_analysis.Rmd
+- 10-Structural_equation_models.Rmd
+- 11-Structural_causal_models.Rmd
+- Appendix.Rmd
