@@ -23,7 +23,6 @@ Welcome to our book on structural equation modeling!
 If you want, you can also download this book as a <a href="https://vectorposse.github.io/sem_book/sem_book.pdf" target="_blank">PDF</a> or <a href="https://vectorposse.github.io/sem_book/sem_book.epub" target="_blank">EPUB</a> file.
 
 
-
 ## Some history {-}
 
 In 2016, Jonathan and Sean embarked upon a bold experiment, asking the question, "Is is possible to teach structural equation modeling (SEM) to undergraduates with little statistical background?" To make things even more exciting, we attempted to do so in a special topics course lasting only one month during our May Term at Westminster College (Salt Lake City, UT).
