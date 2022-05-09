@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 2 Variance | Demystifying Structural Equation Modeling</title>
 <meta name="author" content="Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)">
-<meta name="description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta name="description" content="2.1 A quick refresher on the mean Most of us were taught how to calculate the mean of a variable way back in elementary school: add up all the numbers and divide by the size of the group of...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Chapter 2 Variance | Demystifying Structural Equation Modeling">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://vectorposse.github.io/sem_book/variance.html">
-<meta property="og:description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta property="og:description" content="2.1 A quick refresher on the mean Most of us were taught how to calculate the mean of a variable way back in elementary school: add up all the numbers and divide by the size of the group of...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 2 Variance | Demystifying Structural Equation Modeling">
-<meta name="twitter:description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta name="twitter:description" content="2.1 A quick refresher on the mean Most of us were taught how to calculate the mean of a variable way back in elementary school: add up all the numbers and divide by the size of the group of...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -70,14 +70,32 @@
 <span class="header-section-number">2</span> Variance<a class="anchor" aria-label="anchor" href="#variance"><i class="fas fa-link"></i></a>
 </h1>
 <div class="inline-figure"><img src="graphics/variance.png" width="146" style="display: block; margin: auto;"></div>
+<div id="variance_mean" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> A quick refresher on the mean<a class="anchor" aria-label="anchor" href="#variance_mean"><i class="fas fa-link"></i></a>
+</h2>
+<p>Most of us were taught how to calculate the mean of a variable way back in elementary school: add up all the numbers and divide by the size of the group of numbers. In a statistics context, we often use a “bar” to indicate the mean of a variable; in other words, if a variable is called <span class="math inline">\(X\)</span>, the mean is denoted <span class="math inline">\(\bar{X}\)</span>. Remembering that we always use <span class="math inline">\(n\)</span> to represent the sample size, the formula is</p>
+<p><span class="math display">\[
+\bar{X} = \frac{\sum{X}}{n}
+\]</span></p>
+<div class="rmdnote">
+<p>Here is a small data set we’ll use throughout this chapter as a simple example we can work “by hand”:</p>
+<p>1, 3, 3, 6, 7</p>
+<p>Calculate the mean of this set of five numbers.</p>
+</div>
+<p>Test reference: Check out the <a href="index.html#intro_history">history</a></p>
 
+</div>
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="variables.html"><span class="header-section-number">1</span> Variables and measurement</a></div>
 <div class="next"><a href="covariance.html"><span class="header-section-number">3</span> Covariance</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#variance"><span class="header-section-number">2</span> Variance</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#variance"><span class="header-section-number">2</span> Variance</a></li>
+<li><a class="nav-link" href="#variance_mean"><span class="header-section-number">2.1</span> A quick refresher on the mean</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
@@ -94,7 +112,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-07.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-09.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
@@ -102,6 +120,34 @@
   </div>
 
 </div></div>
-</footer>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
 </body>
 </html>

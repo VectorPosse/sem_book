@@ -124,7 +124,7 @@
 
 \title{Demystifying Structural Equation Modeling}
 \author{Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)}
-\date{2022-05-07}
+\date{2022-05-09}
 
 \begin{document}
 \maketitle
@@ -133,16 +133,16 @@
 \setcounter{tocdepth}{1}
 \tableofcontents
 }
-\hypertarget{introduction}{%
-\chapter*{Introduction}\label{introduction}}
+\hypertarget{intro}{%
+\chapter*{Introduction}\label{intro}}
 \addcontentsline{toc}{chapter}{Introduction}
 
 Welcome to our book on structural equation modeling!
 
 If you want, you can also download this book as a PDF or EPUB file.
 
-\hypertarget{some-history}{%
-\section*{Some history}\label{some-history}}
+\hypertarget{intro_history}{%
+\section*{Some history}\label{intro_history}}
 \addcontentsline{toc}{section}{Some history}
 
 In 2016, Jonathan and Sean embarked upon a bold experiment, asking the question, ``Is is possible to teach structural equation modeling (SEM) to undergraduates with little statistical background?'' To make things even more exciting, we attempted to do so in a special topics course lasting only one month during our May Term at Westminster College (Salt Lake City, UT).
@@ -157,8 +157,8 @@ Sean was granted sabbatical in Spring 2020 and proposed to use that time to star
 
 Once the pandemic subsided enough for us to offer the course in person again, we attempted it again in May, 2022. {[}TO BE CONTINUED{]}
 
-\hypertarget{our-philosophy}{%
-\section*{Our philosophy}\label{our-philosophy}}
+\hypertarget{intro_philosophy}{%
+\section*{Our philosophy}\label{intro_philosophy}}
 \addcontentsline{toc}{section}{Our philosophy}
 
 As we mentioned before, our motivation for writing the book was driven by the difficulty we had finding readings for the students. Perhaps that begs the question, should one even try teaching a topic as ``difficult'' or ``advanced'' as structural equation modeling to the audience we had? To be sure, the traditional approaches already on the market seem to assume a lot more background than we had at our disposal. And the books that claim to assume less background\ldots well, sometimes they require more than they let on.
@@ -189,7 +189,9 @@ Explain everything from the beginning in terms that are as simple as possible. S
   \emph{Incorporate active learning into everything.}
 \end{itemize}
 
-The chapters are structured to work as templates for classroom experiences. They intersperse conceptual explanation with activities designed to reinforce those concepts and lead students to important conclusions.
+The chapters are structured to work as templates for classroom experiences. They intersperse conceptual explanation with activities designed to reinforce those concepts and lead students to important conclusions. These learning activities will appear framed in blue boxes {[}CHANGE THIS IF WE ESTABLISH A CUSTOM CALLOUT{]} like this:
+
+Hey, kids! Stop and do this activity here!
 
 \begin{itemize}
 \tightlist
@@ -223,16 +225,16 @@ Learning about complex models induces a sizable cognitive load. Shortcuts in dia
 
 While it may be the industry standard, LISREL notation is needlessly complex for undergraduate students. We take a consistent and simple approach to notation that represents all variables using UPPERCASE names and all path values using lowercase names. Abstract variables tend to be called something like X when exogenous and Y when endogenous. Real-world variables have contextually meaningful names. For those interested in reading the research literature, we have included an appendix describing LISREL notation.
 
-\hypertarget{course-structure}{%
-\section*{Course structure}\label{course-structure}}
+\hypertarget{intro_structure}{%
+\section*{Course structure}\label{intro_structure}}
 \addcontentsline{toc}{section}{Course structure}
 
 We use this book to teach a 2-credit-hour course. (Even though it's a special topics course in our May Term, the number of contact hours for students is equivalent to a semester-long, 2-credit-hour course.)
 
 {[}ADD INFO HERE AS WE DECIDE HOW MUCH IS REASONABLE TO COVER. IF WE WANT THE BOOK TO BE USABLE IN A 4-CREDIT-HOUR COURSE, WHAT ADDITIONAL MATERIAL SHOULD WE CONSIDER INCLUDING?{]}
 
-\hypertarget{onward-and-upward}{%
-\section*{Onward and upward}\label{onward-and-upward}}
+\hypertarget{intro_onward}{%
+\section*{Onward and upward}\label{intro_onward}}
 \addcontentsline{toc}{section}{Onward and upward}
 
 We hope you enjoy our textbook. Please send us your feedback!
@@ -265,6 +267,23 @@ Note here
 \chapter{Variance}\label{variance}}
 
 \begin{center}\includegraphics{graphics/variance} \end{center}
+
+\hypertarget{variance_mean}{%
+\section{A quick refresher on the mean}\label{variance_mean}}
+
+Most of us were taught how to calculate the mean of a variable way back in elementary school: add up all the numbers and divide by the size of the group of numbers. In a statistics context, we often use a ``bar'' to indicate the mean of a variable; in other words, if a variable is called \(X\), the mean is denoted \(\bar{X}\). Remembering that we always use \(n\) to represent the sample size, the formula is
+
+\[
+\bar{X} = \frac{\sum{X}}{n}
+\]
+
+Here is a small data set we'll use throughout this chapter as a simple example we can work ``by hand'':
+
+1, 3, 3, 6, 7
+
+Calculate the mean of this set of five numbers.
+
+Test reference: Check out the \protect\hyperlink{intro_history}{history}
 
 \hypertarget{covariance}{%
 \chapter{Covariance}\label{covariance}}

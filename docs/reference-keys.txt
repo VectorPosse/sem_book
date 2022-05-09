@@ -1,6 +1,7 @@
 variables
 test
 variance
+variance_mean
 covariance
 simple
 multiple
