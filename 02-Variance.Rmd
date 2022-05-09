@@ -7,20 +7,173 @@ knitr::include_graphics("graphics/variance.png")
 
 ## A quick refresher on the mean {#variance_mean}
 
-Most of us were taught how to calculate the mean of a variable way back in elementary school: add up all the numbers and divide by the size of the group of numbers. In a statistics context, we often use a "bar" to indicate the mean of a variable; in other words, if a variable is called $X$, the mean is denoted $\bar{X}$. Remembering that we always use $n$ to represent the sample size, the formula is
+Most of us were taught how to calculate the mean of a variable way back in elementary school: add up all the numbers and divide by the size of the group of numbers. In a statistics context, we often use a "bar" to indicate the mean of a variable; in other words, if a variable is called $X$, the mean is denoted $\overline{X}$. Remembering that we always use $n$ to represent the sample size, the formula is
 
 $$
-\bar{X} = \frac{\sum{X}}{n}
+\overline{X} = \frac{\sum{X}}{n}
 $$
+(In case you forgot, the Greek letter Sigma ($\Sigma$) stand for "sum" and means "add up all values of the thing that follows".)
 
 ::: {.rmdnote}
 
 Here is a small data set we'll use throughout this chapter as a simple example we can work "by hand":
 
-1, 3, 3, 6, 7
+3, 4, 5, 6, 6, 7, 8, 9
 
-Calculate the mean of this set of five numbers.
+Calculate the mean of this set of eight numbers.
 
 :::
 
-Test reference: Check out the [history](#intro_history)
+
+## Variance
+
+Variance is a quantity meant to capture information about how spread out data is.
+
+Let's build it up step by step.
+
+The first thing to note about spread is that we don't care how large or small the numbers are in any absolute sense. We only care how large or small they are *relative to each other*.
+
+::: {.rmdnote}
+
+Look at the numbers from the earlier exercise:
+
+3, 4, 5, 6, 6, 7, 8, 9
+
+What if we had the following numbers instead?
+
+1003, 1004, 1005, 1006, 1006, 1007, 1008, 1009
+
+Explain why any reasonable measure of "spread" should be the same for both groups of numbers.
+
+:::
+
+One way to measure how large or small a number is relative to the whole set is to measure the distance of each number to the mean.
+
+::: {.rmdnote}
+
+Recall that the mean of the following numbers is 6:
+
+3, 4, 5, 6, 6, 7, 8, 9
+
+Create a new list of five numbers that measures the distance between each of the above numbers and the mean. In other words, subtract 6 from each of the above numbers.
+
+Some of the numbers in your new list should be negative, some should be zero, and some should be positive. Why does that make sense? In other words, what does it mean when a number is negative, zero, or positive? 
+
+:::
+
+If the original set of numbers is called $X$, then what you've just calculated is a new list $\left(X - \overline{X}\right)$. Let's start organizing this into a table:
+
+| $X$ | $\left(X - \overline{X}\right)$ |
+|-----|---------------------------------|
+| 3   | -3                              |
+| 4   | -2                              |
+| 5   | -1                              |
+| 6   |  0                              |
+| 6   |  0                              |
+| 7   |  1                              |
+| 8   |  2                              |
+| 9   |  3                              |
+
+The numbers in the second columns are "deviations" from the mean.
+
+::: {.rmdnote}
+
+One way you might measure "spread" is to look at the average deviation. After all, if the deviations represent the distances to the mean, a set with large spread will have large deviations and a set will small spread will have small deviations.
+
+Go ahead and take the average (mean) of the numbers in the second column above.
+
+Uh, oh! You should have calculated zero. Explain why you will always get zero, no matter what set of numbers you start with.
+
+:::
+
+The idea of the "average deviation" seems like it should work, but it clearly doesn't. How do we fix the idea?
+
+Hopefully, you identified that having negative deviations was a problem because they canceled out the positive deviations. But if all the deviations were positive, that wouldn't be an issue any more.
+
+There are two ways of making numbers positive:
+
+-   Taking absolute values
+
+We could just take the absolute value and make all the values positive. There are some statistical procures that do just that,^[This leads to the "mean absolute deviation" or MAD.] but we're going to take a slightly different approach...
+
+- Squaring
+
+If we square each value, they all become positive.
+
+Taking the absolute value is conceptually easier, but there are some historical and mathematical reasons why squaring is a little better.^[If you know calculus, you might think why the square function is much better behaved than the absolute value function.]
+
+
+::: {.rmdnote}
+
+Square each of the numbers from the second column of the table above. This will calculate a new list $\left(X - \overline{X}\right)^{2}$
+
+:::
+
+Putting the new numbers into our previous table:
+
+| $X$ | $\left(X - \overline{X}\right)$ | $\left(X - \overline{X}\right)^{2}$ |
+|---|----|---|
+| 3 | -3 | 9 |
+| 4 | -2 | 4 |
+| 5 | -1 | 1 |
+| 6 |  0 | 0 |
+| 6 |  0 | 0 |
+| 7 |  1 | 1 |
+| 8 |  2 | 4 |
+| 9 |  3 | 9 |
+
+::: {.rmdnote}
+
+Now take the average (mean) of the numbers in the third column above.
+
+:::
+
+The number you got (should be 3.5) is *almost* what we call the variance. There's only one more annoying wrinkle.
+
+When you took the mean of the last column of numbers, you added them all up and divided by 8 since there are 8 numbers in the list. But for some fairly technical mathematical reasons, we actually don't want to divide by 8. Instead, we divide by one less than that number; in other words, we divide by 7.^[For more information on that, search the internet for "sample variance unbiased"]
+
+::: {.rmdnote}
+
+Re-do the math above, but divide by 7 instead of dividing by 8.
+
+:::
+
+The number you found is the *variance*, written as $Var(X)$. The full formula is
+
+$$
+Var(X) = \frac{\sum{\left(X - \overline{X}\right)^{2}}}{n - 1}
+$$
+
+As a one-liner, the formula may look a little intimidating, but when you break it down step by step as we did above, it's not so bad.
+
+Here is the full calculation in the table:
+
+| $X$ | $\left(X - \overline{X}\right)$ | $\left(X - \overline{X}\right)^{2}$ |
+|---|----|---|
+| 3 | -3 | 9 |
+| 4 | -2 | 4 |
+| 5 | -1 | 1 |
+| 6 |  0 | 0 |
+| 6 |  0 | 0 |
+| 7 |  1 | 1 |
+| 8 |  2 | 4 |
+| 9 |  3 | 9 |
+|---|----| $\overline{28}$ |
+
+::: {.rmdnote}
+
+Using the table approach, calculate the variance of the following set of numbers:
+
+4, 3, 7, 2, 9, 4, 6
+
+:::
+
+
+
+
+
+
+## Mean centering data {#variance_mean-centering}
+
+Many of the statistical techniques taught in an intro stats course focus on learning about the means of variables. Structural equation modeling is a little different in that it is more focused on the explaining the variability of data---how changes in one or more variables predict changes in other variables.^[There are tools in SEM for working with means as well. WILL WE COVER THIS IN A FUTURE CHAPTER?]
+

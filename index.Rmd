@@ -16,6 +16,7 @@ description: "A textbook on structural equation modeling written from first pric
 options(knitr.graphics.auto_pdf = TRUE)
 ```
 
+
 # Introduction {-#intro}
 
 Welcome to our book on structural equation modeling!

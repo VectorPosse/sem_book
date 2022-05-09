@@ -74,19 +74,242 @@
 <h2>
 <span class="header-section-number">2.1</span> A quick refresher on the mean<a class="anchor" aria-label="anchor" href="#variance_mean"><i class="fas fa-link"></i></a>
 </h2>
-<p>Most of us were taught how to calculate the mean of a variable way back in elementary school: add up all the numbers and divide by the size of the group of numbers. In a statistics context, we often use a “bar” to indicate the mean of a variable; in other words, if a variable is called <span class="math inline">\(X\)</span>, the mean is denoted <span class="math inline">\(\bar{X}\)</span>. Remembering that we always use <span class="math inline">\(n\)</span> to represent the sample size, the formula is</p>
+<p>Most of us were taught how to calculate the mean of a variable way back in elementary school: add up all the numbers and divide by the size of the group of numbers. In a statistics context, we often use a “bar” to indicate the mean of a variable; in other words, if a variable is called <span class="math inline">\(X\)</span>, the mean is denoted <span class="math inline">\(\overline{X}\)</span>. Remembering that we always use <span class="math inline">\(n\)</span> to represent the sample size, the formula is</p>
 <p><span class="math display">\[
-\bar{X} = \frac{\sum{X}}{n}
-\]</span></p>
+\overline{X} = \frac{\sum{X}}{n}
+\]</span>
+(In case you forgot, the Greek letter Sigma (<span class="math inline">\(\Sigma\)</span>) stand for “sum” and means “add up all values of the thing that follows”.)</p>
 <div class="rmdnote">
 <p>Here is a small data set we’ll use throughout this chapter as a simple example we can work “by hand”:</p>
-<p>1, 3, 3, 6, 7</p>
-<p>Calculate the mean of this set of five numbers.</p>
+<p>3, 4, 5, 6, 6, 7, 8, 9</p>
+<p>Calculate the mean of this set of eight numbers.</p>
 </div>
-<p>Test reference: Check out the <a href="index.html#intro_history">history</a></p>
+</div>
+<div id="variance-1" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Variance<a class="anchor" aria-label="anchor" href="#variance-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>Variance is a quantity meant to capture information about how spread out data is.</p>
+<p>Let’s build it up step by step.</p>
+<p>The first thing to note about spread is that we don’t care how large or small the numbers are in any absolute sense. We only care how large or small they are <em>relative to each other</em>.</p>
+<div class="rmdnote">
+<p>Look at the numbers from the earlier exercise:</p>
+<p>3, 4, 5, 6, 6, 7, 8, 9</p>
+<p>What if we had the following numbers instead?</p>
+<p>1003, 1004, 1005, 1006, 1006, 1007, 1008, 1009</p>
+<p>Explain why any reasonable measure of “spread” should be the same for both groups of numbers.</p>
+</div>
+<p>One way to measure how large or small a number is relative to the whole set is to measure the distance of each number to the mean.</p>
+<div class="rmdnote">
+<p>Recall that the mean of the following numbers is 6:</p>
+<p>3, 4, 5, 6, 6, 7, 8, 9</p>
+<p>Create a new list of five numbers that measures the distance between each of the above numbers and the mean. In other words, subtract 6 from each of the above numbers.</p>
+<p>Some of the numbers in your new list should be negative, some should be zero, and some should be positive. Why does that make sense? In other words, what does it mean when a number is negative, zero, or positive?</p>
+</div>
+<p>If the original set of numbers is called <span class="math inline">\(X\)</span>, then what you’ve just calculated is a new list <span class="math inline">\(\left(X - \overline{X}\right)\)</span>. Let’s start organizing this into a table:</p>
+<div class="inline-table"><table class="table table-sm">
+<thead><tr class="header">
+<th><span class="math inline">\(X\)</span></th>
+<th><span class="math inline">\(\left(X - \overline{X}\right)\)</span></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>3</td>
+<td>-3</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>-2</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>-1</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>3</td>
+</tr>
+</tbody>
+</table></div>
+<p>The numbers in the second columns are “deviations” from the mean.</p>
+<div class="rmdnote">
+<p>One way you might measure “spread” is to look at the average deviation. After all, if the deviations represent the distances to the mean, a set with large spread will have large deviations and a set will small spread will have small deviations.</p>
+<p>Go ahead and take the average (mean) of the numbers in the second column above.</p>
+<p>Uh, oh! You should have calculated zero. Explain why you will always get zero, no matter what set of numbers you start with.</p>
+</div>
+<p>The idea of the “average deviation” seems like it should work, but it clearly doesn’t. How do we fix the idea?</p>
+<p>Hopefully, you identified that having negative deviations was a problem because they canceled out the positive deviations. But if all the deviations were positive, that wouldn’t be an issue any more.</p>
+<p>There are two ways of making numbers positive:</p>
+<ul>
+<li>Taking absolute values</li>
+</ul>
+<p>We could just take the absolute value and make all the values positive. There are some statistical procures that do just that,<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This leads to the “mean absolute deviation” or MAD.&lt;/p&gt;"><sup>1</sup></a> but we’re going to take a slightly different approach…</p>
+<ul>
+<li>Squaring</li>
+</ul>
+<p>If we square each value, they all become positive.</p>
+<p>Taking the absolute value is conceptually easier, but there are some historical and mathematical reasons why squaring is a little better.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;If you know calculus, you might think why the square function is much better behaved than the absolute value function.&lt;/p&gt;"><sup>2</sup></a></p>
+<div class="rmdnote">
+<p>Square each of the numbers from the second column of the table above. This will calculate a new list <span class="math inline">\(\left(X - \overline{X}\right)^{2}\)</span></p>
+</div>
+<p>Putting the new numbers into our previous table:</p>
+<div class="inline-table"><table class="table table-sm">
+<colgroup>
+<col width="30%">
+<col width="40%">
+<col width="30%">
+</colgroup>
+<thead><tr class="header">
+<th><span class="math inline">\(X\)</span></th>
+<th><span class="math inline">\(\left(X - \overline{X}\right)\)</span></th>
+<th><span class="math inline">\(\left(X - \overline{X}\right)^{2}\)</span></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>3</td>
+<td>-3</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>-2</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>-1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>3</td>
+<td>9</td>
+</tr>
+</tbody>
+</table></div>
+<div class="rmdnote">
+<p>Now take the average (mean) of the numbers in the third column above.</p>
+</div>
+<p>The number you got (should be 3.5) is <em>almost</em> what we call the variance. There’s only one more annoying wrinkle.</p>
+<p>When you took the mean of the last column of numbers, you added them all up and divided by 8 since there are 8 numbers in the list. But for some fairly technical mathematical reasons, we actually don’t want to divide by 8. Instead, we divide by one less than that number; in other words, we divide by 7.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;For more information on that, search the internet for “sample variance unbiased”&lt;/p&gt;"><sup>3</sup></a></p>
+<div class="rmdnote">
+<p>Re-do the math above, but divide by 7 instead of dividing by 8.</p>
+</div>
+<p>The number you found is the <em>variance</em>, written as <span class="math inline">\(Var(X)\)</span>. The full formula is</p>
+<p><span class="math display">\[
+Var(X) = \frac{\sum{\left(X - \overline{X}\right)^{2}}}{n - 1}
+\]</span></p>
+<p>As a one-liner, the formula may look a little intimidating, but when you break it down step by step as we did above, it’s not so bad.</p>
+<p>Here is the full calculation in the table:</p>
+<div class="inline-table"><table class="table table-sm">
+<colgroup>
+<col width="30%">
+<col width="40%">
+<col width="30%">
+</colgroup>
+<thead><tr class="header">
+<th><span class="math inline">\(X\)</span></th>
+<th><span class="math inline">\(\left(X - \overline{X}\right)\)</span></th>
+<th><span class="math inline">\(\left(X - \overline{X}\right)^{2}\)</span></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>3</td>
+<td>-3</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>-2</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>-1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>2</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>3</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td>—</td>
+<td>—-</td>
+<td><span class="math inline">\(\overline{28}\)</span></td>
+</tr>
+</tbody>
+</table></div>
+<div class="rmdnote">
+<p>Using the table approach, calculate the variance of the following set of numbers:</p>
+<p>4, 3, 7, 2, 9, 4, 6</p>
+</div>
+</div>
+<div id="variance_mean-centering" class="section level2" number="2.3">
+<h2>
+<span class="header-section-number">2.3</span> Mean centering data<a class="anchor" aria-label="anchor" href="#variance_mean-centering"><i class="fas fa-link"></i></a>
+</h2>
+<p>Many of the statistical techniques taught in an intro stats course focus on learning about the means of variables. Structural equation modeling is a little different in that it is more focused on the explaining the variability of data—how changes in one or more variables predict changes in other variables.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;There are tools in SEM for working with means as well. WILL WE COVER THIS IN A FUTURE CHAPTER?&lt;/p&gt;"><sup>4</sup></a></p>
 
 </div>
 </div>
+
   <div class="chapter-nav">
 <div class="prev"><a href="variables.html"><span class="header-section-number">1</span> Variables and measurement</a></div>
 <div class="next"><a href="covariance.html"><span class="header-section-number">3</span> Covariance</a></div>
@@ -95,6 +318,8 @@
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#variance"><span class="header-section-number">2</span> Variance</a></li>
 <li><a class="nav-link" href="#variance_mean"><span class="header-section-number">2.1</span> A quick refresher on the mean</a></li>
+<li><a class="nav-link" href="#variance-1"><span class="header-section-number">2.2</span> Variance</a></li>
+<li><a class="nav-link" href="#variance_mean-centering"><span class="header-section-number">2.3</span> Mean centering data</a></li>
 </ul>
 
       <div class="book-extra">
