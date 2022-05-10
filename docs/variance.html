@@ -85,9 +85,9 @@
 <p>Calculate the mean of this set of eight numbers.</p>
 </div>
 </div>
-<div id="variance-by-hand" class="section level2" number="2.2">
+<div id="variance_variance" class="section level2" number="2.2">
 <h2>
-<span class="header-section-number">2.2</span> Variance (by hand)<a class="anchor" aria-label="anchor" href="#variance-by-hand"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.2</span> Variance<a class="anchor" aria-label="anchor" href="#variance_variance"><i class="fas fa-link"></i></a>
 </h2>
 <p>Variance is a quantity meant to capture information about how spread out data is.</p>
 <p>Let’s build it up step by step.</p>
@@ -103,7 +103,7 @@
 <div class="rmdnote">
 <p>Recall that the mean of the following numbers is 6:</p>
 <p>3, 4, 5, 6, 6, 7, 8, 9</p>
-<p>Create a new list of five numbers that measures the distance between each of the above numbers and the mean. In other words, subtract 6 from each of the above numbers.</p>
+<p>Create a new list of eight numbers that measures the distance between each of the above numbers and the mean. In other words, subtract 6 from each of the above numbers.</p>
 <p>Some of the numbers in your new list should be negative, some should be zero, and some should be positive. Why does that make sense? In other words, what does it mean when a number is negative, zero, or positive?</p>
 </div>
 <p>If the original set of numbers is called <span class="math inline">\(X\)</span>, then what you’ve just calculated is a new list <span class="math inline">\(\left(X - \overline{X}\right)\)</span>. Let’s start organizing this into a table:</p>
@@ -149,7 +149,7 @@
 </table></div>
 <p>The numbers in the second columns are “deviations” from the mean.</p>
 <div class="rmdnote">
-<p>One way you might measure “spread” is to look at the average deviation. After all, if the deviations represent the distances to the mean, a set with large spread will have large deviations and a set will small spread will have small deviations.</p>
+<p>One way you might measure “spread” is to look at the average deviation. After all, if the deviations represent the distances to the mean, a set with large spread will have large deviations and a set with small spread will have small deviations.</p>
 <p>Go ahead and take the average (mean) of the numbers in the second column above.</p>
 <p>Uh, oh! You should have calculated zero. Explain why you will always get zero, no matter what set of numbers you start with.</p>
 </div>
@@ -297,10 +297,13 @@ Var(X) = \frac{\sum{\left(X - \overline{X}\right)^{2}}}{n - 1}
 <tr class="even">
 <td></td>
 <td></td>
-<td>28/7 = 4</td>
+<td>Variance: 28/7 = <span class="math inline">\(\boxed{4}\)</span>
+</td>
 </tr>
 </tbody>
 </table></div>
+<p>In our diagrams, the variance of a variable is indicated by a curved, double-headed arrow, labeled with the value of the variance, like this:</p>
+<div class="inline-figure"><img src="graphics/variance_labeled.png" width="146" style="display: block; margin: auto;"></div>
 <div class="rmdnote">
 <p>Using the tabular approach, calculate the variance of the following set of numbers:</p>
 <p>4, 3, 7, 2, 9, 4, 6</p>
@@ -315,58 +318,58 @@ Var(X) = \frac{\sum{\left(X - \overline{X}\right)^{2}}}{n - 1}
 <p>Once you’ve decided, then calculate the variance for both sets and check your answer.</p>
 </div>
 </div>
-<div id="variance-in-r" class="section level2" number="2.3">
+<div id="variance_r" class="section level2" number="2.3">
 <h2>
-<span class="header-section-number">2.3</span> Variance (in R)<a class="anchor" aria-label="anchor" href="#variance-in-r"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.3</span> Variance (in R)<a class="anchor" aria-label="anchor" href="#variance_r"><i class="fas fa-link"></i></a>
 </h2>
-<p>Once you’ve done it by hand a few times to make sure you understand how the formula works, from here on out we can let R do the work for us:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>Once we’ve done it by hand a few times to make sure we understand how the formula works, from here on out we can let R do the work for us:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">X1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">9</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">X1</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 4</code></pre>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">X2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">3</span>, <span class="fl">7</span>, <span class="fl">2</span>, <span class="fl">9</span>, <span class="fl">4</span>, <span class="fl">6</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">X2</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">X3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">8</span>, <span class="fl">9</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">X3</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 12.5</code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">X4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">9</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">X4</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 8.5</code></pre>
 <p>This is also easier for real-world data that is not highly engineered 😉 to produce whole numbers:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">PlantGrowth</span><span class="op">$</span><span class="va">weight</span></code></pre></div>
 <pre><code>##  [1] 4.17 5.58 5.18 6.11 4.50 4.61 5.17 4.53 5.33 5.14 4.81 4.17 4.41 3.59 5.87
 ## [16] 3.83 6.03 4.89 4.32 4.69 6.31 5.12 5.54 5.50 5.37 5.29 4.92 6.15 5.80 5.26</code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">PlantGrowth</span><span class="op">$</span><span class="va">weight</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 0.49167</code></pre>
 </div>
-<div id="variance-rules" class="section level2" number="2.4">
+<div id="variance_rules" class="section level2" number="2.4">
 <h2>
-<span class="header-section-number">2.4</span> Variance rules<a class="anchor" aria-label="anchor" href="#variance-rules"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.4</span> Variance rules<a class="anchor" aria-label="anchor" href="#variance_rules"><i class="fas fa-link"></i></a>
 </h2>
 <p>In this course, we will need to be able to calculate the variance of various combinations of variables. For example, if <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are two variables, we can create a new variable <span class="math inline">\(X_{1} + X_{2}\)</span> by adding up the values of the two variables. What is the variance of <span class="math inline">\(X_{1} + X_{2}\)</span>?</p>
 <p>But before we answer that, let’s establish the first rule.</p>
 <div class="rmdimportant">
 <ul>
-<li><strong>Rule 1</strong></li>
+<li><a id="Rule1"><strong>Rule 1</strong></a></li>
 </ul>
-<p>Suppose that <span class="math inline">\(C\)</span> is a constant, meaning a single number (rather than a variable that could represent lots of different numbers). Then,</p>
+<p>Suppose that <span class="math inline">\(C\)</span> is a “constant” variable, meaning that it always has the same value (rather than being a variable that could contain lots of different numbers). Then,</p>
 <p><span class="math display">\[
 Var\left(C\right) = 0
 \]</span></p>
 </div>
 <div class="rmdnote">
-<p>Why is Rule 1 true? You can either reason through this conceptually, based on how you understand what variance is supposed to measure, or you can do a sample calculation. (Make a table starting with a column that contains many copies of only a single number and work through the calculation.)</p>
+<p>Why is <a href="#Rule1"><strong>Rule 1</strong></a> true? You can either reason through this conceptually, based on how you understand what variance is supposed to measure, or you can do a sample calculation. (Make a table starting with a column that contains many copies of only a single number and work through the calculation.)</p>
 </div>
 <p>Now, back to the example at the beginning of the section of finding the variance of <span class="math inline">\(X_{1} + X_{2}\)</span>.</p>
 <div class="rmdimportant">
 <ul>
-<li><strong>Rule 2</strong></li>
+<li><a id="Rule2"><strong>Rule 2</strong></a></li>
 </ul>
 <p>If <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent, then</p>
 <p><span class="math display">\[
@@ -375,18 +378,18 @@ Var\left(X_{1}\right) + Var\left(X_{2}\right)
 \]</span></p>
 </div>
 <p>We’re not going to get into a formal definition of <em>independence</em> here. For now, it suffices to think of the intuitive definition you may already have in your head of what it means for two things to be independent. The idea is that, to be independent, <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> should have nothing to do with each other. Knowing the values of one should not give you any information about values of the other. In the next chapter [LINK], we’ll say more about this rule.</p>
-<p>It’s important to note that <strong>Rule 2</strong> is an abstract mathematical rule that holds <em>in theory</em>. When we have actual data, however, we know that statistics won’t always match their theoretical values. For example, even if a true population mean is 42, samples drawn from that population will have sample means that are <em>close</em> to 42, but likely not exactly 42.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The exact distribution of sample means around a true population value is something you probably learned about in an intro stats course. Sample means follow a Student t distribution.&lt;/p&gt;"><sup>4</sup></a></p>
+<p>It’s important to note that <a href="#Rule2"><strong>Rule 2</strong></a> is an abstract mathematical rule that holds <em>in theory</em>. When we have actual data, however, we know that statistics won’t always match their theoretical values. For example, even if a true population mean is 42, samples drawn from that population will have sample means that are <em>close</em> to 42, but likely not exactly 42.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The exact distribution of sample means around a true population value is something you probably learned about in an intro stats course. Sample means follow a Student t distribution.&lt;/p&gt;"><sup>4</sup></a></p>
 <div class="rmdnote">
 <p>Let’s test this out. Below are two new variables that are defined using random numbers. The first one is normally distributed with mean 1 and standard deviation 2. The second one is normally distributed with mean 4 and standard deviation 3. [WHERE DOES SEED INFO GO?] These are independent because the definition of <span class="math inline">\(X_{5}\)</span> does not depend on any way on the definition of <span class="math inline">\(X_{6}\)</span> and vice versa.</p>
 <p>The sample sizes (2000) are large enough that we should get pretty close to the theoretically correct results here.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">10101</span><span class="op">)</span>
 <span class="va">X5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">2000</span>, mean <span class="op">=</span> <span class="fl">1</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="va">X6</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">2000</span>, mean <span class="op">=</span> <span class="fl">4</span>, sd <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">X5</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] -0.7535339 -0.4927789  3.7518296  1.4751639  1.2172549  3.4054426</code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">X6</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2.297279 4.856377 6.661822 1.309892 2.270882 3.827944</code></pre>
 <p>Use R to calculate the variance of <span class="math inline">\(X_{5}\)</span> and <span class="math inline">\(X_{6}\)</span> separately. Then use R to add the two numbers you just obtained (the sum of the two variances). Finally, use R to calculate the variance of the sum of the two variables.</p>
@@ -402,16 +405,17 @@ Var\left(X + C\right) = Var\left(X\right)
 \]</span></p>
 </div>
 <div class="rmdnote">
-<p>Can you apply Rule 2 followed by Rule 1 to see mathematically why <span class="math inline">\(Var\left(X + C\right) = Var\left(X\right)\)</span>?</p>
+<p>Can you apply <a href="#Rule2"><strong>Rule 2</strong></a> followed by <a href="#Rule1"><strong>Rule 1</strong></a> to see mathematically why <span class="math inline">\(Var\left(X + C\right) = Var\left(X\right)\)</span>?</p>
 </div>
 <div class="rmdnote">
 <p>What is the intuition behind the statement <span class="math inline">\(Var\left(X + C\right) = Var\left(X\right)\)</span>? In other words, can you explain the rule to someone in terms of what it means about shifting the values of a data set up or down by a constant amount?</p>
 </div>
-<p>Rule 3 is similar to Rule 2, but it’s quite counter-intuitive:</p>
+<p><a href="#Rule3"><strong>Rule 3</strong></a> is similar to <a href="#Rule2"><strong>Rule 2</strong></a>, but it’s quite counter-intuitive:</p>
 <div class="rmdimportant">
 <ul>
-<li><strong>Rule 3</strong></li>
+<li><a id="Rule3"><strong>Rule 3</strong></a></li>
 </ul>
+<p>If <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent, then</p>
 <p><span class="math display">\[
 Var\left(X_{1} - X_{2}\right) =
 Var\left(X_{1}\right) + Var\left(X_{2}\right)
@@ -424,22 +428,23 @@ Var\left(X_{1}\right) + Var\left(X_{2}\right)
 <span class="math display">\[
 Var\left(X_{1}\right) - Var\left(X_{2}\right) = 0
 \]</span>
-Can this be true? Zero variance means “no spread” which means exact certainty of the value. (Remember Rule 1?) Are you 100% confident that you will end both transactions with exactly $0? No way!</p>
-<p>In fact, the amount of money you end up with ranges from -$100 up to $100. This is a larger range than in either transaction individually. Our uncertainty has grown because there are two random processes in play, just like in the scenario with two beneficent strangers. In fact, the width of the range of possibilities is the same in both scenarios. $0 to $200 and -$100 to $100 both span a range of $200.</p>
+Can this be true? Zero variance means “no spread” which means exact certainty of the value. (Remember <a href="#Rule1"><strong>Rule 1</strong></a>?) Are you 100% confident that you will end both transactions with exactly $0? No way!</p>
+<p>In fact, the amount of money you end up with ranges from -$100 up to $100. This is a larger range than in either transaction individually. Our uncertainty has grown because there are two random processes in play, just like in the scenario with two beneficent strangers. In fact, the width of the range of possibilities is the same in both scenarios: $0 to $200 and -$100 to $100 both span a range of $200.</p>
 <p>The next rule, unfortunately, does not have a great intuitive explanation. It will make a little more sense in the next chapter [LINK], and we’ll revisit it then.</p>
 <div class="rmdimportant">
 <ul>
-<li><strong>Rule 4</strong></li>
+<li><a id="Rule4"><strong>Rule 4</strong></a></li>
 </ul>
 <p>If <span class="math inline">\(a\)</span> is any number,</p>
 <p><span class="math display">\[
 Var\left(aX\right) = a^2 Var\left(X\right)
 \]</span></p>
 </div>
+<p>If you go back to the table, imagine multiplying every number in the first column by <span class="math inline">\(a\)</span>. Every number in the second column will still have a factor of <span class="math inline">\(a\)</span>. But when you square those values, every number in the third column will have a factor of <span class="math inline">\(a^{2}\)</span>. That’s the gist of the rule anyway. But, again, there’s not much intuition about why that makes sense.</p>
 <div class="rmdnote">
 <p>We can, at least, check empirically that the rule works.</p>
 <p>We’ll use <span class="math inline">\(X_{5}\)</span> as we defined it above, a normally distributed variable with mean 1 and standard deviation 2. The variance of the data is about 4:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">X5</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 4.15763</code></pre>
 <p>Let’s use <span class="math inline">\(a = 3\)</span>.</p>
@@ -449,9 +454,9 @@ Var\left(aX\right) = a^2 Var\left(X\right)
 </div>
 <p>And that’s all the variance rules we’ll need!</p>
 </div>
-<div id="standard-deviation" class="section level2" number="2.5">
+<div id="variance_standard-deviation" class="section level2" number="2.5">
 <h2>
-<span class="header-section-number">2.5</span> Standard deviation<a class="anchor" aria-label="anchor" href="#standard-deviation"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.5</span> Standard deviation<a class="anchor" aria-label="anchor" href="#variance_standard-deviation"><i class="fas fa-link"></i></a>
 </h2>
 <p>The variance is nice because it obeys all the above rules. The one big downside is that it’s not very interpretable.</p>
 <p>For example, think of the scenario with people giving/taking money. In that case, the values were measures in units of dollars.</p>
@@ -461,7 +466,7 @@ Var\left(aX\right) = a^2 Var\left(X\right)
 <p>Okay, now here’s where things get weird. What are the units of <span class="math inline">\(\left(X - \overline{X}\right)^{2}\)</span>? This no longer makes sense.</p>
 </div>
 <p>Variance is <em>nearly</em> the average of a bunch of squared deviations, so for a variable measured in dollars, the units of variance would be “squared dollars”, whatever that is.</p>
-<p>Variances are not really interpretable directly. How do we make them more interpretable? Well, if variance has “squared” unit, we can take the square root to get back to the natural units we started with.</p>
+<p>Variances are not really interpretable directly. How do we make them more interpretable? Well, if variance has “squared” units, we can take the square root to get back to the natural units we started with.</p>
 <p>And this is called the standard deviation, <span class="math inline">\(SD(X)\)</span>.</p>
 <p><span class="math display">\[
 SD(X) = \sqrt{\frac{\sum{\left(X - \overline{X}\right)^{2}}}
@@ -478,7 +483,11 @@ SD\left(X_{1}\right)^{2} + SD\left(X_{2}\right)^{2}
 }
 \]</span>
 But, eww, that’s gross.</p>
-<p>For SEM, we will focus almost exclusively on variance and switch to standard deviation only if we need to communicate something about spread in meaningful units.</p>
+<p>For SEM, we will focus almost exclusively on variance and switch to standard deviation for only two reasons:</p>
+<ol style="list-style-type: decimal">
+<li>We need to communicate something about spread in meaningful units.</li>
+<li>We need to standardize variables. (See Section @ref(#variance_standardizing) below.)</li>
+</ol>
 </div>
 <div id="variance_mean-centering" class="section level2" number="2.6">
 <h2>
@@ -490,13 +499,20 @@ But, eww, that’s gross.</p>
 <p>Let’s use <span class="math inline">\(X_{6}\)</span> as we defined it before, a normally distributed variable with mean 4 and standard deviation 3. How do we interpret the values of <span class="math inline">\(X_{6} - \overline{X_{6}}\)</span>? (Remember, this is just the second column in our variance tables earlier.)</p>
 <p>If we shift all the <span class="math inline">\(X_{6}\)</span> values to the left by <span class="math inline">\(\overline{X_{6}}\)</span> units, what is the mean of the new list of numbers?</p>
 <p>Let’s verify this in R. We’ll use the “suffix” <code>mc</code> to indicate a mean-centered variable.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">X6_mc</span> <span class="op">&lt;-</span> <span class="va">X6</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">X6</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">X6_mc</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2.851573e-16</code></pre>
 <p>Why does this answer not exactly agree with the “theoretical” answer you came up with in a few lines above? (If you don’t already know, the <code>e-16</code> in the expression above is scientific notation and means “times <span class="math inline">\(10^{-16}\)</span>. That’s a really small number!)</p>
 <p>Take a guess about the variance of <code>X6_mc</code>. Verify your guess in R.</p>
 </div>
+<p>So the good news is that <strong>mean centering preserves the variance</strong>. While the mean will be shifted to be 0, the variance does not change, so any statistical model we build that analyzes the variance will not be affecting by mean-centering.</p>
+</div>
+<div id="variance_standardizing" class="section level2" number="2.7">
+<h2>
+<span class="header-section-number">2.7</span> Standardizing data<a class="anchor" aria-label="anchor" href="#variance_standardizing"><i class="fas fa-link"></i></a>
+</h2>
+<p>After we’ve mean centered the data, we can go one step further.</p>
 
 </div>
 </div>
@@ -509,11 +525,12 @@ But, eww, that’s gross.</p>
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#variance"><span class="header-section-number">2</span> Variance</a></li>
 <li><a class="nav-link" href="#variance_mean"><span class="header-section-number">2.1</span> A quick refresher on the mean</a></li>
-<li><a class="nav-link" href="#variance-by-hand"><span class="header-section-number">2.2</span> Variance (by hand)</a></li>
-<li><a class="nav-link" href="#variance-in-r"><span class="header-section-number">2.3</span> Variance (in R)</a></li>
-<li><a class="nav-link" href="#variance-rules"><span class="header-section-number">2.4</span> Variance rules</a></li>
-<li><a class="nav-link" href="#standard-deviation"><span class="header-section-number">2.5</span> Standard deviation</a></li>
+<li><a class="nav-link" href="#variance_variance"><span class="header-section-number">2.2</span> Variance</a></li>
+<li><a class="nav-link" href="#variance_r"><span class="header-section-number">2.3</span> Variance (in R)</a></li>
+<li><a class="nav-link" href="#variance_rules"><span class="header-section-number">2.4</span> Variance rules</a></li>
+<li><a class="nav-link" href="#variance_standard-deviation"><span class="header-section-number">2.5</span> Standard deviation</a></li>
 <li><a class="nav-link" href="#variance_mean-centering"><span class="header-section-number">2.6</span> Mean centering data</a></li>
+<li><a class="nav-link" href="#variance_standardizing"><span class="header-section-number">2.7</span> Standardizing data</a></li>
 </ul>
 
       <div class="book-extra">
@@ -531,7 +548,7 @@ But, eww, that’s gross.</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-09.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-10.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

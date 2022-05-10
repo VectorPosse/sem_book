@@ -26,7 +26,7 @@ Calculate the mean of this set of eight numbers.
 :::
 
 
-## Variance (by hand)
+## Variance {#variance_variance}
 
 Variance is a quantity meant to capture information about how spread out data is.
 
@@ -56,7 +56,7 @@ Recall that the mean of the following numbers is 6:
 
 3, 4, 5, 6, 6, 7, 8, 9
 
-Create a new list of five numbers that measures the distance between each of the above numbers and the mean. In other words, subtract 6 from each of the above numbers.
+Create a new list of eight numbers that measures the distance between each of the above numbers and the mean. In other words, subtract 6 from each of the above numbers.
 
 Some of the numbers in your new list should be negative, some should be zero, and some should be positive. Why does that make sense? In other words, what does it mean when a number is negative, zero, or positive? 
 
@@ -79,7 +79,7 @@ The numbers in the second columns are "deviations" from the mean.
 
 ::: {.rmdnote}
 
-One way you might measure "spread" is to look at the average deviation. After all, if the deviations represent the distances to the mean, a set with large spread will have large deviations and a set will small spread will have small deviations.
+One way you might measure "spread" is to look at the average deviation. After all, if the deviations represent the distances to the mean, a set with large spread will have large deviations and a set with small spread will have small deviations.
 
 Go ahead and take the average (mean) of the numbers in the second column above.
 
@@ -160,7 +160,15 @@ Here is the full calculation in the table:
 | 8 |  2 | 4 |
 | 9 |  3 | 9 |
 |   |    | Sum: 28  |
-|   |    | 28/7 = 4 |
+|   |    | Variance: 28/7 = $\boxed{4}$ |
+
+
+In our diagrams, the variance of a variable is indicated by a curved, double-headed arrow, labeled with the value of the variance, like this:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/variance_labeled.png")
+```
+
 
 ::: {.rmdnote}
 
@@ -185,9 +193,9 @@ Once you've decided, then calculate the variance for both sets and check your an
 :::
 
 
-## Variance (in R)
+## Variance (in R) {#variance_r}
 
-Once you've done it by hand a few times to make sure you understand how the formula works, from here on out we can let R do the work for us:
+Once we've done it by hand a few times to make sure we understand how the formula works, from here on out we can let R do the work for us:
 
 ```{r}
 X1 <- c(3, 4, 5, 6, 6, 7, 8, 9)
@@ -220,7 +228,7 @@ var(PlantGrowth$weight)
 ```
 
 
-## Variance rules
+## Variance rules {#variance_rules}
 
 In this course, we will need to be able to calculate the variance of various combinations of variables. For example, if $X_{1}$ and $X_{2}$ are two variables, we can create a new variable $X_{1} + X_{2}$ by adding up the values of the two variables. What is the variance of $X_{1} + X_{2}$?
 
@@ -228,9 +236,9 @@ But before we answer that, let's establish the first rule.
 
 ::: {.rmdimportant}
 
--  **Rule 1**
+-  <a id = "Rule1">**Rule 1**</a>
 
-Suppose that $C$ is a constant, meaning a single number (rather than a variable that could represent lots of different numbers). Then,
+Suppose that $C$ is a "constant" variable, meaning that it always has the same value (rather than being a variable that could contain lots of different numbers). Then,
 
 $$
 Var\left(C\right) = 0
@@ -239,7 +247,7 @@ $$
 
 ::: {.rmdnote}
 
-Why is Rule 1 true? You can either reason through this conceptually, based on how you understand what variance is supposed to measure, or you can do a sample calculation. (Make a table starting with a column that contains many copies of only a single number and work through the calculation.)
+Why is [**Rule 1**](#Rule1) true? You can either reason through this conceptually, based on how you understand what variance is supposed to measure, or you can do a sample calculation. (Make a table starting with a column that contains many copies of only a single number and work through the calculation.)
 
 :::
 
@@ -247,7 +255,7 @@ Now, back to the example at the beginning of the section of finding the variance
 
 ::: {.rmdimportant}
 
--  **Rule 2**
+-  <a id = "Rule2">**Rule 2**</a>
 
 If $X_{1}$ and $X_{2}$ are independent, then
 
@@ -260,7 +268,7 @@ $$
 
 We're not going to get into a formal definition of *independence* here. For now, it suffices to think of the intuitive definition you may already have in your head of what it means for two things to be independent. The idea is that, to be independent, $X_{1}$ and $X_{2}$ should have nothing to do with each other. Knowing the values of one should not give you any information about values of the other. In the next chapter [LINK], we'll say more about this rule.
 
-It's important to note that **Rule 2** is an abstract mathematical rule that holds *in theory*. When we have actual data, however, we know that statistics won't always match their theoretical values. For example, even if a true population mean is 42, samples drawn from that population will have sample means that are *close* to 42, but likely not exactly 42.^[The exact distribution of sample means around a true population value is something you probably learned about in an intro stats course. Sample means follow a Student t distribution.]
+It's important to note that [**Rule 2**](#Rule2) is an abstract mathematical rule that holds *in theory*. When we have actual data, however, we know that statistics won't always match their theoretical values. For example, even if a true population mean is 42, samples drawn from that population will have sample means that are *close* to 42, but likely not exactly 42.^[The exact distribution of sample means around a true population value is something you probably learned about in an intro stats course. Sample means follow a Student t distribution.]
 
 ::: {.rmdnote}
 
@@ -305,7 +313,7 @@ $$
 
 ::: {.rmdnote}
 
-Can you apply Rule 2 followed by Rule 1 to see mathematically why $Var\left(X + C\right) = Var\left(X\right)$?
+Can you apply [**Rule 2**](#Rule2) followed by [**Rule 1**](#Rule1) to see mathematically why $Var\left(X + C\right) = Var\left(X\right)$?
 
 :::
 
@@ -315,11 +323,13 @@ What is the intuition behind the statement $Var\left(X + C\right) = Var\left(X\r
 
 :::
 
-Rule 3 is similar to Rule 2, but it's quite counter-intuitive:
+[**Rule 3**](#Rule3) is similar to [**Rule 2**](#Rule2), but it's quite counter-intuitive:
 
 ::: {.rmdimportant}
 
--  **Rule 3**
+-  <a id = "Rule3">**Rule 3**</a>
+
+If $X_{1}$ and $X_{2}$ are independent, then
 
 $$
 Var\left(X_{1} - X_{2}\right) =
@@ -338,15 +348,15 @@ Imagine a world in which the wrong rule prevailed. What if $Var\left(X_{1} - X_{
 $$
 Var\left(X_{1}\right) - Var\left(X_{2}\right) = 0
 $$
-Can this be true? Zero variance means "no spread" which means exact certainty of the value. (Remember Rule 1?) Are you 100% confident that you will end both transactions with exactly \$0? No way!
+Can this be true? Zero variance means "no spread" which means exact certainty of the value. (Remember [**Rule 1**](#Rule1)?) Are you 100% confident that you will end both transactions with exactly \$0? No way!
 
-In fact, the amount of money you end up with ranges from -\$100 up to \$100. This is a larger range than in either transaction individually. Our uncertainty has grown because there are two random processes in play, just like in the scenario with two beneficent strangers. In fact, the width of the range of possibilities is the same in both scenarios. \$0 to \$200 and -\$100 to \$100 both span a range of $200.
+In fact, the amount of money you end up with ranges from -\$100 up to \$100. This is a larger range than in either transaction individually. Our uncertainty has grown because there are two random processes in play, just like in the scenario with two beneficent strangers. In fact, the width of the range of possibilities is the same in both scenarios: \$0 to \$200 and -\$100 to \$100 both span a range of $200.
 
 The next rule, unfortunately, does not have a great intuitive explanation. It will make a little more sense in the next chapter [LINK], and we'll revisit it then.
 
 ::: {.rmdimportant}
 
--  **Rule 4**
+-  <a id = "Rule4">**Rule 4**</a>
 
 If $a$ is any number, 
 
@@ -355,6 +365,8 @@ Var\left(aX\right) = a^2 Var\left(X\right)
 $$
 
 :::
+
+If you go back to the table, imagine multiplying every number in the first column by $a$. Every number in the second column will still have a factor of $a$. But when you square those values, every number in the third column will have a factor of $a^{2}$. That's the gist of the rule anyway. But, again, there's not much intuition about why that makes sense.
 
 ::: {.rmdnote}
 
@@ -376,10 +388,12 @@ But now try $9 Var\left(X_{5}\right)$. That should work.
 
 :::
 
+
+
 And that's all the variance rules we'll need!
 
 
-## Standard deviation
+## Standard deviation {#variance_standard-deviation}
 
 The variance is nice because it obeys all the above rules. The one big downside is that it's not very interpretable.
 
@@ -397,7 +411,7 @@ Okay, now here's where things get weird. What are the units of $\left(X - \overl
 
 Variance is *nearly* the average of a bunch of squared deviations, so for a variable measured in dollars, the units of variance would be "squared dollars", whatever that is.
 
-Variances are not really interpretable directly. How do we make them more interpretable? Well, if variance has "squared" unit, we can take the square root to get back to the natural units we started with.
+Variances are not really interpretable directly. How do we make them more interpretable? Well, if variance has "squared" units, we can take the square root to get back to the natural units we started with.
 
 And this is called the standard deviation, $SD(X)$.
 
@@ -420,7 +434,10 @@ SD\left(X_{1}\right)^{2} + SD\left(X_{2}\right)^{2}
 $$
 But, eww, that's gross.
 
-For SEM, we will focus almost exclusively on variance and switch to standard deviation only if we need to communicate something about spread in meaningful units.
+For SEM, we will focus almost exclusively on variance and switch to standard deviation for only two reasons:
+
+1. We need to communicate something about spread in meaningful units.
+2. We need to standardize variables. (See Section [FIGURE OUT SECTION LINKING] below.)
 
 
 ## Mean centering data {#variance_mean-centering}
@@ -446,4 +463,12 @@ Why does this answer not exactly agree with the "theoretical" answer you came up
 Take a guess about the variance of `X6_mc`. Verify your guess in R.
 
 :::
+
+So the good news is that **mean centering preserves the variance**. While the mean will be shifted to be 0, the variance does not change, so any statistical model we build that analyzes the variance will not be affecting by mean-centering.
+
+
+## Standardizing data {#variance_standardizing}
+
+After we've mean centered the data, we can go one step further.
+
 

@@ -5,13 +5,8 @@ knitr::include_graphics("graphics/variable.png")
 ```
 
 
-## TEST
+## Section [#variables_first-section]
 
-::: {.rmdnote}
-Note here
-:::
 
-```{r}
-2 + 2
-```
 
+[SOMEWHERE NEED TO MENTION "CONSTANT" VARIABLES, OR VARIABLES THAT TAKE ONLY ONE VALUE.]
