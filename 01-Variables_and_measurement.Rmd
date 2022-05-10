@@ -5,8 +5,7 @@ knitr::include_graphics("graphics/variable.png")
 ```
 
 
-## Section [#variables_first-section]
-
+## First section {#variables-first-section}
 
 
 [SOMEWHERE NEED TO MENTION "CONSTANT" VARIABLES, OR VARIABLES THAT TAKE ONLY ONE VALUE.]
