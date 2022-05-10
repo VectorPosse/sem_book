@@ -444,7 +444,7 @@ For SEM, we will focus almost exclusively on variance and switch to standard dev
 
 Many of the statistical techniques taught in an intro stats course focus on learning about the means of variables. Structural equation modeling is a little different in that it is more focused on the explaining the variability of data---how changes in one or more variables predict changes in other variables.^[There are tools in SEM for working with means as well. WILL WE COVER THIS IN A FUTURE CHAPTER?]
 
-A habit we'll start forming now is to mean-center all our variables. We do this by subtracting the mean of a variable from all its values.
+A habit we'll start forming now is to mean center all our variables. We do this by subtracting the mean of a variable from all its values.
 
 ::: {.rmdnote}
 
@@ -469,8 +469,103 @@ So the good news is that **mean centering preserves the variance**. While the me
 
 ## Standardizing data {#variance-standardizing}
 
-After we've mean centered the data, we can go one step further.
+After we've mean centered the data, we can go one step further and divide by the standard deviation. This results in something often called a *z-score*. The process of converting variables from their original units to z-scores is called *standardizing* the data.
 
+$$
+Z = \frac{\left(X - \overline{X}\right)}{SD(X)}
+$$
 
+Why is this useful? One reason is that it remove the units of measurement to facilitate comparisons between variables. Suppose $X$ represents height in inches. The numerator ($X - \overline{X}$) has units of inches. The standard deviation $SD(X)$ also has units of inches. So when you divide, the units go away and the z-score is left without units, sometimes called a "dimensionless quantity".
+
+::: {.rmdnote}
+
+Suppose a female in the United States is 6 feet tall (72 inches). Suppose a female in China is 5'8 tall (68 inches). In absolute terms, the American woman is taller than the Chinese woman. But what if we're interested in knowing which woman is taller *relative* to their respective population?
+
+The mean height for an American woman is 65" with a standard deviation of 3.5" The mean height for a Chinese woman is 62" with a standard deviation of 2.5". (These numbers aren't perfectly correct, but they're probably close-ish.)
+
+Calculate the z-scores for both these women.
+
+Which woman is taller relative to their population?
+
+:::
+
+Although z-scores don't technically have units, we can think of them as measuring how many standard deviations a value lies above or below the mean.
+
+::: {.rmdnote}
+
+What is the z-score for a value that equals the mean?
+
+What is the meaning of a negative z-score?
+
+:::
+
+The z-score for the American woman was 2. This means that her height measures two standard deviations above the mean.
+
+For real-world data, we will use technology to do this. Here are some temperature measurements from New York in 1974. (These are daily highs across a six-month period.)
+
+```{r}
+airquality$Temp
+```
+
+We calculate the mean and standard deviation:
+
+```{r}
+mean(airquality$Temp)
+```
+
+```{r}
+sd(airquality$Temp)
+```
+
+This is an average high of about 78 degrees Fahrenheit with a standard deviation of about 9.5 degrees Fahrenheit.
+
+If we just subtract the mean, we get mean-centered data.
+
+```{r}
+airquality$Temp - mean(airquality$Temp)
+```
+
+But if we also divide by the standard deviation, we get a standardized variable (or a set of z-scores). Note the extra parentheses to make sure we get the order of operations right. We have to subtract first, but then divide that whole mean-centered quantity by the standard deviation.
+
+```{r}
+(airquality$Temp - mean(airquality$Temp))/sd(airquality$Temp)
+```
+
+The easier way to do this in R is to use the `scale` command:
+
+```{r}
+scale(airquality$Temp)
+```
+
+Although the outputs are formatted a little differently, you can go back and check that these sets of numbers match each other.
+
+::: {.rmdnote}
+
+What is the mean of a standardized variable? How do you know this?
+
+:::
+
+::: {.rmdnote}
+
+Let's calculate the variance of a standardized variable. To do so, I'll note that the mean $\overline{X}$ is just a number. Also, the standard deviation $SD(X)$ is just a number. To make the calculation easier to understand, let's just substitute letters that are easier to work with:
+
+$M = \overline{X}$
+
+$S = SD(X)$.
+
+Remember, $M$ and $S$ are *constants*.
+
+Now we need to calculate $Var(Z)$. I'll do the first couple of steps. Then you take over and, using the variance rules from earlier in the chapter, simplify the expression until you get to a numerical answer.
+
+\begin{align}
+Var(Z) &= Var\left(\frac{\left(X - \overline{X}\right)}{SD(X)}\right) \\
+    &= Var\left(\frac{\left(X - M\right)}{S}\right) \\
+    &= Var\left(\frac{1}{S}\left(X - M\right)\right) \\
+    &= \quad ???
+\end{align}
+
+:::
+
+You should get the answer 1. A standardized variable always has variance 1. This will be an important fact in future chapters.
 
 
