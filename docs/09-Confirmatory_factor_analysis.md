@@ -1,1 +1,0 @@
-# Confirmatory factor analysis
