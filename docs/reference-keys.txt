@@ -2,7 +2,10 @@ variables
 test
 variance
 variance_mean
-variance-1
+variance-by-hand
+variance-in-r
+variance-rules
+standard-deviation
 variance_mean-centering
 covariance
 simple

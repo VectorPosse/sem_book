@@ -276,7 +276,8 @@ Most of us were taught how to calculate the mean of a variable way back in eleme
 \[
 \overline{X} = \frac{\sum{X}}{n}
 \]
-(In case you forgot, the Greek letter Sigma (\(\Sigma\)) stand for ``sum'' and means ``add up all values of the thing that follows''.)
+
+(In case you forgot, the Greek letter Sigma \(\Sigma\) stands for ``sum'' and means ``add up all values of the thing that follows''.)
 
 Here is a small data set we'll use throughout this chapter as a simple example we can work ``by hand'':
 
@@ -431,14 +432,63 @@ Here is the full calculation in the table:
 6 & 0 & 0 \\
 7 & 1 & 1 \\
 8 & 2 & 4 \\
-9 & 3 & 9 \\
---- & ---- & \(\overline{28}\) \\
+9 & 3 & \(\underline{9}\) \\
+& & \(\overline{28}\) \\
 \bottomrule
 \end{longtable}
 
-Using the table approach, calculate the variance of the following set of numbers:
+Using the tabular approach, calculate the variance of the following set of numbers:
 
 4, 3, 7, 2, 9, 4, 6
+
+Square each of the numbers from the second column of the table above. This will calculate a new list \(\left(X - \overline{X}\right)^{2}\)
+
+Once you've done it by hand a few times to make sure you understand how the formula works, from here on out we can let R do the work for us:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X1 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{5}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{)}
+\FunctionTok{var}\NormalTok{(X1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X2 }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{6}\NormalTok{)}
+\FunctionTok{var}\NormalTok{(X2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 6
+\end{verbatim}
+
+This is also easier for real-world data that is not highly engineered 😉 to produce whole numbers:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{PlantGrowth}\SpecialCharTok{$}\NormalTok{weight}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 4.17 5.58 5.18 6.11 4.50 4.61 5.17 4.53 5.33 5.14 4.81 4.17 4.41 3.59 5.87
+## [16] 3.83 6.03 4.89 4.32 4.69 6.31 5.12 5.54 5.50 5.37 5.29 4.92 6.15 5.80 5.26
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{var}\NormalTok{(PlantGrowth}\SpecialCharTok{$}\NormalTok{weight)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.49167
+\end{verbatim}
 
 \hypertarget{variance_mean-centering}{%
 \section{Mean centering data}\label{variance_mean-centering}}
