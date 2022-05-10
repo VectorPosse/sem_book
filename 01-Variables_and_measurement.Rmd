@@ -5,7 +5,7 @@ knitr::include_graphics("graphics/variable.png")
 ```
 
 
-## Section [#variables_first-section]
+## Section [#variables-first-section]
 
 
 

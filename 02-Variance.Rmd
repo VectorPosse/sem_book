@@ -5,7 +5,7 @@ knitr::include_graphics("graphics/variance.png")
 ```
 
 
-## A quick refresher on the mean {#variance_mean}
+## A quick refresher on the mean {#variance-mean}
 
 Most of us were taught how to calculate the mean of a variable way back in elementary school: add up all the numbers and divide by the size of the group of numbers. In a statistics context, we often use a "bar" to indicate the mean of a variable; in other words, if a variable is called $X$, the mean is denoted $\overline{X}$. Remembering that we always use $n$ to represent the sample size, the formula is
 
@@ -26,7 +26,7 @@ Calculate the mean of this set of eight numbers.
 :::
 
 
-## Variance {#variance_variance}
+## Variance {#variance-variance}
 
 Variance is a quantity meant to capture information about how spread out data is.
 
@@ -193,7 +193,7 @@ Once you've decided, then calculate the variance for both sets and check your an
 :::
 
 
-## Variance (in R) {#variance_r}
+## Variance (in R) {#variance-r}
 
 Once we've done it by hand a few times to make sure we understand how the formula works, from here on out we can let R do the work for us:
 
@@ -228,7 +228,7 @@ var(PlantGrowth$weight)
 ```
 
 
-## Variance rules {#variance_rules}
+## Variance rules {#variance-rules}
 
 In this course, we will need to be able to calculate the variance of various combinations of variables. For example, if $X_{1}$ and $X_{2}$ are two variables, we can create a new variable $X_{1} + X_{2}$ by adding up the values of the two variables. What is the variance of $X_{1} + X_{2}$?
 
@@ -393,7 +393,7 @@ But now try $9 Var\left(X_{5}\right)$. That should work.
 And that's all the variance rules we'll need!
 
 
-## Standard deviation {#variance_standard-deviation}
+## Standard deviation {#variance-sd}
 
 The variance is nice because it obeys all the above rules. The one big downside is that it's not very interpretable.
 
@@ -437,10 +437,10 @@ But, eww, that's gross.
 For SEM, we will focus almost exclusively on variance and switch to standard deviation for only two reasons:
 
 1. We need to communicate something about spread in meaningful units.
-2. We need to standardize variables. (See Section [FIGURE OUT SECTION LINKING] below.)
+2. We need to standardize variables. (See Section \@ref(variance-standardizing) below.)
 
 
-## Mean centering data {#variance_mean-centering}
+## Mean centering data {#variance-mean-centering}
 
 Many of the statistical techniques taught in an intro stats course focus on learning about the means of variables. Structural equation modeling is a little different in that it is more focused on the explaining the variability of data---how changes in one or more variables predict changes in other variables.^[There are tools in SEM for working with means as well. WILL WE COVER THIS IN A FUTURE CHAPTER?]
 
@@ -467,8 +467,10 @@ Take a guess about the variance of `X6_mc`. Verify your guess in R.
 So the good news is that **mean centering preserves the variance**. While the mean will be shifted to be 0, the variance does not change, so any statistical model we build that analyzes the variance will not be affecting by mean-centering.
 
 
-## Standardizing data {#variance_standardizing}
+## Standardizing data {#variance-standardizing}
 
 After we've mean centered the data, we can go one step further.
+
+
 
 

@@ -24,7 +24,7 @@ Welcome to our book on structural equation modeling!
 If you want, you can also download this book as a <a href="https://vectorposse.github.io/sem_book/sem_book.pdf" target="_blank">PDF</a> or <a href="https://vectorposse.github.io/sem_book/sem_book.epub" target="_blank">EPUB</a> file.
 
 
-## Some history {-#intro_history}
+## Some history {-#intro-history}
 
 In 2016, Jonathan and Sean embarked upon a bold experiment, asking the question, "Is is possible to teach structural equation modeling (SEM) to undergraduates with little statistical background?" To make things even more exciting, we attempted to do so in a special topics course lasting only one month during our May Term at Westminster College (Salt Lake City, UT).
 
@@ -39,7 +39,7 @@ Sean was granted sabbatical in Spring 2020 and proposed to use that time to star
 Once the pandemic subsided enough for us to offer the course in person again, we attempted it again in May, 2022. [TO BE CONTINUED]
 
 
-## Our philosophy {-#intro_philosophy}
+## Our philosophy {-#intro-philosophy}
 
 As we mentioned before, our motivation for writing the book was driven by the difficulty we had finding readings for the students. Perhaps that begs the question, should one even try teaching a topic as "difficult" or "advanced" as structural equation modeling to the audience we had? To be sure, the traditional approaches already on the market seem to assume a lot more background than we had at our disposal. And the books that claim to assume less background...well, sometimes they require more than they let on.
 
@@ -81,13 +81,13 @@ Learning about complex models induces a sizable cognitive load. Shortcuts in dia
 
 While it may be the industry standard, LISREL notation is needlessly complex for undergraduate students. We take a consistent and simple approach to notation that represents all variables using UPPERCASE names and all path values using lowercase names. Abstract variables tend to be called something like X when exogenous and Y when endogenous. Real-world variables have contextually meaningful names. For those interested in reading the research literature, we have included an appendix describing LISREL notation.
 
-## Course structure {-#intro_structure}
+## Course structure {-#intro-structure}
 
 We use this book to teach a 2-credit-hour course. (Even though it's a special topics course in our May Term, the number of contact hours for students is equivalent to a semester-long, 2-credit-hour course.)
 
 [ADD INFO HERE AS WE DECIDE HOW MUCH IS REASONABLE TO COVER. IF WE WANT THE BOOK TO BE USABLE IN A 4-CREDIT-HOUR COURSE, WHAT ADDITIONAL MATERIAL SHOULD WE CONSIDER INCLUDING?]
 
-## Onward and upward {-#intro_onward}
+## Onward and upward {-#intro-onward}
 
 We hope you enjoy our textbook. Please send us your feedback!
 
