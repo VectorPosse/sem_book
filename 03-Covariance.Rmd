@@ -181,7 +181,7 @@ cov(airquality$Temp, airquality$Wind)
 
 ## Covariance rules {#covariance-rules}
 
-We'll think of the variance and covariance rules as one big list. We left off on [**Rule 4**](../variance.html#Rule4), so now we'll introduce [**Rule 5**](#Rule5).
+We'll think of the variance and covariance rules as one big list. We left off on [**Rule 4**](./variance.html#Rule4), so now we'll introduce [**Rule 5**](#Rule5).
 
 ::: {.rmdimportant}
 
