@@ -359,15 +359,15 @@ Square each of the numbers from the second column of the table above. This will 
 Putting the new numbers into our previous table:
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}@{}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}@{}}
 \toprule
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\raggedleft
 \(X\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\left(X - \overline{X}\right)\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\left(X - \overline{X}\right)^{2}\)
 \end{minipage} \\
 \midrule
@@ -402,15 +402,15 @@ As a one-liner, the formula may look a little intimidating, but when you break i
 Here is the full calculation in the table:
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}@{}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4000}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}@{}}
 \toprule
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\raggedleft
 \(X\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\left(X - \overline{X}\right)\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\left(X - \overline{X}\right)^{2}\)
 \end{minipage} \\
 \midrule
@@ -562,7 +562,7 @@ We're not going to get into a formal definition of \emph{independence} here. For
 
 It's important to note that \protect\hyperlink{Rule2}{\textbf{Rule 2}} is an abstract mathematical rule that holds \emph{in theory}. When we have actual data, however, we know that statistics won't always match their theoretical values. For example, even if a true population mean is 42, samples drawn from that population will have sample means that are \emph{close} to 42, but likely not exactly 42.\footnote{The exact distribution of sample means around a true population value is something you probably learned about in an intro stats course. Sample means follow a Student t distribution.}
 
-Let's test this out. Below are two new variables that are defined using random numbers. The first one is normally distributed with mean 1 and standard deviation 2. The second one is normally distributed with mean 4 and standard deviation 3. {[}WHERE DOES SEED INFO GO?{]} These are independent because the definition of \(X_{5}\) does not depend on any way on the definition of \(X_{6}\) and vice versa.
+Let's test this out. Below are two new variables that are defined using random numbers. The first one is normally distributed with mean 1 and standard deviation 2. (If you don't remember standard deviation from intro stats, we talk about it in the next section.) The second one is normally distributed with mean 4 and standard deviation 3. {[}WHERE DOES SEED INFO GO?{]} These are independent because the definition of \(X_{5}\) does not depend on any way on the definition of \(X_{6}\) and vice versa.
 
 The sample sizes (2000) are large enough that we should get pretty close to the theoretically correct results here.
 
@@ -705,6 +705,17 @@ And this is called the standard deviation, \(SD(X)\).
 \[
 SD(X) = \sqrt{\frac{\sum{\left(X - \overline{X}\right)^{2}}}
 {n - 1}}
+\]
+
+Or, said more simply,
+
+\[
+SD(X) = \sqrt{Var(X)}
+\]
+Equivalently,
+
+\[
+Var(X) = SD(X)^2
 \]
 
 Due to its interpretability, an intro stats class will focus far more on the standard deviation than on the variance. The downside is that the mathematical rules aren't so nice for standard deviations. For example, what is
@@ -905,7 +916,7 @@ But if we also divide by the standard deviation, we get a standardized variable 
 ## [151] -0.30451884 -0.19886945 -1.04406459
 \end{verbatim}
 
-The easier way to do this in R is to use the \texttt{scale} command:
+The easier way to do this in R is to use the \texttt{scale} command. (Sorry, the output is a little long. Keep scrolling below.)
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1086,7 +1097,7 @@ Let's calculate the variance of a standardized variable. To do so, I'll note tha
 
 Remember, \(M\) and \(S\) are \emph{constants}.
 
-Now we need to calculate \(Var(Z)\). I'll do the first couple of steps. Then you take over and, using the variance rules from earlier in the chapter, simplify the expression until you get to a numerical answer.
+Now we need to calculate \(Var(Z)\). I'll do the first couple of steps. Then you take over and, using the variance rules from earlier in the chapter, simplify the expression until you get to a numerical answer. Be sure to justify each step by citing the rule you invoked to get there.
 
 \begin{align}
 Var(Z) &= Var\left(\frac{\left(X - \overline{X}\right)}{SD(X)}\right) \\
@@ -1117,7 +1128,7 @@ As we did in the last chapter with variance, we'll build up the calculation of c
 
 Here are two variables (with \(n = 7\)) that have been mean centered:
 
-\begin{longtable}[]{@{}ll@{}}
+\begin{longtable}[]{@{}rr@{}}
 \toprule
 \(X_{1}\) & \(X_{2}\) \\
 \midrule
@@ -1142,7 +1153,7 @@ What if both \(X_{1}\) and \(X_{2}\) lie below their means? What do we know abou
 
 Here is the chart again, but with the products listed in a new column:
 
-\begin{longtable}[]{@{}lll@{}}
+\begin{longtable}[]{@{}rrr@{}}
 \toprule
 \(X_{1}\) & \(X_{2}\) & \(X_{1}X_{2}\) \\
 \midrule
@@ -1159,7 +1170,7 @@ Here is the chart again, but with the products listed in a new column:
 
 Now we add up the products across all seven data pairs:
 
-\begin{longtable}[]{@{}lll@{}}
+\begin{longtable}[]{@{}rrr@{}}
 \toprule
 \(X_{1}\) & \(X_{2}\) & \(X_{1}X_{2}\) \\
 \midrule
@@ -1181,7 +1192,7 @@ We're almost there. Just like we wanted the average squared deviation to calcula
 
 Putting this all together:
 
-\begin{longtable}[]{@{}lll@{}}
+\begin{longtable}[]{@{}rrr@{}}
 \toprule
 \(X_{1}\) & \(X_{2}\) & \(X_{1}X_{2}\) \\
 \midrule
@@ -1217,21 +1228,21 @@ Suppose \(X_{1}\) tends to be above its mean when \(X_{2}\) is below its mean an
 For general variables (not necessarily mean centered), the table will actually look like this:
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}@{}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 8\tabcolsep) * \real{0.2000}}@{}}
 \toprule
-\begin{minipage}[b]{\linewidth}\raggedright
+\begin{minipage}[b]{\linewidth}\raggedleft
 \(X_{1}\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(X_{2}\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\left(X_{1} - \overline{X_{1}}\right)\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\left(X_{2} - \overline{X_{2}}\right)\)
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\left(X_{1} - \overline{X_{1}}\right)\left(X_{2} - \overline{X_{2}}\right)\)
 \end{minipage} \\
 \midrule
@@ -1439,6 +1450,8 @@ Var(aX_{1} + bX_{2}) &= Cov(aX_{1} + bX_{2}, aX_{1} + bX_{2}) \\
     &= \quad ???
 \end{align}
 
+You'll need these rules to do calculations in future chapters. Rather than having to search for them in Chapter \ref{variance} and this chapter, we've gathered up all the rules in one convenient place in Appendix \ref{appendix-rules}.
+
 \hypertarget{covariance-correlation}{%
 \section{Correlation}\label{covariance-correlation}}
 
@@ -1477,8 +1490,157 @@ Var(aX_{1} + bX_{2}) &= Cov(aX_{1} + bX_{2}, aX_{1} + bX_{2}) \\
 \appendix}
 
 
-\hypertarget{lisrel-notation}{%
-\chapter{LISREL notation}\label{lisrel-notation}}
+\hypertarget{appendix-rules}{%
+\chapter{Variance/covariance rules}\label{appendix-rules}}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 1}
+\end{itemize}
+
+If \(C\) is constant, then
+
+\[
+Var\left(C\right) = 0
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 2}
+\end{itemize}
+
+If \(X_{1}\) and \(X_{2}\) are independent, then
+
+\[
+Var\left(X_{1} + X_{2}\right) =
+Var\left(X_{1}\right) + Var\left(X_{2}\right)
+\]
+
+Consequence of \textbf{Rule 1} and \textbf{Rule 2}:
+
+\[
+Var\left(X + C\right) = Var\left(X\right)
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 3}
+\end{itemize}
+
+If \(X_{1}\) and \(X_{2}\) are independent, then
+
+\[
+Var\left(X_{1} - X_{2}\right) =
+Var\left(X_{1}\right) + Var\left(X_{2}\right)
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 4}
+\end{itemize}
+
+If \(a\) is any number,
+
+\[
+Var\left(aX\right) = a^2 Var\left(X\right)
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 5}
+\end{itemize}
+
+\[
+Cov(X, X) = Var(X)
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 6}
+\end{itemize}
+
+\[
+Cov\left(X_{1}, X_{2}\right) = Cov\left(X_{2}, X_{1}\right)
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 7}
+\end{itemize}
+
+If \(C\) is constant, then
+
+\[
+Cov\left(X, C\right) = 0
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 8}
+\end{itemize}
+
+\[
+Cov\left(X_{1} + X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) + Cov\left(X_{2}, X_{3}\right)  
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 9}
+\end{itemize}
+
+\[
+Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
+\]
+
+Consequence of \textbf{Rule 6}, \textbf{Rule 8}, and \textbf{Rule 9}:
+
+\[
+Cov\left(X_{1}, X_{2} \pm X_{3}\right) = Cov\left(X_{1}, X_{2}\right) \pm Cov\left(X_{1}, X_{3}\right)  
+\]
+- \textbf{Rule 10}
+
+If \(a\) is any number,
+
+\[
+Cov\left(a X_{1}, X_{2}\right) = a Cov\left(X_{1}, X_{2}\right) =  Cov\left(X_{1}, a X_{2}\right)  
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 11}
+\end{itemize}
+
+If \(X_{1}\) and \(X_{2}\) are independent, then
+
+\[
+Cov\left(X_{1}, X_{2}\right) = 0
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 12}
+\end{itemize}
+
+For \emph{any} two variables \(X_{1}\) and \(X_{2}\):
+
+\[
+Var(aX_{1} + bX_{2}) = 
+    a^2Var(X_{1}) + b^2Var(X_{2}) + 2abCov(X_{1}, X_{2})
+\]
+
+\hypertarget{appendix-lisrel}{%
+\chapter{LISREL notation}\label{appendix-lisrel}}
 
   \bibliography{book.bib,packages.bib}
 

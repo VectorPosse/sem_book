@@ -1,3 +1,113 @@
 # (APPENDIX) Appendix {-}
 
-# LISREL notation
+# Variance/covariance rules {#appendix-rules}
+
+
+
+-  **Rule 1**
+
+If $C$ is constant, then
+
+$$
+Var\left(C\right) = 0
+$$
+
+-  **Rule 2**
+
+If $X_{1}$ and $X_{2}$ are independent, then
+
+$$
+Var\left(X_{1} + X_{2}\right) =
+Var\left(X_{1}\right) + Var\left(X_{2}\right)
+$$
+
+Consequence of **Rule 1** and **Rule 2**:
+
+$$
+Var\left(X + C\right) = Var\left(X\right)
+$$
+
+-  **Rule 3**
+
+If $X_{1}$ and $X_{2}$ are independent, then
+
+$$
+Var\left(X_{1} - X_{2}\right) =
+Var\left(X_{1}\right) + Var\left(X_{2}\right)
+$$
+
+
+-  **Rule 4**
+
+If $a$ is any number, 
+
+$$
+Var\left(aX\right) = a^2 Var\left(X\right)
+$$
+
+
+-  **Rule 5**
+
+$$
+Cov(X, X) = Var(X)
+$$
+
+-  **Rule 6**
+
+$$
+Cov\left(X_{1}, X_{2}\right) = Cov\left(X_{2}, X_{1}\right)
+$$
+
+-  **Rule 7**
+
+If $C$ is constant, then
+
+$$
+Cov\left(X, C\right) = 0
+$$
+
+-  **Rule 8**
+
+$$
+Cov\left(X_{1} + X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) + Cov\left(X_{2}, X_{3}\right)  
+$$
+
+-  **Rule 9**
+
+$$
+Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
+$$
+
+Consequence of **Rule 6**, **Rule 8**, and **Rule 9**:
+
+$$
+Cov\left(X_{1}, X_{2} \pm X_{3}\right) = Cov\left(X_{1}, X_{2}\right) \pm Cov\left(X_{1}, X_{3}\right)  
+$$
+-  **Rule 10**
+
+If $a$ is any number, 
+
+$$
+Cov\left(a X_{1}, X_{2}\right) = a Cov\left(X_{1}, X_{2}\right) =  Cov\left(X_{1}, a X_{2}\right)  
+$$
+
+-  **Rule 11**
+
+If $X_{1}$ and $X_{2}$ are independent, then
+
+$$
+Cov\left(X_{1}, X_{2}\right) = 0
+$$
+
+-  **Rule 12**
+
+For *any* two variables $X_{1}$ and $X_{2}$:
+
+$$
+Var(aX_{1} + bX_{2}) = 
+    a^2Var(X_{1}) + b^2Var(X_{2}) + 2abCov(X_{1}, X_{2})
+$$
+
+
+
+# LISREL notation {#appendix-lisrel}

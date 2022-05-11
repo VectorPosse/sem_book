@@ -339,7 +339,7 @@ Var(aX_{1} + bX_{2}) &= Cov(aX_{1} + bX_{2}, aX_{1} + bX_{2}) \\
 
 :::
 
-
+You'll need these rules to do calculations in future chapters. Rather than having to search for them in Chapter \@ref(variance) and this chapter, we've gathered up all the rules in one convenient place in Appendix \@ref(appendix-rules).
 
 
 ## Correlation {#covariance-correlation}

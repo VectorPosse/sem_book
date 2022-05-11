@@ -4,17 +4,17 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Chapter 1 Variables and measurement | Demystifying Structural Equation Modeling</title>
+<title>A Variance/covariance rules | Demystifying Structural Equation Modeling</title>
 <meta name="author" content="Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)">
-<meta name="description" content="1.1 First section [SOMEWHERE NEED TO MENTION “CONSTANT” VARIABLES, OR VARIABLES THAT TAKE ONLY ONE VALUE.]">
+<meta name="description" content="Rule 1 If \(C\) is constant, then \[ Var\left(C\right) = 0 \] Rule 2 If \(X_{1}\) and \(X_{2}\) are independent, then \[ Var\left(X_{1} + X_{2}\right) = Var\left(X_{1}\right) +...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
-<meta property="og:title" content="Chapter 1 Variables and measurement | Demystifying Structural Equation Modeling">
+<meta property="og:title" content="A Variance/covariance rules | Demystifying Structural Equation Modeling">
 <meta property="og:type" content="book">
-<meta property="og:url" content="https://vectorposse.github.io/sem_book/variables.html">
-<meta property="og:description" content="1.1 First section [SOMEWHERE NEED TO MENTION “CONSTANT” VARIABLES, OR VARIABLES THAT TAKE ONLY ONE VALUE.]">
+<meta property="og:url" content="https://vectorposse.github.io/sem_book/appendix-rules.html">
+<meta property="og:description" content="Rule 1 If \(C\) is constant, then \[ Var\left(C\right) = 0 \] Rule 2 If \(X_{1}\) and \(X_{2}\) are independent, then \[ Var\left(X_{1} + X_{2}\right) = Var\left(X_{1}\right) +...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chapter 1 Variables and measurement | Demystifying Structural Equation Modeling">
-<meta name="twitter:description" content="1.1 First section [SOMEWHERE NEED TO MENTION “CONSTANT” VARIABLES, OR VARIABLES THAT TAKE ONLY ONE VALUE.]">
+<meta name="twitter:title" content="A Variance/covariance rules | Demystifying Structural Equation Modeling">
+<meta name="twitter:description" content="Rule 1 If \(C\) is constant, then \[ Var\left(C\right) = 0 \] Rule 2 If \(X_{1}\) and \(X_{2}\) are independent, then \[ Var\left(X_{1} + X_{2}\right) = Var\left(X_{1}\right) +...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -45,7 +45,7 @@
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html">Introduction</a></li>
-<li><a class="active" href="variables.html"><span class="header-section-number">1</span> Variables and measurement</a></li>
+<li><a class="" href="variables.html"><span class="header-section-number">1</span> Variables and measurement</a></li>
 <li><a class="" href="variance.html"><span class="header-section-number">2</span> Variance</a></li>
 <li><a class="" href="covariance.html"><span class="header-section-number">3</span> Covariance</a></li>
 <li><a class="" href="simple.html"><span class="header-section-number">4</span> Simple regression</a></li>
@@ -57,7 +57,7 @@
 <li><a class="" href="structural-equation-models.html"><span class="header-section-number">10</span> Structural equation models</a></li>
 <li><a class="" href="structural-causal-models.html"><span class="header-section-number">11</span> Structural causal models</a></li>
 <li class="book-part">Appendix</li>
-<li><a class="" href="appendix-rules.html"><span class="header-section-number">A</span> Variance/covariance rules</a></li>
+<li><a class="active" href="appendix-rules.html"><span class="header-section-number">A</span> Variance/covariance rules</a></li>
 <li><a class="" href="appendix-lisrel.html"><span class="header-section-number">B</span> LISREL notation</a></li>
 </ul>
 
@@ -66,33 +66,111 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="variables" class="section level1" number="1">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="appendix-rules" class="section level1" number="12">
 <h1>
-<span class="header-section-number">1</span> Variables and measurement<a class="anchor" aria-label="anchor" href="#variables"><i class="fas fa-link"></i></a>
+<span class="header-section-number">A</span> Variance/covariance rules<a class="anchor" aria-label="anchor" href="#appendix-rules"><i class="fas fa-link"></i></a>
 </h1>
-<div class="inline-figure"><img src="graphics/variable.png" width="146" style="display: block; margin: auto;"></div>
-<div id="variables-first-section" class="section level2" number="1.1">
-<h2>
-<span class="header-section-number">1.1</span> First section<a class="anchor" aria-label="anchor" href="#variables-first-section"><i class="fas fa-link"></i></a>
-</h2>
-<p>[SOMEWHERE NEED TO MENTION “CONSTANT” VARIABLES, OR VARIABLES THAT TAKE ONLY ONE VALUE.]</p>
-
-</div>
+<ul>
+<li><strong>Rule 1</strong></li>
+</ul>
+<p>If <span class="math inline">\(C\)</span> is constant, then</p>
+<p><span class="math display">\[
+Var\left(C\right) = 0
+\]</span></p>
+<ul>
+<li><strong>Rule 2</strong></li>
+</ul>
+<p>If <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent, then</p>
+<p><span class="math display">\[
+Var\left(X_{1} + X_{2}\right) =
+Var\left(X_{1}\right) + Var\left(X_{2}\right)
+\]</span></p>
+<p>Consequence of <strong>Rule 1</strong> and <strong>Rule 2</strong>:</p>
+<p><span class="math display">\[
+Var\left(X + C\right) = Var\left(X\right)
+\]</span></p>
+<ul>
+<li><strong>Rule 3</strong></li>
+</ul>
+<p>If <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent, then</p>
+<p><span class="math display">\[
+Var\left(X_{1} - X_{2}\right) =
+Var\left(X_{1}\right) + Var\left(X_{2}\right)
+\]</span></p>
+<ul>
+<li><strong>Rule 4</strong></li>
+</ul>
+<p>If <span class="math inline">\(a\)</span> is any number,</p>
+<p><span class="math display">\[
+Var\left(aX\right) = a^2 Var\left(X\right)
+\]</span></p>
+<ul>
+<li><strong>Rule 5</strong></li>
+</ul>
+<p><span class="math display">\[
+Cov(X, X) = Var(X)
+\]</span></p>
+<ul>
+<li><strong>Rule 6</strong></li>
+</ul>
+<p><span class="math display">\[
+Cov\left(X_{1}, X_{2}\right) = Cov\left(X_{2}, X_{1}\right)
+\]</span></p>
+<ul>
+<li><strong>Rule 7</strong></li>
+</ul>
+<p>If <span class="math inline">\(C\)</span> is constant, then</p>
+<p><span class="math display">\[
+Cov\left(X, C\right) = 0
+\]</span></p>
+<ul>
+<li><strong>Rule 8</strong></li>
+</ul>
+<p><span class="math display">\[
+Cov\left(X_{1} + X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) + Cov\left(X_{2}, X_{3}\right)  
+\]</span></p>
+<ul>
+<li><strong>Rule 9</strong></li>
+</ul>
+<p><span class="math display">\[
+Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
+\]</span></p>
+<p>Consequence of <strong>Rule 6</strong>, <strong>Rule 8</strong>, and <strong>Rule 9</strong>:</p>
+<p><span class="math display">\[
+Cov\left(X_{1}, X_{2} \pm X_{3}\right) = Cov\left(X_{1}, X_{2}\right) \pm Cov\left(X_{1}, X_{3}\right)  
+\]</span>
+- <strong>Rule 10</strong></p>
+<p>If <span class="math inline">\(a\)</span> is any number,</p>
+<p><span class="math display">\[
+Cov\left(a X_{1}, X_{2}\right) = a Cov\left(X_{1}, X_{2}\right) =  Cov\left(X_{1}, a X_{2}\right)  
+\]</span></p>
+<ul>
+<li><strong>Rule 11</strong></li>
+</ul>
+<p>If <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent, then</p>
+<p><span class="math display">\[
+Cov\left(X_{1}, X_{2}\right) = 0
+\]</span></p>
+<ul>
+<li><strong>Rule 12</strong></li>
+</ul>
+<p>For <em>any</em> two variables <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>:</p>
+<p><span class="math display">\[
+Var(aX_{1} + bX_{2}) =
+    a^2Var(X_{1}) + b^2Var(X_{2}) + 2abCov(X_{1}, X_{2})
+\]</span></p>
 </div>
   <div class="chapter-nav">
-<div class="prev"><a href="index.html">Introduction</a></div>
-<div class="next"><a href="variance.html"><span class="header-section-number">2</span> Variance</a></div>
+<div class="prev"><a href="structural-causal-models.html"><span class="header-section-number">11</span> Structural causal models</a></div>
+<div class="next"><a href="appendix-lisrel.html"><span class="header-section-number">B</span> LISREL notation</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav">
-<li><a class="nav-link" href="#variables"><span class="header-section-number">1</span> Variables and measurement</a></li>
-<li><a class="nav-link" href="#variables-first-section"><span class="header-section-number">1.1</span> First section</a></li>
-</ul>
+      <ul class="nav navbar-nav"><li><a class="nav-link" href="#appendix-rules"><span class="header-section-number">A</span> Variance/covariance rules</a></li></ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/VectorPosse/sem_book/blob/main/01-Variables_and_measurement.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/VectorPosse/sem_book/edit/main/01-Variables_and_measurement.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/VectorPosse/sem_book/blob/main/Appendix.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/VectorPosse/sem_book/edit/main/Appendix.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>
