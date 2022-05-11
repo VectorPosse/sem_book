@@ -222,7 +222,7 @@
 </tbody>
 </table></div>
 <p>So when <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> tend to have similar values (both positive or both negative), their product is usually positive. It’s not true of every pair of values in the table above; some products are negative. But the majority are positive. Therefore, the sum of all such products will be positive.</p>
-<p>We’re almost there. Just like we wanted the average squared deviation to calculate the variance, here we want the average of the products from the third column above. And just like in the case of variance, it’s not <em>quite</em> the average we calculate. Instead of dividing by <span class="math inline">\(n\)</span>, we divide by <span class="math inline">\(n - 1\)</span> for exactly the same esoteric reason.</p>
+<p>We’re almost there. Just like we wanted the average squared deviation to calculate the variance, here we want the average of the products from the third column above. And just like in the case of variance, it’s not <em>quite</em> the average we calculate. Instead of dividing by <span class="math inline">\(n\)</span>, we divide by <span class="math inline">\(n - 1\)</span> for exactly the same esoteric reason. In our example, there are 7 data points (in other words, 7 rows of data), so we divide by 6.</p>
 <p>Putting this all together:</p>
 <div class="inline-table"><table class="table table-sm">
 <thead><tr class="header">
@@ -281,13 +281,19 @@
 </table></div>
 <p>In our diagrams, the covariance of two variables is indicated by a curved, double-headed arrow pointing at both boxes and labeled with the value of the covariance, like this:</p>
 <div class="inline-figure"><img src="graphics/covariance_labeled.png" width="204" style="display: block; margin: auto;"></div>
+<p>Note that we still include the variances of each of the individual variables. They are still important to us. We just have one new type of arrow now.</p>
 <div class="rmdnote">
-<p>Suppose <span class="math inline">\(X_{1}\)</span> tends to be positive when <span class="math inline">\(X_{2}\)</span> is negative and <span class="math inline">\(X_{1}\)</span> tends to be negative when <span class="math inline">\(X_{2}\)</span> is positive. What will the product <span class="math inline">\(X_{1}X_{2}\)</span> usually be? Therefore, what will the sum of all such products likely be?</p>
+<p>Verify that the variances in the diagram are correct for our example. You can do it by hand if you want, but using R is fine too.</p>
 </div>
 <p>Here is the final formula for covariance, written as <span class="math inline">\(Cov\left(X_{1}, X_{2}\right)\)</span>. This works for all pairs of variables, even if they aren’t mean centered. The terms <span class="math inline">\(\left(X_{1} - \overline{X_1}\right)\)</span> and <span class="math inline">\(\left(X_{2} - \overline{X_2}\right)\)</span> do the mean centering:</p>
+<div class="rmdimportant">
 <p><span class="math display">\[
 Cov\left(X_{1}, X_{2}\right) = \frac{\sum \left(X_{1} - \overline{X_{1}}\right)\left(X_{2} - \overline{X_{2}}\right)}{n - 1}
 \]</span></p>
+</div>
+<div class="rmdnote">
+<p>Suppose <span class="math inline">\(X_{1}\)</span> tends to be above its mean when <span class="math inline">\(X_{2}\)</span> is below its mean and <span class="math inline">\(X_{1}\)</span> tends to be below its mean when <span class="math inline">\(X_{2}\)</span> is above its mean. What will the product <span class="math inline">\(\left(X_{1} - \overline{X_{1}}\right)\left(X_{2} - \overline{X_{2}}\right)\)</span> usually be? Therefore, what will the sum of all such products likely be?</p>
+</div>
 <p>For general variables (not necessarily mean centered), the table will actually look like this:</p>
 <div class="inline-table"><table class="table table-sm">
 <colgroup>
@@ -306,13 +312,20 @@ Cov\left(X_{1}, X_{2}\right) = \frac{\sum \left(X_{1} - \overline{X_{1}}\right)\
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>4</td>
-<td>3</td>
+<td>17</td>
+<td>23</td>
 <td>-2</td>
-<td>1</td>
-<td>-2</td>
+<td>11</td>
+<td>-22</td>
 </tr>
 <tr class="even">
+<td>25</td>
+<td>15</td>
+<td>6</td>
+<td>3</td>
+<td>18</td>
+</tr>
+<tr class="odd">
 <td>…</td>
 <td>…</td>
 <td>…</td>
@@ -323,9 +336,9 @@ Cov\left(X_{1}, X_{2}\right) = \frac{\sum \left(X_{1} - \overline{X_{1}}\right)\
 </table></div>
 <div class="rmdnote">
 <p>Calculate the covariance by hand by making a table like the one above. (These variables are <em>not</em> mean centered, so you’ll have to calculate the mean of each variable in order to fill out the third and fourth columns.)</p>
-<p><span class="math inline">\(X_{1}: 8, 10, 16, 7, 4, 3\)</span></p>
-<p><span class="math inline">\(X_{2}: 6, 5, 4, 9, 11, 7\)</span></p>
-<p>Explain intuitively why the covariance is negative.</p>
+<p><span class="math inline">\(X_{3}\)</span>: 8, 10, 16, 7, 4, 3</p>
+<p><span class="math inline">\(X_{4}\)</span>: 6, 5, 4, 9, 11, 7</p>
+<p>Explain intuitively why the covariance is negative for these two variables.</p>
 </div>
 <div class="rmdnote">
 <p>When calculating variance, the order of the data points does not matter. Why?</p>
@@ -337,10 +350,108 @@ Cov\left(X_{1}, X_{2}\right) = \frac{\sum \left(X_{1} - \overline{X_{1}}\right)\
 <h2>
 <span class="header-section-number">3.2</span> Calculating covariance in R<a class="anchor" aria-label="anchor" href="#covariance-r"><i class="fas fa-link"></i></a>
 </h2>
+<p>Once we’ve done it by hand a few times to make sure we understand how the formula works, from here on out we can let R do the work for us:</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">X1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="op">-</span><span class="fl">3</span>, <span class="fl">4</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>
+<span class="va">X2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="op">-</span><span class="fl">2</span>, <span class="op">-</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="op">-</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="va">X1</span>, <span class="va">X2</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 1.666667</code></pre>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">X3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">16</span>, <span class="fl">7</span>, <span class="fl">4</span>, <span class="fl">3</span><span class="op">)</span>
+<span class="va">X4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">11</span>, <span class="fl">7</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="va">X3</span>, <span class="va">X4</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] -9.2</code></pre>
+<p>And here’s some real world data:</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span>, <span class="va">airquality</span><span class="op">$</span><span class="va">Wind</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] -15.27214</code></pre>
 </div>
 <div id="covariance-rules" class="section level2" number="3.3">
 <h2>
 <span class="header-section-number">3.3</span> Covariance rules<a class="anchor" aria-label="anchor" href="#covariance-rules"><i class="fas fa-link"></i></a>
+</h2>
+<p>We’ll think of the variance and covariance rules as one big list. We left off on <a href="#Rule4"><strong>Rule 4</strong></a>, so now we’ll introduce <a href="#Rule5"><strong>Rule 5</strong></a>.</p>
+<div class="rmdimportant">
+<ul>
+<li><a id="Rule5"><strong>Rule 5</strong></a></li>
+</ul>
+<p><span class="math display">\[
+Cov(X, X) = Var(X)
+\]</span></p>
+</div>
+<p>In words, <a href="#Rule5"><strong>Rule 5</strong></a> states that the covariance of a variable <em>with itself</em> is just the same thing as the variance of that variable. This is quite remarkable! It means that variance is really just a special case of covariance.</p>
+<div class="rmdnote">
+<p>Explain why <a href="#Rule5"><strong>Rule 5</strong></a> is true. (Hint: think about how you would calculate <span class="math inline">\(Cov(X, X)\)</span> using either the formula or the table—or both!)</p>
+</div>
+<div class="rmdimportant">
+<ul>
+<li><a id="Rule6"><strong>Rule 6</strong></a></li>
+</ul>
+<p><span class="math display">\[
+Cov\left(X_{1}, X_{2}\right) = Cov\left(X_{2}, X_{1}\right)
+\]</span></p>
+</div>
+<p>In words, we would say that covariance is <em>symmetric</em>.</p>
+<div class="rmdnote">
+<p>Explain why <a href="#Rule6"><strong>Rule 6</strong></a> is true. (Again, think about the formula or the table—or both!)</p>
+</div>
+<p>The next three rules are analogous to similar rules for variance (<a href="#Rule1"><strong>Rule 1</strong></a>, <a href="#Rule2"><strong>Rule 2</strong></a>, and <a href="#Rule3"><strong>Rule 3</strong></a>).</p>
+<div class="rmdimportant">
+<ul>
+<li><a id="Rule7"><strong>Rule 7</strong></a></li>
+</ul>
+<p>Suppose that <span class="math inline">\(C\)</span> is a “constant” variable, meaning that it always has the same value (rather than being a variable that could contain lots of different numbers). Then,</p>
+<p><span class="math display">\[
+Cov\left(X, C\right) = 0
+\]</span></p>
+</div>
+<div class="rmdnote">
+<p>As always, try to explain this rule. Give an intuitive explanation of why this rule “should” be true. Then think about it computationally, thinking of either the formula or the table—or both!</p>
+</div>
+<div class="rmdimportant">
+<ul>
+<li><a id="Rule8"><strong>Rule 8</strong></a></li>
+</ul>
+<p><span class="math display">\[
+Cov\left(X_{1} + X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) + Cov\left(X_{2}, X_{3}\right)  
+\]</span></p>
+</div>
+<p>What you should appreciate here is that there is no longer any restriction on the relationships among the variables involved. <a href="#Rule2"><strong>Rule 2</strong></a> only worked when the two variables were independent. On the other hand, <a href="#Rule8"><strong>Rule 8</strong></a> works for any combination of variables, no matter their relation.</p>
+<p>Even more satisfying is this next rule:</p>
+<div class="rmdimportant">
+<ul>
+<li><a id="Rule9"><strong>Rule 9</strong></a></li>
+</ul>
+<p><span class="math display">\[
+Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
+\]</span></p>
+</div>
+<p>Yay! The minus sign behaves sensibly now! Of course, since covariance can be positive or negative (unlike variance which is always positive!) we can more safely subtract two of them without worry.</p>
+<p>There are versions of these rules with the addition or subtraction on the other side, but these are just minor variations of <a href="#Rule8"><strong>Rule 8</strong></a> and <a href="#Rule9"><strong>Rule 9</strong></a>, so they’re not worth mentioning as a separate rule:</p>
+<div class="rmdimportant">
+<p><span class="math display">\[
+Cov\left(X_{1}, X_{2} \pm X_{3}\right) = Cov\left(X_{1}, X_{2}\right) \pm Cov\left(X_{1}, X_{3}\right)  
+\]</span></p>
+</div>
+<p>We were talking about independence a minute ago. That leads directly to an interesting and super-important rule:</p>
+<div class="rmdimportant">
+<ul>
+<li><a id="Rule10"><strong>Rule 10</strong></a></li>
+</ul>
+<p>If <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent, then</p>
+<p><span class="math display">\[
+Cov\left(X_{1}, X_{2}\right) = 0
+\]</span></p>
+</div>
+</div>
+<div id="covariance-correlation" class="section level2" number="3.4">
+<h2>
+<span class="header-section-number">3.4</span> Correlation<a class="anchor" aria-label="anchor" href="#covariance-correlation"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="covariance-visualizing" class="section level2" number="3.5">
+<h2>
+<span class="header-section-number">3.5</span> Visualizing covariance and correlation<a class="anchor" aria-label="anchor" href="#covariance-visualizing"><i class="fas fa-link"></i></a>
 </h2>
 
 </div>
@@ -355,6 +466,8 @@ Cov\left(X_{1}, X_{2}\right) = \frac{\sum \left(X_{1} - \overline{X_{1}}\right)\
 <li><a class="nav-link" href="#covariance-calculating"><span class="header-section-number">3.1</span> Calculating covariance</a></li>
 <li><a class="nav-link" href="#covariance-r"><span class="header-section-number">3.2</span> Calculating covariance in R</a></li>
 <li><a class="nav-link" href="#covariance-rules"><span class="header-section-number">3.3</span> Covariance rules</a></li>
+<li><a class="nav-link" href="#covariance-correlation"><span class="header-section-number">3.4</span> Correlation</a></li>
+<li><a class="nav-link" href="#covariance-visualizing"><span class="header-section-number">3.5</span> Visualizing covariance and correlation</a></li>
 </ul>
 
       <div class="book-extra">

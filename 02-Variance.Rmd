@@ -141,9 +141,13 @@ Re-do the math above, but divide by 7 instead of dividing by 8.
 
 The number you found is the *variance*, written as $Var(X)$. The full formula is
 
+::: {.rmdimportant}
+
 $$
 Var(X) = \frac{\sum{\left(X - \overline{X}\right)^{2}}}{n - 1}
 $$
+
+:::
 
 As a one-liner, the formula may look a little intimidating, but when you break it down step by step as we did above, it's not so bad.
 

@@ -12,6 +12,8 @@ covariance
 covariance-calculating
 covariance-r
 covariance-rules
+covariance-correlation
+covariance-visualizing
 simple
 multiple
 mediation

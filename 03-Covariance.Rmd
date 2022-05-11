@@ -77,7 +77,7 @@ Now we add up the products across all seven data pairs:
 
 So when $X_{1}$ and $X_{2}$ tend to have similar values (both positive or both negative), their product is usually positive. It's not true of every pair of values in the table above; some products are negative. But the majority are positive. Therefore, the sum of all such products will be positive.
 
-We're almost there. Just like we wanted the average squared deviation to calculate the variance, here we want the average of the products from the third column above. And just like in the case of variance, it's not *quite* the average we calculate. Instead of dividing by $n$, we divide by $n - 1$ for exactly the same esoteric reason.
+We're almost there. Just like we wanted the average squared deviation to calculate the variance, here we want the average of the products from the third column above. And just like in the case of variance, it's not *quite* the average we calculate. Instead of dividing by $n$, we divide by $n - 1$ for exactly the same esoteric reason. In our example, there are 7 data points (in other words, 7 rows of data), so we divide by 6.
 
 Putting this all together:
 
@@ -99,23 +99,36 @@ In our diagrams, the covariance of two variables is indicated by a curved, doubl
 knitr::include_graphics("graphics/covariance_labeled.png")
 ```
 
+Note that we still include the variances of each of the individual variables. They are still important to us. We just have one new type of arrow now.
+
 ::: {.rmdnote}
 
-Suppose $X_{1}$ tends to be positive when $X_{2}$ is negative and $X_{1}$ tends to be negative when $X_{2}$ is positive. What will the product $X_{1}X_{2}$ usually be? Therefore, what will the sum of all such products likely be?
+Verify that the variances in the diagram are correct for our example. You can do it by hand if you want, but using R is fine too.
 
 :::
 
 Here is the final formula for covariance, written as $Cov\left(X_{1}, X_{2}\right)$. This works for all pairs of variables, even if they aren't mean centered. The terms $\left(X_{1} - \overline{X_1}\right)$ and $\left(X_{2} - \overline{X_2}\right)$ do the mean centering:
 
+
+::: {.rmdimportant}
+
 $$
 Cov\left(X_{1}, X_{2}\right) = \frac{\sum \left(X_{1} - \overline{X_{1}}\right)\left(X_{2} - \overline{X_{2}}\right)}{n - 1}
 $$
+:::
+
+::: {.rmdnote}
+
+Suppose $X_{1}$ tends to be above its mean when $X_{2}$ is below its mean and $X_{1}$ tends to be below its mean when $X_{2}$ is above its mean. What will the product $\left(X_{1} - \overline{X_{1}}\right)\left(X_{2} - \overline{X_{2}}\right)$ usually be? Therefore, what will the sum of all such products likely be?
+
+:::
 
 For general variables (not necessarily mean centered), the table will actually look like this:
 
 |$X_{1}$| $X_{2}$|$\left(X_{1} - \overline{X_{1}}\right)$ | $\left(X_{2} - \overline{X_{2}}\right)$ | $\left(X_{1} - \overline{X_{1}}\right)\left(X_{2} - \overline{X_{2}}\right)$ |
 |-----|-----|-----|-----|-----|
-| 4   | 3   | -2  | 1   | -2  |
+| 17  | 23  | -2  | 11  | -22 |
+| 25  | 15  |  6  | 3   |  18 |
 | ... | ... | ... | ... | ... |
 
 
@@ -124,11 +137,11 @@ For general variables (not necessarily mean centered), the table will actually l
 
 Calculate the covariance by hand by making a table like the one above. (These variables are *not* mean centered, so you'll have to calculate the mean of each variable in order to fill out the third and fourth columns.)
 
-$X_{1}: 8, 10, 16, 7, 4, 3$
+$X_{3}$: 8, 10, 16, 7, 4, 3
 
-$X_{2}: 6, 5, 4, 9, 11, 7$
+$X_{4}$: 6, 5, 4, 9, 11, 7
 
-Explain intuitively why the covariance is negative.
+Explain intuitively why the covariance is negative for these two variables.
 
 :::
 
@@ -146,4 +159,137 @@ What if you keep pairs together, but rearrange the rows of the table. How does t
 
 ## Calculating covariance in R {#covariance-r}
 
+Once we’ve done it by hand a few times to make sure we understand how the formula works, from here on out we can let R do the work for us:
+
+```{r}
+X1 <- c(-1,-2, 2, -3, 4, -1, 1)
+X2 <- c(-2, 2, -2, -1, 2, -2, 3)
+cov(X1, X2)
+```
+
+```{r}
+X3 <- c(8, 10, 16, 7, 4, 3)
+X4 <- c(6, 5, 4, 9, 11, 7)
+cov(X3, X4)
+```
+
+And here's some real world data:
+
+```{r}
+cov(airquality$Temp, airquality$Wind)
+```
+
 ## Covariance rules {#covariance-rules}
+
+We'll think of the variance and covariance rules as one big list. We left off on [**Rule 4**](#Rule4), so now we'll introduce [**Rule 5**](#Rule5).
+
+::: {.rmdimportant}
+
+-  <a id = "Rule5">**Rule 5**</a>
+
+$$
+Cov(X, X) = Var(X)
+$$
+
+:::
+
+In words, [**Rule 5**](#Rule5) states that the covariance of a variable *with itself* is just the same thing as the variance of that variable. This is quite remarkable! It means that variance is really just a special case of covariance.
+
+::: {.rmdnote}
+
+Explain why [**Rule 5**](#Rule5) is true. (Hint: think about how you would calculate $Cov(X, X)$ using either the formula or the table---or both!)
+
+:::
+
+::: {.rmdimportant}
+
+-  <a id = "Rule6">**Rule 6**</a>
+
+$$
+Cov\left(X_{1}, X_{2}\right) = Cov\left(X_{2}, X_{1}\right)
+$$
+
+:::
+
+In words, we would say that covariance is *symmetric*.
+
+::: {.rmdnote}
+
+Explain why [**Rule 6**](#Rule6) is true. (Again, think about the formula or the table---or both!)
+
+:::
+
+The next three rules are analogous to similar rules for variance ([**Rule 1**](#Rule1), [**Rule 2**](#Rule2), and [**Rule 3**](#Rule3)).
+
+::: {.rmdimportant}
+
+-  <a id = "Rule7">**Rule 7**</a>
+
+Suppose that $C$ is a "constant" variable, meaning that it always has the same value (rather than being a variable that could contain lots of different numbers). Then,
+
+$$
+Cov\left(X, C\right) = 0
+$$
+:::
+
+::: {.rmdnote}
+
+As always, try to explain this rule. Give an intuitive explanation of why this rule "should" be true. Then think about it computationally, thinking of either the formula or the table---or both!
+
+:::
+
+::: {.rmdimportant}
+
+-  <a id = "Rule8">**Rule 8**</a>
+
+$$
+Cov\left(X_{1} + X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) + Cov\left(X_{2}, X_{3}\right)  
+$$
+
+:::
+
+What you should appreciate here is that there is no longer any restriction on the relationships among the variables involved. [**Rule 2**](#Rule2) only worked when the two variables were independent. On the other hand, [**Rule 8**](#Rule8) works for any combination of variables, no matter their relation.
+
+Even more satisfying is this next rule:
+
+::: {.rmdimportant}
+
+-  <a id = "Rule9">**Rule 9**</a>
+
+$$
+Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
+$$
+:::
+
+Yay! The minus sign behaves sensibly now! Of course, since covariance can be positive or negative (unlike variance which is always positive!) we can more safely subtract two of them without worry.
+
+There are versions of these rules with the addition or subtraction on the other side, but these are just minor variations of [**Rule 8**](#Rule8) and [**Rule 9**](#Rule9), so they're not worth mentioning as a separate rule:
+
+::: {.rmdimportant}
+
+$$
+Cov\left(X_{1}, X_{2} \pm X_{3}\right) = Cov\left(X_{1}, X_{2}\right) \pm Cov\left(X_{1}, X_{3}\right)  
+$$
+:::
+
+We were talking about independence a minute ago. That leads directly to an interesting and super-important rule:
+
+::: {.rmdimportant}
+
+-  <a id = "Rule10">**Rule 10**</a>
+
+If $X_{1}$ and $X_{2}$ are independent, then
+
+$$
+Cov\left(X_{1}, X_{2}\right) = 0
+$$
+:::
+
+
+
+
+
+## Correlation {#covariance-correlation}
+
+
+## Visualizing covariance and correlation {#covariance-visualizing}
