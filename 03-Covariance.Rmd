@@ -181,7 +181,7 @@ cov(airquality$Temp, airquality$Wind)
 
 ## Covariance rules {#covariance-rules}
 
-We'll think of the variance and covariance rules as one big list. We left off on [**Rule 4**](#Rule4), so now we'll introduce [**Rule 5**](#Rule5).
+We'll think of the variance and covariance rules as one big list. We left off on [**Rule 4**](../variance.html#Rule4), so now we'll introduce [**Rule 5**](#Rule5).
 
 ::: {.rmdimportant}
 
@@ -219,7 +219,7 @@ Explain why [**Rule 6**](#Rule6) is true. (Again, think about the formula or the
 
 :::
 
-The next three rules are analogous to similar rules for variance ([**Rule 1**](#Rule1), [**Rule 2**](#Rule2), and [**Rule 3**](#Rule3)).
+The next four rules are analogous to similar rules for variance ([**Rule 1**](#Rule1), [**Rule 2**](#Rule2), [**Rule 3**](#Rule3), and [**Rule 4**](#Rule4)).
 
 ::: {.rmdimportant}
 
@@ -261,7 +261,7 @@ Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X
 $$
 :::
 
-Yay! The minus sign behaves sensibly now! Of course, since covariance can be positive or negative (unlike variance which is always positive!) we can more safely subtract two of them without worry.
+Yay! The minus sign behaves sensibly now! Of course, since covariances can be positive or negative (unlike variances which are always positive!) we can more safely subtract two of them without worry.
 
 There are versions of these rules with the addition or subtraction on the other side, but these are just minor variations of [**Rule 8**](#Rule8) and [**Rule 9**](#Rule9), so they're not worth mentioning as a separate rule:
 
@@ -271,6 +271,16 @@ $$
 Cov\left(X_{1}, X_{2} \pm X_{3}\right) = Cov\left(X_{1}, X_{2}\right) \pm Cov\left(X_{1}, X_{3}\right)  
 $$
 :::
+
+::: {.rmdimportant}
+
+-  <a id = "Rule10">**Rule 10**</a>
+
+$$
+Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
+$$
+:::
+
 
 We were talking about independence a minute ago. That leads directly to an interesting and super-important rule:
 

@@ -370,7 +370,7 @@ Cov\left(X_{1}, X_{2}\right) = \frac{\sum \left(X_{1} - \overline{X_{1}}\right)\
 <h2>
 <span class="header-section-number">3.3</span> Covariance rules<a class="anchor" aria-label="anchor" href="#covariance-rules"><i class="fas fa-link"></i></a>
 </h2>
-<p>We’ll think of the variance and covariance rules as one big list. We left off on <a href="#Rule4"><strong>Rule 4</strong></a>, so now we’ll introduce <a href="#Rule5"><strong>Rule 5</strong></a>.</p>
+<p>We’ll think of the variance and covariance rules as one big list. We left off on <a href="../variance.html#Rule4"><strong>Rule 4</strong></a>, so now we’ll introduce <a href="#Rule5"><strong>Rule 5</strong></a>.</p>
 <div class="rmdimportant">
 <ul>
 <li><a id="Rule5"><strong>Rule 5</strong></a></li>
@@ -395,7 +395,7 @@ Cov\left(X_{1}, X_{2}\right) = Cov\left(X_{2}, X_{1}\right)
 <div class="rmdnote">
 <p>Explain why <a href="#Rule6"><strong>Rule 6</strong></a> is true. (Again, think about the formula or the table—or both!)</p>
 </div>
-<p>The next three rules are analogous to similar rules for variance (<a href="#Rule1"><strong>Rule 1</strong></a>, <a href="#Rule2"><strong>Rule 2</strong></a>, and <a href="#Rule3"><strong>Rule 3</strong></a>).</p>
+<p>The next four rules are analogous to similar rules for variance (<a href="#Rule1"><strong>Rule 1</strong></a>, <a href="#Rule2"><strong>Rule 2</strong></a>, <a href="#Rule3"><strong>Rule 3</strong></a>, and <a href="#Rule4"><strong>Rule 4</strong></a>).</p>
 <div class="rmdimportant">
 <ul>
 <li><a id="Rule7"><strong>Rule 7</strong></a></li>
@@ -426,11 +426,19 @@ Cov\left(X_{1} + X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) + Cov\left(X
 Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
 \]</span></p>
 </div>
-<p>Yay! The minus sign behaves sensibly now! Of course, since covariance can be positive or negative (unlike variance which is always positive!) we can more safely subtract two of them without worry.</p>
+<p>Yay! The minus sign behaves sensibly now! Of course, since covariances can be positive or negative (unlike variances which are always positive!) we can more safely subtract two of them without worry.</p>
 <p>There are versions of these rules with the addition or subtraction on the other side, but these are just minor variations of <a href="#Rule8"><strong>Rule 8</strong></a> and <a href="#Rule9"><strong>Rule 9</strong></a>, so they’re not worth mentioning as a separate rule:</p>
 <div class="rmdimportant">
 <p><span class="math display">\[
 Cov\left(X_{1}, X_{2} \pm X_{3}\right) = Cov\left(X_{1}, X_{2}\right) \pm Cov\left(X_{1}, X_{3}\right)  
+\]</span></p>
+</div>
+<div class="rmdimportant">
+<ul>
+<li><a id="Rule10"><strong>Rule 10</strong></a></li>
+</ul>
+<p><span class="math display">\[
+Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
 \]</span></p>
 </div>
 <p>We were talking about independence a minute ago. That leads directly to an interesting and super-important rule:</p>

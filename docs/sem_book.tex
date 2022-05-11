@@ -1300,7 +1300,7 @@ And here's some real world data:
 \hypertarget{covariance-rules}{%
 \section{Covariance rules}\label{covariance-rules}}
 
-We'll think of the variance and covariance rules as one big list. We left off on \protect\hyperlink{Rule4}{\textbf{Rule 4}}, so now we'll introduce \protect\hyperlink{Rule5}{\textbf{Rule 5}}.
+We'll think of the variance and covariance rules as one big list. We left off on \href{../variance.html\#Rule4}{\textbf{Rule 4}}, so now we'll introduce \protect\hyperlink{Rule5}{\textbf{Rule 5}}.
 
 \begin{itemize}
 \tightlist
@@ -1330,7 +1330,7 @@ In words, we would say that covariance is \emph{symmetric}.
 
 Explain why \protect\hyperlink{Rule6}{\textbf{Rule 6}} is true. (Again, think about the formula or the table---or both!)
 
-The next three rules are analogous to similar rules for variance (\protect\hyperlink{Rule1}{\textbf{Rule 1}}, \protect\hyperlink{Rule2}{\textbf{Rule 2}}, and \protect\hyperlink{Rule3}{\textbf{Rule 3}}).
+The next four rules are analogous to similar rules for variance (\protect\hyperlink{Rule1}{\textbf{Rule 1}}, \protect\hyperlink{Rule2}{\textbf{Rule 2}}, \protect\hyperlink{Rule3}{\textbf{Rule 3}}, and \protect\hyperlink{Rule4}{\textbf{Rule 4}}).
 
 \begin{itemize}
 \tightlist
@@ -1370,12 +1370,22 @@ Even more satisfying is this next rule:
 Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
 \]
 
-Yay! The minus sign behaves sensibly now! Of course, since covariance can be positive or negative (unlike variance which is always positive!) we can more safely subtract two of them without worry.
+Yay! The minus sign behaves sensibly now! Of course, since covariances can be positive or negative (unlike variances which are always positive!) we can more safely subtract two of them without worry.
 
 There are versions of these rules with the addition or subtraction on the other side, but these are just minor variations of \protect\hyperlink{Rule8}{\textbf{Rule 8}} and \protect\hyperlink{Rule9}{\textbf{Rule 9}}, so they're not worth mentioning as a separate rule:
 
 \[
 Cov\left(X_{1}, X_{2} \pm X_{3}\right) = Cov\left(X_{1}, X_{2}\right) \pm Cov\left(X_{1}, X_{3}\right)  
+\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 10}
+\end{itemize}
+
+\[
+Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
 \]
 
 We were talking about independence a minute ago. That leads directly to an interesting and super-important rule:
