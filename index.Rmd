@@ -21,7 +21,7 @@ options(knitr.graphics.auto_pdf = TRUE)
 
 Welcome to our book on structural equation modeling!
 
-If you want, you can also download this book as a <a href="https://vectorposse.github.io/sem_book/sem_book.pdf" target="_blank">PDF</a> or <a href="https://vectorposse.github.io/sem_book/sem_book.epub" target="_blank">EPUB</a> file. Be aware that the print versions are missing some of the richer text features of the online version.
+If you want, you can also download this book as a <a href="https://vectorposse.github.io/sem_book/sem_book.pdf" target="_blank">PDF</a> or <a href="https://vectorposse.github.io/sem_book/sem_book.epub" target="_blank">EPUB</a> file. Be aware that the print versions are missing some of the richer formatting of the online version.
 
 
 ## Some history {-#intro-history}
