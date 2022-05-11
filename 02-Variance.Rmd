@@ -65,7 +65,7 @@ Some of the numbers in your new list should be negative, some should be zero, an
 If the original set of numbers is called $X$, then what you've just calculated is a new list $\left(X - \overline{X}\right)$. Let's start organizing this into a table:
 
 | $X$ | $\left(X - \overline{X}\right)$ |
-|-----|---------------------------------|
+|----:|--------------------------------:|
 | 3   | -3                              |
 | 4   | -2                              |
 | 5   | -1                              |
@@ -113,7 +113,7 @@ Square each of the numbers from the second column of the table above. This will 
 Putting the new numbers into our previous table:
 
 | $X$ | $\left(X - \overline{X}\right)$ | $\left(X - \overline{X}\right)^{2}$ |
-|---|----|---|
+|--:|---:|--:|
 | 3 | -3 | 9 |
 | 4 | -2 | 4 |
 | 5 | -1 | 1 |
@@ -154,7 +154,7 @@ As a one-liner, the formula may look a little intimidating, but when you break i
 Here is the full calculation in the table:
 
 | $X$ | $\left(X - \overline{X}\right)$ | $\left(X - \overline{X}\right)^{2}$ |
-|---|----|---|
+|--:|---:|--:|
 | 3 | -3 | 9 |
 | 4 | -2 | 4 |
 | 5 | -1 | 1 |
@@ -276,7 +276,7 @@ It's important to note that [**Rule 2**](#Rule2) is an abstract mathematical rul
 
 ::: {.rmdnote}
 
-Let's test this out. Below are two new variables that are defined using random numbers. The first one is normally distributed with mean 1 and standard deviation 2.  The second one is normally distributed with mean 4 and standard deviation 3. [WHERE DOES SEED INFO GO?] These are independent because the definition of $X_{5}$ does not depend on any way on the definition of $X_{6}$ and vice versa.
+Let's test this out. Below are two new variables that are defined using random numbers. The first one is normally distributed with mean 1 and standard deviation 2. (If you don't remember standard deviation from intro stats, we talk about it in the next section.)  The second one is normally distributed with mean 4 and standard deviation 3. [WHERE DOES SEED INFO GO?] These are independent because the definition of $X_{5}$ does not depend on any way on the definition of $X_{6}$ and vice versa.
 
 The sample sizes (2000) are large enough that we should get pretty close to the theoretically correct results here.
 
@@ -424,6 +424,17 @@ SD(X) = \sqrt{\frac{\sum{\left(X - \overline{X}\right)^{2}}}
 {n - 1}}
 $$
 
+Or, said more simply,
+
+$$
+SD(X) = \sqrt{Var(X)}
+$$
+Equivalently,
+
+$$
+Var(X) = SD(X)^2
+$$
+
 Due to its interpretability, an intro stats class will focus far more on the standard deviation than on the variance. The downside is that the mathematical rules aren't so nice for standard deviations. For example, what is
 $$
 SD\left(X_{1} + X_{2}\right)?
@@ -535,7 +546,7 @@ But if we also divide by the standard deviation, we get a standardized variable 
 (airquality$Temp - mean(airquality$Temp))/sd(airquality$Temp)
 ```
 
-The easier way to do this in R is to use the `scale` command:
+The easier way to do this in R is to use the `scale` command. (Sorry, the output is a little long. Keep scrolling below.)
 
 ```{r}
 scale(airquality$Temp)
@@ -559,7 +570,7 @@ $S = SD(X)$.
 
 Remember, $M$ and $S$ are *constants*.
 
-Now we need to calculate $Var(Z)$. I'll do the first couple of steps. Then you take over and, using the variance rules from earlier in the chapter, simplify the expression until you get to a numerical answer.
+Now we need to calculate $Var(Z)$. I'll do the first couple of steps. Then you take over and, using the variance rules from earlier in the chapter, simplify the expression until you get to a numerical answer. Be sure to justify each step by citing the rule you invoked to get there.
 
 \begin{align}
 Var(Z) &= Var\left(\frac{\left(X - \overline{X}\right)}{SD(X)}\right) \\

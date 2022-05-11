@@ -306,7 +306,7 @@ Some of the numbers in your new list should be negative, some should be zero, an
 
 If the original set of numbers is called \(X\), then what you've just calculated is a new list \(\left(X - \overline{X}\right)\). Let's start organizing this into a table:
 
-\begin{longtable}[]{@{}ll@{}}
+\begin{longtable}[]{@{}rr@{}}
 \toprule
 \(X\) & \(\left(X - \overline{X}\right)\) \\
 \midrule
@@ -1330,7 +1330,7 @@ In words, we would say that covariance is \emph{symmetric}.
 
 Explain why \protect\hyperlink{Rule6}{\textbf{Rule 6}} is true. (Again, think about the formula or the table---or both!)
 
-The next four rules are analogous to similar rules for variance (\protect\hyperlink{Rule1}{\textbf{Rule 1}}, \protect\hyperlink{Rule2}{\textbf{Rule 2}}, \protect\hyperlink{Rule3}{\textbf{Rule 3}}, and \protect\hyperlink{Rule4}{\textbf{Rule 4}}).
+The next four rules are analogous to similar rules for variance (\href{./variance.html\#Rule1}{\textbf{Rule 1}}, \href{./variance.html\#Rule2}{\textbf{Rule 2}}, \href{./variance.html\#Rule3}{\textbf{Rule 3}}, and \href{./variance.html\#Rule4}{\textbf{Rule 4}}).
 
 \begin{itemize}
 \tightlist
@@ -1356,7 +1356,7 @@ As always, try to explain this rule. Give an intuitive explanation of why this r
 Cov\left(X_{1} + X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) + Cov\left(X_{2}, X_{3}\right)  
 \]
 
-What you should appreciate here is that there is no longer any restriction on the relationships among the variables involved. \protect\hyperlink{Rule2}{\textbf{Rule 2}} only worked when the two variables were independent. On the other hand, \protect\hyperlink{Rule8}{\textbf{Rule 8}} works for any combination of variables, no matter their relation.
+What you should appreciate here is that there is no longer any restriction on the relationships among the variables involved. \href{./variance.html\#Rule2}{\textbf{Rule 2}} only worked when the two variables were independent. On the other hand, \protect\hyperlink{Rule8}{\textbf{Rule 8}} works for any combination of variables, no matter their relation.
 
 Even more satisfying is this next rule:
 
@@ -1370,9 +1370,9 @@ Even more satisfying is this next rule:
 Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
 \]
 
-Yay! The minus sign behaves sensibly now! Of course, since covariances can be positive or negative (unlike variances which are always positive!) we can more safely subtract two of them without worry.
+Yay! The minus sign behaves sensibly now! Of course, since covariances can be positive or negative (unlike variances which are always positive!) we can more safely subtract two of them without worry. And this rule, like \protect\hyperlink{Rule8}{\textbf{Rule 8}}, does not depend on \(X_{1}\) and \(X_{2}\) being independent. They can be any two variables.
 
-There are versions of these rules with the addition or subtraction on the other side, but these are just minor variations of \protect\hyperlink{Rule8}{\textbf{Rule 8}} and \protect\hyperlink{Rule9}{\textbf{Rule 9}}, so they're not worth mentioning as a separate rule:
+There are versions of these rules with the addition or subtraction on the other side, but these are just minor variations of \protect\hyperlink{Rule8}{\textbf{Rule 8}} and \protect\hyperlink{Rule9}{\textbf{Rule 9}}, so they're not worth mentioning as a separate rule. Remember that covariance is symmetric, so you can always swap things on the left and right of the comma.
 
 \[
 Cov\left(X_{1}, X_{2} \pm X_{3}\right) = Cov\left(X_{1}, X_{2}\right) \pm Cov\left(X_{1}, X_{3}\right)  
@@ -1384,16 +1384,20 @@ Cov\left(X_{1}, X_{2} \pm X_{3}\right) = Cov\left(X_{1}, X_{2}\right) \pm Cov\le
   \textbf{Rule 10}
 \end{itemize}
 
+If \(a\) is any number,
+
 \[
-Cov\left(X_{1} - X_{2}, X_{3}\right) = Cov\left(X_{1}, X_{3}\right) - Cov\left(X_{2}, X_{3}\right)  
+Cov\left(a X_{1}, X_{2}\right) = a Cov\left(X_{1}, X_{2}\right) =  Cov\left(X_{1}, a X_{2}\right)  
 \]
 
-We were talking about independence a minute ago. That leads directly to an interesting and super-important rule:
+This rule is also very sensible. Instead of \href{./variance.html\#Rule4}{\textbf{Rule 4}} that takes a number \(a\) and pulls out an \(a^{2}\), \protect\hyperlink{Rule10}{\textbf{Rule 10}} just pulls out a single factor of \(a\) (from either slot).
+
+Just a couple more rules. We were talking about independence in conjunction with \protect\hyperlink{Rule8}{\textbf{Rule 8}} and \protect\hyperlink{Rule9}{\textbf{Rule 9}}. That leads directly to an interesting and super-important rule:
 
 \begin{itemize}
 \tightlist
 \item
-  \textbf{Rule 10}
+  \textbf{Rule 11}
 \end{itemize}
 
 If \(X_{1}\) and \(X_{2}\) are independent, then
@@ -1401,6 +1405,39 @@ If \(X_{1}\) and \(X_{2}\) are independent, then
 \[
 Cov\left(X_{1}, X_{2}\right) = 0
 \]
+
+Why is \protect\hyperlink{Rule11}{\textbf{Rule 11}} true, intuitively?
+
+It's interesting to note that this rule only works one way. In other words, if you know that two variables are independent, then you can conclude their covariance is zero. However, if you know the covariance is zero, that doesn't necessarily mean that the two variables are independent. We'll see an example of this later in the chapter.
+
+Finally, one rule to rule them all:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Rule 12}
+\end{itemize}
+
+For \emph{any} two variables \(X_{1}\) and \(X_{2}\):
+
+\[
+Var(aX_{1} + bX_{2}) = 
+    a^2Var(X_{1}) + b^2Var(X_{2}) + 2abCov(X_{1}, X_{2})
+\]
+
+This brings practically everything we know together into one rule!
+
+Proving \protect\hyperlink{Rule12}{\textbf{Rule 12}} will give us good practice with the type of manipulation we'll need to do in future chapters. So here goes. For the first few steps, you name what rule we're invoking. Then, you'll pick up the thread and follow it through the last few steps on your own.
+
+\begin{align}
+Var(aX_{1} + bX_{2}) &= Cov(aX_{1} + bX_{2}, aX_{1} + bX_{2}) \\
+    &= Cov(aX_{1} + bX_{2}, aX_{1}) + Cov(aX_{1} + bX_{2}, bX_{2}) \\
+    &=  Cov(aX_{1}, aX_{1}) + 
+        Cov(bX_{2}, aX_{1}) + \\
+    &   \qquad Cov(aX_{1}, bX_{2}) + 
+        Cov(bX_{2}, bX_{2}) \\
+    &= \quad ???
+\end{align}
 
 \hypertarget{covariance-correlation}{%
 \section{Correlation}\label{covariance-correlation}}
