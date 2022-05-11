@@ -2,13 +2,16 @@ variables
 variables-first-section
 variance
 variance-mean
-variance-variance
+variance-calculating
 variance-r
 variance-rules
 variance-sd
 variance-mean-centering
 variance-standardizing
 covariance
+covariance-calculating
+covariance-r
+covariance-rules
 simple
 multiple
 mediation

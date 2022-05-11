@@ -26,7 +26,7 @@ Calculate the mean of this set of eight numbers.
 :::
 
 
-## Variance {#variance-variance}
+## Calculating variance {#variance-calculating}
 
 Variance is a quantity meant to capture information about how spread out data is.
 
@@ -193,7 +193,7 @@ Once you've decided, then calculate the variance for both sets and check your an
 :::
 
 
-## Variance (in R) {#variance-r}
+## Calculating variance in R {#variance-r}
 
 Once we've done it by hand a few times to make sure we understand how the formula works, from here on out we can let R do the work for us:
 
