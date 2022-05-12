@@ -124,7 +124,7 @@
 
 \title{Demystifying Structural Equation Modeling}
 \author{Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)}
-\date{2022-05-10}
+\date{2022-05-12}
 
 \begin{document}
 \maketitle
@@ -743,6 +743,30 @@ For SEM, we will focus almost exclusively on variance and switch to standard dev
   We need to standardize variables. (See Section \ref{variance-standardizing} below.)
 \end{enumerate}
 
+Although the standard deviance is just the square root of the variance, it is worth knowing the R command to calculate it. It's just \texttt{sd}. For example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sd}\NormalTok{(PlantGrowth}\SpecialCharTok{$}\NormalTok{weight)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7011918
+\end{verbatim}
+
+You can see below that \texttt{sd} did the right thing:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sqrt}\NormalTok{(}\FunctionTok{var}\NormalTok{(PlantGrowth}\SpecialCharTok{$}\NormalTok{weight))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7011918
+\end{verbatim}
+
 \hypertarget{variance-mean-centering}{%
 \section{Mean centering data}\label{variance-mean-centering}}
 
@@ -1093,7 +1117,7 @@ Let's calculate the variance of a standardized variable. To do so, I'll note tha
 
 \(M = \overline{X}\)
 
-\(S = SD(X)\).
+\(S = SD(X)\)
 
 Remember, \(M\) and \(S\) are \emph{constants}.
 
@@ -1455,8 +1479,534 @@ You'll need these rules to do calculations in future chapters. Rather than havin
 \hypertarget{covariance-correlation}{%
 \section{Correlation}\label{covariance-correlation}}
 
+The pros and cons for calculating covariance are similar to those for variance. The mathematics is much nicer for covariance, but we lose interpretability.
+
+Let's suppose that \(X_{1}\) measures salary in dollars and \(X_{2}\) measures years of education. We would expect there to be some association between these variables, so we calculate the covariance. What is the unit of measurement of the resulting number?
+
+The solution to the problem here is not as simple as it was for variance. Since variance had squared units, all we had to do was take the square root. Covariance has a weird product of units, so we have to do something more clever.
+
+Following up on the activity above, let's suppose we have a covariance with units of ``dollar-years''. If we divide by a number expressed in dollars, we get rid of those units and we're left with years. But that seems unsatisfying; covariance should express something about both variables that went into it. Likewise, it makes no sense to divide by a number expressed in years as that would leave us just with dollars.
+
+The solution to the dilemma is to accept that we aren't going to be able to keep any units in a meaningful way. Therefore, what we want is something \emph{standardized}, meaning that it has no units.
+
+If \(X_{1}\) is expressed in dollars, can you think of a statistic that measures spread and is also in units of dollars?
+
+Likewise, if \(X_{2}\) is measured in years, what statistic that measures spread is also in units of years?
+
+The previous activity gives us an idea. What if we divide the covariance by \emph{both} the standard deviation of \(X_{1}\) \emph{and} the standard deviation of \(X_{2}\)?
+
+\[
+\frac{Cov(X_{1},X_{2})}{SD(X_{1}) SD(X_{2})}
+\]
+
+Sometimes it's written like this:
+
+\[
+\frac{Cov(X_{1},X_{2})}{\sqrt{Var(X_{1})} \sqrt{Var(X_{2})}}
+\]
+But that's the same thing, right?
+
+This quantity has no units. We call this the \emph{correlation} between \(X_{1}\) and \(X_{2}\). We'll either write
+\[
+Corr(X_{1}, X_{2})
+\]
+or, if we need to be more concise,
+\[
+r_{X_{1}X_{2}}
+\]
+
+Yes, this is the same as the correlation coefficient you learned about in your intro stats class, although it wasn't likely presented to you quite this way.\footnote{Karl Pearson is credited with inventing the correlation coefficient. Pearson was a life-long eugenicist and a proponent of using ``science'' to prove that some races were superior to others. It important to disentangle the truly valuable notion of correlation from the discredited hands that may have first written it down. Therefore, we will not be referring to it in this text as the Pearson correlation coefficient.}
+
+One great thing about correlation is that it has no units, so it serves as a sort of ``universal'' measure of how two variables co-vary. But the best part is that it has a nice intuitive meaning precisely because it factors out the pieces of the covariance that are only there because of the spread of the two variables individually. In other words, the fact that \(X_{1}\) and \(X_{2}\) have their own variability actually \emph{complicates} the notion of covariance. Those individual variances ``corrupt'' the interpretation of covariance. But after excising them, all that's left in the correlation is the ``pure'' part of the covariance that expresses the relationship or association between \(X_{1}\) and \(X_{2}\).
+
+\hypertarget{covariance-standardized}{%
+\section{Covariance with standardized data}\label{covariance-standardized}}
+
+In the last chapter, you showed that the variance of a standardized variable was 1. What is the covariance between two standardized variables?
+
+Let's standardize both \(X_{1}\) and \(X_{2}\). To make the math a little easier, we'll use similar notation to what we used at the end of the last chapter.
+
+\(M_{1} = \overline{X_{1}}\)
+
+\(S_{1} = SD(X_{1})\)
+
+\(M_{2} = \overline{X_{2}}\)
+
+\(S_{2} = SD(X_{2})\)
+
+And we'll write the z-scores in a way that is more amenable to mathematical manipulation (like before):
+
+\[
+Z_{1} = \frac{1}{S_{1}}\left(X_{1} - M_{1}\right)
+\]
+
+\[
+Z_{2} = \frac{1}{S_{2}}\left(X_{2} - M_{2}\right)
+\]
+
+This looks a little more intimidating, but if you apply the rules, it works out:
+
+\begin{align}
+Cov(Z_{1}, Z_{2}) &= Cov\left( \frac{1}{S_{1}}\left(X_{1} - M_{1}\right), \frac{1}{S_{2}}\left(X_{2} - M_{2}\right) \right) \\
+    &= \quad ???
+\end{align}
+
+Work this out. Take your time. Apply the rules carefully. So that you know what you're aiming for, you should get
+
+\[
+Cov(Z_{1}, Z_{2}) = \frac{Cov\left( X_{1}, X_{2} \right)}{S_{1} S_{2}}
+\]
+
+Okay, now remember that \(S_{1}\) is just a convenient substitute for \(SD(X_{1})\) and \(S_{2}\) is just a substitute for \(SD(X_{2})\). Wait, does that answer look familiar?
+
+This is cool! Correlation is simply the covariance of two variables after they've been standardized.
+
+This also reinforces the earlier comment about interpreting covariance after removing the extraneous influence of the spread of the individual variables. Standardizing variables makes the spread all all variables 1, so their covariance is now a pure representation of just the association between them.
+
+You probably remember from intro stats that correlation takes on values between -1 and 1. That fact is not obvious from the formula we have. Why should the fraction
+\[
+\frac{Cov(X_{1},X_{2})}{SD(X_{1}) SD(X_{2})}
+\]
+be bounded by -1 and 1?
+
+Let's go back to standardized variable to keep things simple. The correlation is just the covariance of two standardized variables:
+
+\[
+Corr(X_{1}, X_{2}) = Cov(Z_{1}, Z_{2})
+\]
+
+Use the rules to calculate this:
+
+\[
+Var(Z_{1} + Z_{2})
+\]
+
+Remember that \(Z_{1}\) and \(Z_{2}\) are not necessarily independent. (In fact, we hope they are not. Otherwise, why do we care about their correlation? It would be zero!) So you need \protect\hyperlink{Rule12}{\textbf{Rule 12}}, not \href{./variance.html\#Rule2}{\textbf{Rule 2}}. Keep manipulating until you get
+\[
+2 + 2Corr(X_{1}, X_{2})
+\]
+
+Since variances are always non-negative, we now know that
+
+\[
+0 \leq 2 + 2Corr(X_{1}, X_{2})
+\]
+Solve this inequality for \(Corr(X_{1}, X_{2})\).
+
+Now follow the exact same steps for
+\[
+Var(Z_{1} - Z_{2})
+\]
+
+Very little should change in your answer, but there is one small change. Again, solve the resulting inequality. (Don't forget the key rule when working with inequalities that multiplying or dividing by a negative number changes the direction of the inequality.)
+
+Here is a fact we will state without proof:
+
+Correlation is only interpretable as the strength of \textbf{linear} associations.
+
+Why is this? Basically, it boils down to the fact that a ``perfect'' correlation of 1 or -1 is only achievable when data points lie on a perfectly straight line. Therefore, thinking of correlation as lying between 0 and 1 (or 0 and -1) is only sensible if you are judging how close points are to lying on a straight line. We'll see examples of this in the next section when we plot some data.
+
+To calculation correlation in R, use the \texttt{cor} command:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Temp, airquality}\SpecialCharTok{$}\NormalTok{Wind)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -0.4579879
+\end{verbatim}
+
+Use R to confirm that the number above is the covariance divided by the product of the standard deviations.
+
 \hypertarget{covariance-visualizing}{%
-\section{Visualizing covariance and correlation}\label{covariance-visualizing}}
+\section{Visualizing correlation}\label{covariance-visualizing}}
+
+Covariance is hard to interpret, so when we're visualizing data and we want to understand any association that might exist between two variables, correlation is a much better statistic to calculate. Let's see how correlation relates to the graph of two variables.
+
+Before getting into the graphing, we will need to load some packages. The \texttt{tidyverse} is a whole set of commonly used packages that will allow us to work with data frames (or ``tibbles'' as the cool kids are calling them) and make graphs. Be sure to load the package by typing the following in R before going any further:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+\end{verbatim}
+
+\begin{verbatim}
+## v ggplot2 3.3.6     v purrr   0.3.4
+## v tibble  3.1.7     v dplyr   1.0.9
+## v tidyr   1.2.0     v stringr 1.4.0
+## v readr   2.1.2     v forcats 0.5.1
+\end{verbatim}
+
+\begin{verbatim}
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+\end{verbatim}
+
+In fact, from here on out, we'll start each chapter by loading any necessary libraries in R that we'll need.
+
+The standard graph of two numerical variables is a scatterplot. Let's start with a straight line relationship. First, we define two variables. We'll use some shortcuts here to make our lives a little easier. The \texttt{seq} command just generates a sequence of numbers.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X5 }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{9}\NormalTok{)}
+\NormalTok{X5}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1 2 3 4 5 6 7 8 9
+\end{verbatim}
+
+Then we can establish a linear relationship just by declaring one in a formula:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X6 }\OtherTok{\textless{}{-}} \DecValTok{3} \SpecialCharTok{+} \FloatTok{0.5} \SpecialCharTok{*}\NormalTok{ X5}
+\NormalTok{X6}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3.5 4.0 4.5 5.0 5.5 6.0 6.5 7.0 7.5
+\end{verbatim}
+
+To put both variables into the same graph, it helps to make them both columns in a single tibble.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{linear\_data }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(X5, X6)}
+\NormalTok{linear\_data}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 9 x 2
+##      X5    X6
+##   <int> <dbl>
+## 1     1   3.5
+## 2     2   4  
+## 3     3   4.5
+## 4     4   5  
+## 5     5   5.5
+## 6     6   6  
+## 7     7   6.5
+## 8     8   7  
+## 9     9   7.5
+\end{verbatim}
+
+And here is the graph:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(linear\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ X6, }\AttributeTok{x =}\NormalTok{ X5)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-34-1.pdf}
+
+Now the correlation:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(X5, X6)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+It is 1, as expected.
+
+What about a perfectly straight line with a negative slope?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X7 }\OtherTok{\textless{}{-}} \DecValTok{5} \SpecialCharTok{{-}} \FloatTok{0.2} \SpecialCharTok{*}\NormalTok{ X5}
+\NormalTok{X7}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 4.8 4.6 4.4 4.2 4.0 3.8 3.6 3.4 3.2
+\end{verbatim}
+
+Throw this new variable into the tibble we already have (for convenience). To explain the syntax below, the \texttt{\%\textgreater{}\%} symbol is called a ``pipe'' and it tells R to pass the \texttt{linear\_data} tibble on to the next row to process it. And the processing itself is dictated by the \texttt{bind\_cols} command which tells R to ``bind a new column'' to the tibble. The part that says \texttt{X7\ =\ X7} may be a little confusing. It says to add the new column \texttt{X7}, but also still call it \texttt{X7}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{linear\_data }\OtherTok{\textless{}{-}}\NormalTok{ linear\_data }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{bind\_cols}\NormalTok{(}\AttributeTok{X7 =}\NormalTok{ X7)}
+\NormalTok{linear\_data}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 9 x 3
+##      X5    X6    X7
+##   <int> <dbl> <dbl>
+## 1     1   3.5   4.8
+## 2     2   4     4.6
+## 3     3   4.5   4.4
+## 4     4   5     4.2
+## 5     5   5.5   4  
+## 6     6   6     3.8
+## 7     7   6.5   3.6
+## 8     8   7     3.4
+## 9     9   7.5   3.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(linear\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ X7, }\AttributeTok{x =}\NormalTok{ X5)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-38-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(X5, X7)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -1
+\end{verbatim}
+
+Again, that is what we expected.
+
+What happens if we plot random data? The \texttt{runif} command just chooses random numbers uniformly between 0 and 1.\footnote{Sean's brain always want to parse this command as ``run if''. Run if what? No, no, it's ``r unif''.}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1234}\NormalTok{)}
+\NormalTok{X8 }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{20}\NormalTok{)}
+\NormalTok{X9 }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{20}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X8}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 0.113703411 0.622299405 0.609274733 0.623379442 0.860915384 0.640310605
+##  [7] 0.009495756 0.232550506 0.666083758 0.514251141 0.693591292 0.544974836
+## [13] 0.282733584 0.923433484 0.292315840 0.837295628 0.286223285 0.266820780
+## [19] 0.186722790 0.232225911
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X9}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] 0.31661245 0.30269337 0.15904600 0.03999592 0.21879954 0.81059855
+##  [7] 0.52569755 0.91465817 0.83134505 0.04577026 0.45609148 0.26518667
+## [13] 0.30467220 0.50730687 0.18109621 0.75967064 0.20124804 0.25880982
+## [19] 0.99215042 0.80735234
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{random\_data }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(X8, X9)}
+\NormalTok{random\_data}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 20 x 2
+##         X8     X9
+##      <dbl>  <dbl>
+##  1 0.114   0.317 
+##  2 0.622   0.303 
+##  3 0.609   0.159 
+##  4 0.623   0.0400
+##  5 0.861   0.219 
+##  6 0.640   0.811 
+##  7 0.00950 0.526 
+##  8 0.233   0.915 
+##  9 0.666   0.831 
+## 10 0.514   0.0458
+## 11 0.694   0.456 
+## 12 0.545   0.265 
+## 13 0.283   0.305 
+## 14 0.923   0.507 
+## 15 0.292   0.181 
+## 16 0.837   0.760 
+## 17 0.286   0.201 
+## 18 0.267   0.259 
+## 19 0.187   0.992 
+## 20 0.232   0.807
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(random\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ X9, }\AttributeTok{x =}\NormalTok{ X8)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-44-1.pdf}
+
+What do you guess is the correlation between \(X_{8}\) and \(X_{9}\)?
+
+Now calculate it using R? Did you get the \emph{exact} answer you guessed? If not, why not?
+
+What about data that follows a perfect mathematical relationship that is not a straight line? For example, here is a part of a parabola.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X10 }\OtherTok{\textless{}{-}} \FloatTok{0.1} \SpecialCharTok{*}\NormalTok{ X5}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{X10}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1 0.4 0.9 1.6 2.5 3.6 4.9 6.4 8.1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nonlinear\_data }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(X5, X10)}
+\NormalTok{nonlinear\_data}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 9 x 2
+##      X5   X10
+##   <int> <dbl>
+## 1     1   0.1
+## 2     2   0.4
+## 3     3   0.9
+## 4     4   1.6
+## 5     5   2.5
+## 6     6   3.6
+## 7     7   4.9
+## 8     8   6.4
+## 9     9   8.1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(nonlinear\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ X10, }\AttributeTok{x =}\NormalTok{ X5)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-47-1.pdf}
+
+Now for the correlation:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(X5, X10)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.975281
+\end{verbatim}
+
+This is a large correlation, but it is not exactly 1, even though the points follow a precise mathematical relationship. That relationship is not linear.
+
+Here's a fascinating example. For this, we'll want a parabola that goes down and then up.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X11 }\OtherTok{\textless{}{-}} \FloatTok{0.5} \SpecialCharTok{*}\NormalTok{ (X5 }\SpecialCharTok{{-}} \DecValTok{5}\NormalTok{)}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{X11}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 8.0 4.5 2.0 0.5 0.0 0.5 2.0 4.5 8.0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nonlinear\_data }\OtherTok{\textless{}{-}}\NormalTok{ nonlinear\_data }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{bind\_cols}\NormalTok{(}\AttributeTok{X11 =}\NormalTok{ X11)}
+\NormalTok{nonlinear\_data}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 9 x 3
+##      X5   X10   X11
+##   <int> <dbl> <dbl>
+## 1     1   0.1   8  
+## 2     2   0.4   4.5
+## 3     3   0.9   2  
+## 4     4   1.6   0.5
+## 5     5   2.5   0  
+## 6     6   3.6   0.5
+## 7     7   4.9   2  
+## 8     8   6.4   4.5
+## 9     9   8.1   8
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(nonlinear\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ X11, }\AttributeTok{x =}\NormalTok{ X5)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-51-1.pdf}
+
+Before looking at the answer, what is your guess for the correlation between \(X_{5}\) and \(X_{11}\)?
+
+Now calculate the correlation in R.
+
+Again, there's a perfect mathematical relationship between these two variables. They are most definitely associated. So why is the correlation 0?
+
+Recall the earlier promise to discuss \protect\hyperlink{Rule11}{\textbf{Rule 11}}. If two variables are independent, then their covariance is zero, and, therefore, their correlation is also zero. However, this rule doesn't work the other way around. The claim is that knowing the covariance/correlation is zero does not imply (necessarily) that the two variables are independent. Here is the promised example of that phenomenon. \(X_{5}\) and \(X_{11}\) have zero correlation. And yet, \(X_{5}\) and \(X_{11}\) are definitely \emph{not} independent.
+
+This is important enough for a fancy box:
+
+\textbf{When you see that the correlation between two variables is zero or near zero, be careful not to conclude that the variables are independent.}
+
+A zero or near-zero correlation indicates only the lack of a \emph{linear} association between two variables. There may be nonlinear associations. That's why it's always a good idea to graph your data.
+
+Real data is, of course, much messier and it's just not possible to have perfect correlations between two variables measured out there in the real world. (If you do find a perfect correlation between two columns of your data, chances are that you either recorded the same column twice, or the second column is some simple transformation of first column, like multiplying every value by the same number or something like that.)
+
+Here is a plot of the temperature (degrees Fahrenheit) and wind speed (mph) from the New York air quality data set.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(airquality, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Temp, }\AttributeTok{x =}\NormalTok{ Wind)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-52-1.pdf}
+
+Just looking at the scatterplot (without calculating anything), is the correlation between these two variables positive or negative? Try guessing the exact value of the correlation.
+
+Now calculate the exact value of the correlation to see how close you were.
+
+If you want some practice with looking at scatterplots and guessing the correlation, try this online game:
+
+\href{http://guessthecorrelation.com/}{Guess the Correlation}
+
+Turn up the sound! If the whole class plays at the same time, your classroom will sound like an arcade. Compete with your classmates to see who can get the high score.
 
 \hypertarget{simple}{%
 \chapter{Simple regression}\label{simple}}

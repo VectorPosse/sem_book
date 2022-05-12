@@ -344,5 +344,361 @@ You'll need these rules to do calculations in future chapters. Rather than havin
 
 ## Correlation {#covariance-correlation}
 
+The pros and cons for calculating covariance are similar to those for variance. The mathematics is much nicer for covariance, but we lose interpretability.
 
-## Visualizing covariance and correlation {#covariance-visualizing}
+::: {.rmdnote}
+
+Let's suppose that $X_{1}$ measures salary in dollars and $X_{2}$ measures years of education. We would expect there to be some association between these variables, so we calculate the covariance. What is the unit of measurement of the resulting number?
+
+:::
+
+The solution to the problem here is not as simple as it was for variance. Since variance had squared units, all we had to do was take the square root. Covariance has a weird product of units, so we have to do something more clever.
+
+Following up on the activity above, let's suppose we have a covariance with units of "dollar-years". If we divide by a number expressed in dollars, we get rid of those units and we're left with years. But that seems unsatisfying; covariance should express something about both variables that went into it. Likewise, it makes no sense to divide by a number expressed in years as that would leave us just with dollars.
+
+The solution to the dilemma is to accept that we aren't going to be able to keep any units in a meaningful way. Therefore, what we want is something *standardized*, meaning that it has no units.
+
+::: {.rmdnote}
+
+If $X_{1}$ is expressed in dollars, can you think of a statistic that measures spread and is also in units of dollars?
+
+Likewise, if $X_{2}$ is measured in years, what statistic that measures spread is also in units of years?
+
+:::
+
+The previous activity gives us an idea. What if we divide the covariance by *both* the standard deviation of $X_{1}$ *and* the standard deviation of $X_{2}$?
+
+$$
+\frac{Cov(X_{1},X_{2})}{SD(X_{1}) SD(X_{2})}
+$$
+
+Sometimes it's written like this:
+
+$$
+\frac{Cov(X_{1},X_{2})}{\sqrt{Var(X_{1})} \sqrt{Var(X_{2})}}
+$$
+But that's the same thing, right?
+
+This quantity has no units. We call this the *correlation* between $X_{1}$ and $X_{2}$. We'll either write
+$$
+Corr(X_{1}, X_{2})
+$$
+or, if we need to be more concise,
+$$
+r_{X_{1}X_{2}}
+$$
+
+Yes, this is the same as the correlation coefficient you learned about in your intro stats class, although it wasn't likely presented to you quite this way.^[Karl Pearson is credited with inventing the correlation coefficient. Pearson was a life-long eugenicist and a proponent of using "science" to prove that some races were superior to others. It important to disentangle the truly valuable notion of correlation from the discredited hands that may have first written it down. Therefore, we will not be referring to it in this text as the Pearson correlation coefficient.]
+
+One great thing about correlation is that it has no units, so it serves as a sort of "universal" measure of how two variables co-vary. But the best part is that it has a nice intuitive meaning precisely because it factors out the pieces of the covariance that are only there because of the spread of the two variables individually. In other words, the fact that $X_{1}$ and $X_{2}$ have their own variability actually *complicates* the notion of covariance. Those individual variances "corrupt" the interpretation of covariance. But after excising them, all that's left in the correlation is the "pure" part of the covariance that expresses the relationship or association between $X_{1}$ and $X_{2}$.
+
+
+## Covariance with standardized data {#covariance-standardized}
+
+In the last chapter, you showed that the variance of a standardized variable was 1. What is the covariance between two standardized variables?
+
+::: {.rmdnote}
+
+Let's standardize both $X_{1}$ and $X_{2}$. To make the math a little easier, we'll use similar notation to what we used at the end of the last chapter.
+
+$M_{1} = \overline{X_{1}}$
+
+$S_{1} = SD(X_{1})$
+
+$M_{2} = \overline{X_{2}}$
+
+$S_{2} = SD(X_{2})$
+
+And we'll write the z-scores in a way that is more amenable to mathematical manipulation (like before):
+
+$$
+Z_{1} = \frac{1}{S_{1}}\left(X_{1} - M_{1}\right)
+$$
+
+$$
+Z_{2} = \frac{1}{S_{2}}\left(X_{2} - M_{2}\right)
+$$
+
+This looks a little more intimidating, but if you apply the rules, it works out:
+
+\begin{align}
+Cov(Z_{1}, Z_{2}) &= Cov\left( \frac{1}{S_{1}}\left(X_{1} - M_{1}\right), \frac{1}{S_{2}}\left(X_{2} - M_{2}\right) \right) \\
+    &= \quad ???
+\end{align}
+
+Work this out. Take your time. Apply the rules carefully. So that you know what you're aiming for, you should get
+
+$$
+Cov(Z_{1}, Z_{2}) = \frac{Cov\left( X_{1}, X_{2} \right)}{S_{1} S_{2}}
+$$
+
+Okay, now remember that $S_{1}$ is just a convenient substitute for $SD(X_{1})$ and  $S_{2}$ is just a substitute for $SD(X_{2})$. Wait, does that answer look familiar?
+
+
+:::
+
+This is cool! Correlation is simply the covariance of two variables after they've been standardized.
+
+This also reinforces the earlier comment about interpreting covariance after removing the extraneous influence of the spread of the individual variables. Standardizing variables makes the spread all all variables 1, so their covariance is now a pure representation of just the association between them.
+
+You probably remember from intro stats that correlation takes on values between -1 and 1. That fact is not obvious from the formula we have. Why should the fraction
+$$
+\frac{Cov(X_{1},X_{2})}{SD(X_{1}) SD(X_{2})}
+$$
+be bounded by -1 and 1?
+
+::: {.rmdnote}
+
+Let's go back to standardized variable to keep things simple. The correlation is just the covariance of two standardized variables:
+
+$$
+Corr(X_{1}, X_{2}) = Cov(Z_{1}, Z_{2})
+$$
+
+Use the rules to calculate this:
+
+$$
+Var(Z_{1} + Z_{2})
+$$
+
+Remember that $Z_{1}$ and $Z_{2}$ are not necessarily independent. (In fact, we hope they are not. Otherwise, why do we care about their correlation? It would be zero!) So you need [**Rule 12**](#Rule12), not [**Rule 2**](./variance.html#Rule2). Keep manipulating until you get
+$$
+2 + 2Corr(X_{1}, X_{2})
+$$
+
+Since variances are always non-negative, we now know that
+
+$$
+0 \leq 2 + 2Corr(X_{1}, X_{2})
+$$
+Solve this inequality for $Corr(X_{1}, X_{2})$.
+
+Now follow the exact same steps for
+$$
+Var(Z_{1} - Z_{2})
+$$
+
+Very little should change in your answer, but there is one small change. Again, solve the resulting inequality. (Don't forget the key rule when working with inequalities that multiplying or dividing by a negative number changes the direction of the inequality.)
+
+:::
+
+Here is a fact we will state without proof:
+
+::: .{rmdimportant}
+
+Correlation is only interpretable as the strength of **linear** associations.
+
+:::
+
+Why is this? Basically, it boils down to the fact that a "perfect" correlation of 1 or -1 is only achievable when data points lie on a perfectly straight line. Therefore, thinking of correlation as lying between 0 and 1 (or 0 and -1) is only sensible if you are judging how close points are to lying on a straight line. We'll see examples of this in the next section when we plot some data.
+
+To calculation correlation in R, use the `cor` command:
+
+```{r}
+cor(airquality$Temp, airquality$Wind)
+```
+
+::: {.rmdnote}
+
+Use R to confirm that the number above is the covariance divided by the product of the standard deviations.
+
+:::
+
+
+## Visualizing correlation {#covariance-visualizing}
+
+Covariance is hard to interpret, so when we're visualizing data and we want to understand any association that might exist between two variables, correlation is a much better statistic to calculate. Let's see how correlation relates to the graph of two variables.
+
+Before getting into the graphing, we will need to load some packages. The `tidyverse` is a whole set of commonly used packages that will allow us to work with data frames (or "tibbles" as the cool kids are calling them) and make graphs. Be sure to load the package by typing the following in R before going any further:
+
+```{r}
+library(tidyverse)
+```
+
+In fact, from here on out, we'll start each chapter by loading any necessary libraries in R that we'll need.
+
+The standard graph of two numerical variables is a scatterplot. Let's start with a straight line relationship. First, we define two variables. We'll use some shortcuts here to make our lives a little easier. The `seq` command just generates a sequence of numbers.
+
+```{r}
+X5 <- seq(1, 9)
+X5
+```
+
+Then we can establish a linear relationship just by declaring one in a formula:
+
+```{r}
+X6 <- 3 + 0.5 * X5
+X6
+```
+
+To put both variables into the same graph, it helps to make them both columns in a single tibble.
+
+```{r}
+linear_data <- tibble(X5, X6)
+linear_data
+```
+
+And here is the graph:
+
+```{r}
+ggplot(linear_data, aes(y = X6, x = X5)) +
+    geom_point()
+```
+
+Now the correlation:
+
+```{r}
+cor(X5, X6)
+```
+
+It is 1, as expected.
+
+What about a perfectly straight line with a negative slope?
+
+```{r}
+X7 <- 5 - 0.2 * X5
+X7
+```
+
+Throw this new variable into the tibble we already have (for convenience). To explain the syntax below, the `%>%` symbol is called a "pipe" and it tells R to pass the `linear_data` tibble on to the next row to process it. And the processing itself is dictated by the `bind_cols` command which tells R to "bind a new column" to the tibble. The part that says `X7 = X7` may be a little confusing. It says to add the new column `X7`, but also still call it `X7`.
+
+```{r}
+linear_data <- linear_data %>%
+    bind_cols(X7 = X7)
+linear_data
+```
+```{r}
+ggplot(linear_data, aes(y = X7, x = X5)) +
+    geom_point()
+```
+
+```{r}
+cor(X5, X7)
+```
+
+Again, that is what we expected.
+
+What happens if we plot random data? The `runif` command just chooses random numbers uniformly between 0 and 1.^[Sean's brain always want to parse this command as "run if". Run if what? No, no, it's "r unif".]
+
+```{r}
+set.seed(1234)
+X8 <- runif(20)
+X9 <- runif(20)
+```
+
+```{r}
+X8
+```
+
+```{r}
+X9
+```
+
+```{r}
+random_data <- tibble(X8, X9)
+random_data
+```
+
+```{r}
+ggplot(random_data, aes(y = X9, x = X8)) +
+    geom_point()
+```
+
+::: {.rmdnote}
+
+What do you guess is the correlation between $X_{8}$ and $X_{9}$?
+
+Now calculate it using R? Did you get the *exact* answer you guessed? If not, why not?
+
+:::
+
+What about data that follows a perfect mathematical relationship that is not a straight line? For example, here is a part of a parabola.
+
+```{r}
+X10 <- 0.1 * X5^2
+X10
+```
+```{r}
+nonlinear_data <- tibble(X5, X10)
+nonlinear_data
+```
+
+```{r}
+ggplot(nonlinear_data, aes(y = X10, x = X5)) +
+    geom_point()
+```
+
+Now for the correlation:
+
+```{r}
+cor(X5, X10)
+```
+
+This is a large correlation, but it is not exactly 1, even though the points follow a precise mathematical relationship. That relationship is not linear.
+
+Here's a fascinating example. For this, we'll want a parabola that goes down and then up.
+
+```{r}
+X11 <- 0.5 * (X5 - 5)^2
+X11
+```
+
+```{r}
+nonlinear_data <- nonlinear_data %>%
+    bind_cols(X11 = X11)
+nonlinear_data
+```
+
+```{r}
+ggplot(nonlinear_data, aes(y = X11, x = X5)) +
+    geom_point()
+```
+
+::: {.rmdnote}
+
+Before looking at the answer, what is your guess for the correlation between $X_{5}$ and $X_{11}$?
+
+Now calculate the correlation in R.
+
+Again, there's a perfect mathematical relationship between these two variables. They are most definitely associated. So why is the correlation 0?
+
+:::
+
+Recall the earlier promise to discuss [**Rule 11**](#Rule11). If two variables are independent, then their covariance is zero, and, therefore, their correlation is also zero. However, this rule doesn't work the other way around. The claim is that knowing the covariance/correlation is zero does not imply (necessarily) that the two variables are independent. Here is the promised example of that phenomenon. $X_{5}$ and $X_{11}$ have zero correlation. And yet, $X_{5}$ and $X_{11}$ are definitely *not* independent.
+
+This is important enough for a fancy box:
+
+::: {.rmdimportant}
+
+**When you see that the correlation between two variables is zero or near zero, be careful not to conclude that the variables are independent.**
+
+:::
+
+A zero or near-zero correlation indicates only the lack of a *linear* association between two variables. There may be nonlinear associations. That's why it's always a good idea to graph your data.
+
+Real data is, of course, much messier and it's just not possible to have perfect correlations between two variables measured out there in the real world. (If you do find a perfect correlation between two columns of your data, chances are that you either recorded the same column twice, or the second column is some simple transformation of first column, like multiplying every value by the same number or something like that.)
+
+Here is a plot of the temperature (degrees Fahrenheit) and wind speed (mph) from the New York air quality data set.
+
+```{r}
+ggplot(airquality, aes(y = Temp, x = Wind)) +
+    geom_point()
+```
+
+::: {.rmdnote}
+
+Just looking at the scatterplot (without calculating anything), is the correlation between these two variables positive or negative? Try guessing the exact value of the correlation.
+
+Now calculate the exact value of the correlation to see how close you were.
+
+:::
+
+::: {.rmdnote}
+
+If you want some practice with looking at scatterplots and guessing the correlation, try this online game:
+
+[Guess the Correlation](http://guessthecorrelation.com/)
+
+Turn up the sound! If the whole class plays at the same time, your classroom will sound like an arcade. Compete with your classmates to see who can get the high score.
+
+:::

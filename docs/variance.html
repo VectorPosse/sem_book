@@ -499,6 +499,14 @@ But, eww, that’s gross.</p>
 <li>We need to communicate something about spread in meaningful units.</li>
 <li>We need to standardize variables. (See Section <a href="variance.html#variance-standardizing">2.7</a> below.)</li>
 </ol>
+<p>Although the standard deviance is just the square root of the variance, it is worth knowing the R command to calculate it. It’s just <code>sd</code>. For example:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">PlantGrowth</span><span class="op">$</span><span class="va">weight</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 0.7011918</code></pre>
+<p>You can see below that <code>sd</code> did the right thing:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">PlantGrowth</span><span class="op">$</span><span class="va">weight</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 0.7011918</code></pre>
 </div>
 <div id="variance-mean-centering" class="section level2" number="2.6">
 <h2>
@@ -510,7 +518,7 @@ But, eww, that’s gross.</p>
 <p>Let’s use <span class="math inline">\(X_{6}\)</span> as we defined it before, a normally distributed variable with mean 4 and standard deviation 3. How do we interpret the values of <span class="math inline">\(X_{6} - \overline{X_{6}}\)</span>? (Remember, this is just the second column in our variance tables earlier.)</p>
 <p>If we shift all the <span class="math inline">\(X_{6}\)</span> values to the left by <span class="math inline">\(\overline{X_{6}}\)</span> units, what is the mean of the new list of numbers?</p>
 <p>Let’s verify this in R. We’ll use the “suffix” <code>mc</code> to indicate a mean-centered variable.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">X6_mc</span> <span class="op">&lt;-</span> <span class="va">X6</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">X6</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">X6_mc</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2.851573e-16</code></pre>
@@ -541,7 +549,7 @@ Z = \frac{\left(X - \overline{X}\right)}{SD(X)}
 </div>
 <p>The z-score for the American woman was 2. This means that her height measures two standard deviations above the mean.</p>
 <p>For real-world data, we will use technology to do this. Here are some temperature measurements from New York in 1974. (These are daily highs across a six-month period.)</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span></code></pre></div>
 <pre><code>##   [1] 67 72 74 62 56 66 65 59 61 69 74 69 66 68 58 64 66 57 68 62 59 73 61 61 57
 ##  [26] 58 57 67 81 79 76 78 74 67 84 85 79 82 87 90 87 93 92 82 80 79 77 72 65 73
@@ -551,15 +559,15 @@ Z = \frac{\left(X - \overline{X}\right)}{SD(X)}
 ## [126] 93 93 87 84 80 78 75 73 81 76 77 71 71 78 67 76 68 82 64 71 81 69 63 70 77
 ## [151] 75 76 68</code></pre>
 <p>We calculate the mean and standard deviation:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 77.88235</code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 9.46527</code></pre>
 <p>This is an average high of about 78 degrees Fahrenheit with a standard deviation of about 9.5 degrees Fahrenheit.</p>
 <p>If we just subtract the mean, we get mean-centered data.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span><span class="op">)</span></code></pre></div>
 <pre><code>##   [1] -10.8823529  -5.8823529  -3.8823529 -15.8823529 -21.8823529 -11.8823529
 ##   [7] -12.8823529 -18.8823529 -16.8823529  -8.8823529  -3.8823529  -8.8823529
@@ -588,7 +596,7 @@ Z = \frac{\left(X - \overline{X}\right)}{SD(X)}
 ## [145]  -6.8823529   3.1176471  -8.8823529 -14.8823529  -7.8823529  -0.8823529
 ## [151]  -2.8823529  -1.8823529  -9.8823529</code></pre>
 <p>But if we also divide by the standard deviation, we get a standardized variable (or a set of z-scores). Note the extra parentheses to make sure we get the order of operations right. We have to subtract first, but then divide that whole mean-centered quantity by the standard deviation.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span><span class="op">)</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span><span class="op">)</span></code></pre></div>
 <pre><code>##   [1] -1.14971398 -0.62146702 -0.41016823 -1.67796094 -2.31185730 -1.25536337
 ##   [7] -1.36101276 -1.99490912 -1.78361034 -0.93841519 -0.41016823 -0.93841519
@@ -617,7 +625,7 @@ Z = \frac{\left(X - \overline{X}\right)}{SD(X)}
 ## [145] -0.72711641  0.32937752 -0.93841519 -1.57231155 -0.83276580 -0.09322005
 ## [151] -0.30451884 -0.19886945 -1.04406459</code></pre>
 <p>The easier way to do this in R is to use the <code>scale</code> command. (Sorry, the output is a little long. Keep scrolling below.)</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span><span class="op">)</span></code></pre></div>
 <pre><code>##               [,1]
 ##   [1,] -1.14971398
@@ -784,7 +792,7 @@ Z = \frac{\left(X - \overline{X}\right)}{SD(X)}
 <div class="rmdnote">
 <p>Let’s calculate the variance of a standardized variable. To do so, I’ll note that the mean <span class="math inline">\(\overline{X}\)</span> is just a number. Also, the standard deviation <span class="math inline">\(SD(X)\)</span> is just a number. To make the calculation easier to understand, let’s just substitute letters that are easier to work with:</p>
 <p><span class="math inline">\(M = \overline{X}\)</span></p>
-<p><span class="math inline">\(S = SD(X)\)</span>.</p>
+<p><span class="math inline">\(S = SD(X)\)</span></p>
 <p>Remember, <span class="math inline">\(M\)</span> and <span class="math inline">\(S\)</span> are <em>constants</em>.</p>
 <p>Now we need to calculate <span class="math inline">\(Var(Z)\)</span>. I’ll do the first couple of steps. Then you take over and, using the variance rules from earlier in the chapter, simplify the expression until you get to a numerical answer. Be sure to justify each step by citing the rule you invoked to get there.</p>
 <p><span class="math display">\[\begin{align}
@@ -830,7 +838,7 @@ Var(Z) &amp;= Var\left(\frac{\left(X - \overline{X}\right)}{SD(X)}\right) \\
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-10.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-12.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

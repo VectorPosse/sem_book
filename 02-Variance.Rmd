@@ -454,6 +454,17 @@ For SEM, we will focus almost exclusively on variance and switch to standard dev
 1. We need to communicate something about spread in meaningful units.
 2. We need to standardize variables. (See Section \@ref(variance-standardizing) below.)
 
+Although the standard deviance is just the square root of the variance, it is worth knowing the R command to calculate it. It's just `sd`. For example:
+
+```{r}
+sd(PlantGrowth$weight)
+```
+You can see below that `sd` did the right thing:
+
+```{r}
+sqrt(var(PlantGrowth$weight))
+```
+
 
 ## Mean centering data {#variance-mean-centering}
 
@@ -566,7 +577,7 @@ Let's calculate the variance of a standardized variable. To do so, I'll note tha
 
 $M = \overline{X}$
 
-$S = SD(X)$.
+$S = SD(X)$
 
 Remember, $M$ and $S$ are *constants*.
 

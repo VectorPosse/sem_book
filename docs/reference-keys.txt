@@ -13,6 +13,7 @@ covariance-calculating
 covariance-r
 covariance-rules
 covariance-correlation
+covariance-standardized
 covariance-visualizing
 simple
 multiple
