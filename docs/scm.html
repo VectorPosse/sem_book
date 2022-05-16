@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>B LISREL notation | Demystifying Structural Equation Modeling</title>
+<title>Chapter 11 Structural causal models | Demystifying Structural Equation Modeling</title>
 <meta name="author" content="Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)">
 <meta name="description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
-<meta property="og:title" content="B LISREL notation | Demystifying Structural Equation Modeling">
+<meta property="og:title" content="Chapter 11 Structural causal models | Demystifying Structural Equation Modeling">
 <meta property="og:type" content="book">
-<meta property="og:url" content="https://vectorposse.github.io/sem_book/appendix-lisrel.html">
+<meta property="og:url" content="https://vectorposse.github.io/sem_book/scm.html">
 <meta property="og:description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="B LISREL notation | Demystifying Structural Equation Modeling">
+<meta name="twitter:title" content="Chapter 11 Structural causal models | Demystifying Structural Equation Modeling">
 <meta name="twitter:description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -55,10 +55,10 @@
 <li><a class="" href="latent.html"><span class="header-section-number">8</span> Latent variables</a></li>
 <li><a class="" href="cfa.html"><span class="header-section-number">9</span> Confirmatory factor analysis</a></li>
 <li><a class="" href="sem.html"><span class="header-section-number">10</span> Structural equation models</a></li>
-<li><a class="" href="scm.html"><span class="header-section-number">11</span> Structural causal models</a></li>
+<li><a class="active" href="scm.html"><span class="header-section-number">11</span> Structural causal models</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="appendix-rules.html"><span class="header-section-number">A</span> Variance/covariance rules</a></li>
-<li><a class="active" href="appendix-lisrel.html"><span class="header-section-number">B</span> LISREL notation</a></li>
+<li><a class="" href="appendix-lisrel.html"><span class="header-section-number">B</span> LISREL notation</a></li>
 </ul>
 
         <div class="book-extra">
@@ -66,41 +66,26 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="appendix-lisrel" class="section level1" number="13">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="scm" class="section level1" number="11">
 <h1>
-<span class="header-section-number">B</span> LISREL notation<a class="anchor" aria-label="anchor" href="#appendix-lisrel"><i class="fas fa-link"></i></a>
+<span class="header-section-number">11</span> Structural causal models<a class="anchor" aria-label="anchor" href="#scm"><i class="fas fa-link"></i></a>
 </h1>
 
 </div>
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   <div class="chapter-nav">
-<div class="prev"><a href="appendix-rules.html"><span class="header-section-number">A</span> Variance/covariance rules</a></div>
-<div class="empty"></div>
+<div class="prev"><a href="sem.html"><span class="header-section-number">10</span> Structural equation models</a></div>
+<div class="next"><a href="appendix-rules.html"><span class="header-section-number">A</span> Variance/covariance rules</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#appendix-lisrel"><span class="header-section-number">B</span> LISREL notation</a></li></ul>
+      <ul class="nav navbar-nav"><li><a class="nav-link" href="#scm"><span class="header-section-number">11</span> Structural causal models</a></li></ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/VectorPosse/sem_book/blob/main/Appendix.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/VectorPosse/sem_book/edit/main/Appendix.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/VectorPosse/sem_book/blob/main/11-Structural_causal_models.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/VectorPosse/sem_book/edit/main/11-Structural_causal_models.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>

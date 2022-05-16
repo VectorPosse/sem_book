@@ -124,7 +124,7 @@
 
 \title{Demystifying Structural Equation Modeling}
 \author{Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)}
-\date{2022-05-12}
+\date{2022-05-16}
 
 \begin{document}
 \maketitle
@@ -2013,6 +2013,429 @@ Turn up the sound! If the whole class plays at the same time, your classroom wil
 
 \begin{center}\includegraphics{graphics/simple_regression} \end{center}
 
+\hypertarget{preliminaries}{%
+\section*{Preliminaries}\label{preliminaries}}
+\addcontentsline{toc}{section}{Preliminaries}
+
+We need to load the packages we will need for this chapter. The \texttt{tideverse} package has all sorts of utilities for working with tibbles (data frames). This will also be our first introduction to the \texttt{lavaan} package that will be used throughout the rest of the book.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(lavaan)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## This is lavaan 0.6-11
+## lavaan is FREE software! Please report any bugs.
+\end{verbatim}
+
+\hypertarget{simple-prediction}{%
+\section{Prediction}\label{simple-prediction}}
+
+One of the most important tasks in statistics is \emph{prediction}. Given some data, can we predict the value of something important about a population of interest?
+
+Suppose you have gathered some data on anxiety among Utah high school students. There are various instruments available for measuring anxiety, so say you have administered the \href{https://en.wikipedia.org/wiki/Beck_Anxiety_Inventory}{Beck Anxiety Inventory}. This instrument assigns a score from 0 to 63, with lower numbers indicating less anxiety and higher numbers indicating more.
+
+You take care to make sure your sample is as close to a simple random sample as possible so that it's representative of the population (all high school students in the state of Utah). From your sample data, you can calculate summary statistics. For example, you might find that the mean anxiety score for Utah high school students is 7.1 with a standard deviation of 3.9.
+
+A random Utah high school student walks through the door. You don't know anything about them. Can you say anything about their anxiety? What is your best guess as to what their score might be on the Beck Anxiety Inventory?
+
+We can do a lot better if we have another variable we can measure. For example, let's suppose our data records not only anxiety, but also the minutes of smart phone usage per day.
+
+In theory, why would having information about smart phone usage potentially help us make better predictions of anxiety?
+
+Do you suspect that the association between anxiety and smart phone usage is positive or negative? (You can Google this question to check if there is any empirical evidence out there for your guess.)
+
+Now imagine that another random Utah high school student walks through the door. This time, I tell you that their smart phone usage is average (sitting at the mean). What is your best prediction for their anxiety score? (Give an exact value.)
+
+What if I told you that the student who walked through the door had \emph{higher} than average smart phone usage? What would be your prediction of their anxiety score? (You can't give an exact value here, but give a qualitatively sensible answer.)
+
+What if I told you that the student who walked through the door had \emph{lower} than average smart phone usage? What would be your prediction of their anxiety score? (Again, just give a qualitatively sensible answer.)
+
+\hypertarget{simple-terminology}{%
+\section{Regression terminology}\label{simple-terminology}}
+
+When we have one variable we suspect may help us predict another variable, one way to study it is using a simple regression model.
+
+This is related to, but somewhat different from, covariance. Covariance is symmetric, so it expresses the idea that two variables are mutually related. But there is no ``directionality'' to that relationship. By way of contrast, a simple regression model asserts that one of the variables is ``explanatory'' and the other is ``response''. In other words, we start with the values or properties of the explanatory variable and try to deduce what we can about the values or properties of the response variable.
+
+Keep in mind that ``directionality'' is not the same as ``causality''. While it's possible that one variable causes another, there needs to be a data collection process (often a carefully controlled experiment) and a clear scientific rationale that justifies a causal relationship between variables before we can start thinking about inferring causality. For purposes of much of this book, directionality just means that we wish to establish a predictive relationship wherein we start with the properties of one variable and try to predict the properties of another variable. There is often a ``sensible'' order in which to do this based on the research questions asked or the hypotheses posed.
+
+There are many different terminological conventions in statistics, so be aware that ``explanatory'' variables are also called---often depending on the discipline and the context---predictors, features, covariates, controls, regressors, inputs, or independent variables. In fact, in the context of structural equation modeling, we will use the term ``exogenous'' to refer to variables that play this role. (That term has a much more precise definition that we'll discuss in future chapters.) And ``response'' variables might be called outcomes, outputs, targets, explained variables, or dependent variables, among others. In this book, we will often use the term ``endogenous'' (again, in a very specific way yet to be explained). If there is a data collection process and a clear scientific rationale that justifies a causal relationship between variables, then we might be able to refer to variables as either ``cause'' or ``effect''.
+
+Keep in mind that it's the scientific question we want to ask that determines the explanatory/response relationship. A different researcher with a different hypothesis might use the same two variables but with the roles reversed.
+
+In the anxiety/smart-phone example above, which variable is explanatory and which is response, at least according to the way we stated the scenario?
+
+\hypertarget{simple-model}{%
+\section{The simple regression model}\label{simple-model}}
+
+Here is the figure from the top of the chapter, only now we have decorated it with some letters (and a number):
+
+\begin{center}\includegraphics{graphics/simple_regression_params} \end{center}
+
+The goal of this section is to explain all these.
+
+The variable names are \(X\) and \(Y\). \(X\) is the exogenous variable and \(Y\) is the endogenous variable. For example, \(X\) might be smart phone usage and \(Y\) might be the anxiety score from the example above. In this section, we're going to do some concrete calculations using the example from the last chapter about wind speed and temperature from the \texttt{airquality} data set. In the last chapter, we simply calculated the (symmetric) correlation between wind speed and temperature. Here, we will consider wind speed as exogenous and temperature as endogenous. In other words, our goal is to use the wind speed as a predictor of temperature.
+
+The letter \(v\) requires no further explanation. This is the variance of the variable \(X\), so we already know about it.
+
+The parameter \(b\) is supposed to measure something about the predictive relationship between \(X\) and \(Y\). It is attached to an arrow that is drawn a little thicker than the other arrows in the diagram. More to say about that in a moment.
+
+The really weird, new part is the circle on the right. This will be the ``error'' term.
+
+What is ``error'' and why is it here? To illustrate, let's plot wind speed against temperature. Before plotting and analyzing these variables, we are going to mean-center them and put them in a tibble.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X }\OtherTok{\textless{}{-}}\NormalTok{ airquality}\SpecialCharTok{$}\NormalTok{Wind }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Wind)}
+\NormalTok{Y }\OtherTok{\textless{}{-}}\NormalTok{ airquality}\SpecialCharTok{$}\NormalTok{Temp }\SpecialCharTok{{-}} \FunctionTok{mean}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Temp)}
+\NormalTok{airquality\_mc }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(X, Y)}
+\NormalTok{airquality\_mc}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 153 x 2
+##        X      Y
+##    <dbl>  <dbl>
+##  1 -2.56 -10.9 
+##  2 -1.96  -5.88
+##  3  2.64  -3.88
+##  4  1.54 -15.9 
+##  5  4.34 -21.9 
+##  6  4.94 -11.9 
+##  7 -1.36 -12.9 
+##  8  3.84 -18.9 
+##  9 10.1  -16.9 
+## 10 -1.36  -8.88
+## # ... with 143 more rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(airquality\_mc, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Y, }\AttributeTok{x =}\NormalTok{ X)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-57-1.pdf}
+
+Note that the exogenous variable (wind speed) is on the x-axis and the endogenous variable (temperature) is on the y-axis.
+
+We can see a negative and reasonably linear association between these variables, so let's add a line of best fit to the data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(airquality\_mc, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Y, }\AttributeTok{x =}\NormalTok{ X)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =}\NormalTok{ lm, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-58-1.pdf}
+
+The line passes right through the origin \((0, 0)\). Why?
+
+The slope of this line is \(-1.23\). We'll see how to calculate this slope in a bit. But what does this slope mean?
+
+Look at the help file for the \texttt{airquality} data set. (Either use the Help tab in RStudio or type \texttt{?airquality} at the Console.)
+
+What are the units of measurement of \(X\)? What are the units of measurement of \(Y\)? Since slope is ``rise over run'', what are the units of the slope?
+
+So, the idea is that for every additional mile per hour of wind speed, we predict that the temperature goes down by 1.23 degrees Fahrenheit.
+
+Why is the following sentence incorrect?
+
+\begin{quote}
+For every additional mile per hour of wind speed, the temperature goes down by 1.23 degrees Fahrenheit.
+\end{quote}
+
+The point is that the line is a \emph{model} that makes predictions. As long as \(X\) and \(Y\) are both mean-centered, the equation of this line is
+
+\[
+Y = bX
+\]
+
+And we can use the data to estimate that the value of \(b\) is \(-1.23\):
+
+\[
+Y = -1.23X
+\]
+
+This is a multiplicative effect. Again, as long as \(X\) and \(Y\) are both mean-centered, knowing the value of \(X\) allows us to predict the value of \(Y\) by multiplying by \(b\).
+
+But those predictions will almost always be wrong. On any given day, given an increase of 1 mile per hour wind in wind speed, it will very rarely happen that the temperature will drop by \emph{exactly} 1.23 degrees. That's just a sort of ``average'' over time. On average, there's a slight temperature change associated with 1 mph change in wind speed, and the number -1.23 is the best estimate of that average change across our whole data set. We need to be \emph{especially} clear that an increase in wind speed does not necessary \emph{cause} a drop in temperature. I mean, that might be partially true, but we can't prove it from our observational data. There are all sorts of other reasons to explain both an increase in wind speed and a drop in temperature (like a cold front moving in).
+
+Since our predictions are average effects and not specific guarantees, every prediction we make will be wrong by some amount. (We could get extremely lucky, but even then, it's difficult to imagine a situation in which our prediction is precisely correct to, say, 10 decimal places or something like that.) Therefore, there is error in our prediction. The new equation---accounting for error---is
+
+\[
+Y = bX + E
+\]
+or
+
+\[
+Y = -1.23X + E
+\]
+
+Error is a funny word because it has a negative connotation. It sounds like we made a mistake. Well, the model did make a mistake, but not the kind of mistake that results from doing our arithmetic wrong or anything like that. It's simply the ``natural'' error that results from the messiness of the real world and the impossibility of predicting anything with certainty. For this reason, we will often prefer the term ``residual''. It's what is ``left over'' after we have made a prediction. It's the extra change in temperature, for example, that is not accounted for by the model with wind speed alone.
+
+The residuals are evident in the plot above. If there were no residuals, every data point would lie on a perfect straight line. But the data points are all either a little above or below the line. Those vertical distances between the data and the line are the residuals or errors. Here is an example of two residuals plotted below in red.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(airquality\_mc, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ Y, }\AttributeTok{x =}\NormalTok{ X)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =}\NormalTok{ lm, }\AttributeTok{se =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{annotate}\NormalTok{(}\StringTok{"segment"}\NormalTok{,}
+             \AttributeTok{x =} \SpecialCharTok{{-}}\FloatTok{2.56}\NormalTok{, }\AttributeTok{y =} \FloatTok{3.15}\NormalTok{,}
+             \AttributeTok{xend =} \SpecialCharTok{{-}}\FloatTok{2.56}\NormalTok{, }\AttributeTok{yend =} \FloatTok{3.15} \SpecialCharTok{{-}} \FloatTok{14.03}\NormalTok{,}
+             \AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{size =} \FloatTok{1.5}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{annotate}\NormalTok{(}\StringTok{"segment"}\NormalTok{,}
+             \AttributeTok{x =} \FloatTok{4.94}\NormalTok{, }\AttributeTok{y =} \SpecialCharTok{{-}}\FloatTok{6.08}\NormalTok{,}
+             \AttributeTok{xend =} \FloatTok{4.94}\NormalTok{, }\AttributeTok{yend =} \SpecialCharTok{{-}}\FloatTok{6.08} \SpecialCharTok{+} \FloatTok{9.20}\NormalTok{,}
+             \AttributeTok{color =} \StringTok{"red"}\NormalTok{, }\AttributeTok{size =} \FloatTok{1.5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-59-1.pdf}
+
+Points below the line have negative residuals and points above the line have positive residuals.
+
+The residuals do not appear as observed or measured variables in our data. They are a consequence of a variety of \emph{unmeasured} factors that determine temperature aside from wind speed. An unmeasured variable that appears in a model is called a \emph{latent variable}. We will discuss latent variables in far greater detail in Chapter \ref{latent}. For now, just know that latent variables are indicated by circles in the diagram. That's why there is a circle with the letter \(E\) inside.
+
+The equation
+
+\[
+Y = bX + E
+\]
+can also be written as
+\[
+Y = bX + 1 \cdot E
+\]
+
+How is that ``1'' represented in the diagram?
+
+The only thing in the diagram that hasn't been explained yet is \(e\).
+
+Where does \(e\) appear in the diagram? Given where it appears, what does it represent mathematically?
+
+We know that curved arrows represent variance. But what does it mean to measure the variance of a variable we can't observe?
+
+What would the scatterplot look like if the error variance were very small. What about if the error variance were large?
+
+There is variability in the size of the residuals. Some are small (points that are close to the line) and some are large (points that are far from the line). This spread of residuals can be estimated from data, just like any other variance calculation.\footnote{We know that variance is close to the average squared deviation, except we divide by \(n - 1\) instead of \(n\). Well, residuals are a little more weird still. To get an unbiased estimate, you have divide by \(n - 2\). However, the calculation that appears next is the one that uses \(n - 1\). This is for reasons that, regrettably, we'll have to sweep under the rug here.} It turns out to be about 70.8. We'll see how to calculate that below.
+
+Let's put everything together into a diagram.
+
+First, we need the variance of \(X\) (wind speed). Calculate it in R. You should get 12.4.
+
+Does it matter if you calculate the variance of the variable \texttt{Wind} from the original \texttt{airquality} data, or the variance of the \(X\) variable from \texttt{airqualilty\_mc}? Why or why not?
+
+\begin{center}\includegraphics{graphics/simple_regression_param_values} \end{center}
+
+While it's helpful to see \(X\) and \(Y\) as generic prototypes for any simple regression model, in most applied problems from now on we'll refer to variables using contextually meaningful names. The final diagram looks like this:
+
+\begin{center}\includegraphics{graphics/simple_regression_param_values_named_vars} \end{center}
+
+Is the error variable \(E\) exogenous or endogenous?
+
+One final note about this diagram: you may have noticed that the \(Y\) variable (or \(\textit{TEMP}\)) does \emph{not} have a variance term attached. There is no double-headed arrow on that box. Why not? The point here is that we are trying to explain the reasons that \(Y\) varies using other elements of the model. In other words, \(Y\) has a variance, but that variance is partially explained by \(X\). And the rest of the variance not explained by \(X\) is explained by the error term \(E\). So all the variance is \(Y\) is accounted for through the contribution of \(X\) and \(E\) combined.
+
+\hypertarget{simple-calculating}{%
+\section{Calculating regression parameters}\label{simple-calculating}}
+
+Now we'll show one way to calculate the regression parameters (the numbers) in the above diagram. This isn't the only way to do it. In fact, this is not the approach that is used in most intro stats classes. But this approach will be helpful to illustrate the way we will do these calculations in future chapters.
+
+Let's go back to the diagram without the numbers:
+
+\begin{center}\includegraphics{graphics/simple_regression_params} \end{center}
+
+The letter \(v\) is easy because it's just the variance of \(X\):
+
+\[
+Var(X) = v
+\]
+
+We can estimate it directly from the data. (You already did it in R above for the temperature and wind speed data.) Through completing the activities below, we will also calculate \(b\) and \(e\).
+
+To get the other parameters, we have to set up a few equations.
+The first observation we need to make is that, as important as the arrows are in a diagram, it's just as important where the arrows are \emph{not}.
+
+Are there any arrows directly connecting \(X\) and \(E\)? What does that imply about the relationship between \(X\) and \(E\)?
+
+Given all that, what is \(Cov(X, E)\)?
+
+Next, because \(Y\) is the combination of \(X\) and \(E\), we've already seen that we can write
+
+\[
+Y = bX + E
+\]
+
+Therefore, we can calculate \(Var(Y)\) according to this formula using the established rules. (A convenient list of all of them in one place is located in Appendix \ref{appendix-rules}.)
+
+Keep simplifying the following as much as possible:
+
+\begin{align}
+Var(Y)  &= Var(bX + E) \\
+        &= \quad ???
+\end{align}
+
+You should end up with
+
+\[
+b^{2}v + e
+\]
+
+Don't forget that \(Var(X) = v\) and \(Var(E) = e\) in the diagram!
+
+We also need to use information about the covariance between \(X\) and \(Y\). Keep simplifying the calculation below:
+
+\begin{align}
+Cov(X, Y)  &= Cov(X, bX + E) \\
+        &= \quad ???
+\end{align}
+
+You should end up with
+
+\[
+bv
+\]
+
+Use R to calculate \(Var(X)\), \(Var(Y)\) and \(Cov(X, Y)\).
+
+You should get 12.4, 89.6, and -15.3, respectively.
+
+Now we can set up all the equations we need to solve for the various letters we want. Here are the three equations we have established:
+
+\begin{align}
+12.4 &= v \\
+89.6 &= b^2v + e \\
+-15.3 &= bv
+\end{align}
+
+Time to do a little algebra. You know \(v\). Using that value, solve for \(b\) first (using the last equation). Then, using both values of \(b\) and \(v\), solve for \(e\) in the second equation.
+
+Check that the values you got are the same as the ones from the diagram at the end of the last section (with the possibility of a little rounding error).
+
+Now let's go through that again, but this time, in full generality:
+
+\begin{align}
+Var(X) &= v \\
+Var(Y) &= b^2v + e \\
+Cov(X, Y) &= bv
+\end{align}
+
+Therefore,
+
+\[
+v = Var(X)
+\]
+
+\[
+b = \frac{Cov(X, Y)}{Var(X)}
+\]
+
+\[
+e = Var(Y) - \left( \frac{Cov(X, Y)}{Var(X)} \right)^2 Var(X)
+\]
+
+\hypertarget{simple-mim}{%
+\section{The model-implied matrix}\label{simple-mim}}
+
+It will be convenient in future chapters to collect up all these numbers we need in an array of terms called a \emph{covariance matrix}. (Sometimes this is called the variance-covariance matrix.) The idea is to take the covariance of all possible pairs of observed variables and arrange them as follows:
+
+\[
+\begin{bmatrix}
+Cov(X, X)    &    Cov(X, Y) \\
+Cov(Y, X)    &    Cov(Y, Y) \\
+\end{bmatrix}
+\]
+
+There are some immediate simplifications to make.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Since \(Cov(Y, X) = Cov(X, Y)\), there is no point in writing it twice. We will just use a dash (---) to replace \(Cov(Y, X)\).
+\item
+  We can replace the upper-left and lower-right entries (the entries on the so-called ``diagonal'' of the matrix) with variances.
+\end{enumerate}
+
+This is our final covariance matrix:
+
+\[
+\begin{bmatrix}
+Var(X)       &    Cov(X, Y) \\
+-   &    Var(Y)    \\
+\end{bmatrix}
+\]
+
+When we have data, we can calculate numbers for all these quantities.
+
+There is another important matrix called the \emph{model-implied matrix}. Given the model, what does the covariance matrix look like? From the calculations above, we know that the model-implied matrix is
+
+\[
+\begin{bmatrix}
+v   &    bv         \\
+-   &    b^{2}v + e \\
+\end{bmatrix}
+\]
+
+The letters \(b\), \(v\), and \(e\) are unknowns. Okay, \(v\) is not \emph{very} unknown. It's an unknown in the sense of being a parameter in the model, but you don't have to work very hard to find it. The point is that model parameters are estimated by equating the covariance matrix (calculated from the data) with model-implied matrix and trying to solve for all the unknown parameters.
+
+There is no new math to do in this section. The matrices are just convenient ways to organize the work we've already done.
+
+\hypertarget{simple-error-correlation}{%
+\section{Error variance in terms of correlation}\label{simple-error-correlation}}
+
+The formulas we derived are fine as far as they go. They allow you to take quantities calculated from data (variances and covariances of observed variables) and translate that into estimates of model parameters.
+
+The formula for the error variance \(e\) is a little gross, though. With a little trickery, we can simplify that formula quite a bit.
+
+Here is the starting point:
+
+\[
+e = Var(Y) - \left( \frac{Cov(X, Y)}{Var(X)} \right)^2 Var(X)
+\]
+
+Explain why the right-hand side can be rewritten as
+
+\[
+Var(Y) - \frac{Cov(X, Y)^{2}}{Var(X)}
+\]
+
+We're going to multiply the top and bottom of the fraction on the right by \(Var(Y)\):
+
+\[
+Var(Y) - \frac{Cov(X, Y)^{2} Var(Y)}{Var(X) Var(Y)}
+\]
+
+Then we can factor out a common term of \(Var(Y)\) from both pieces:
+
+\[
+Var(Y) \left( 1 - \frac{Cov(X, Y)^{2}}{Var(X) Var(Y)} \right)
+\]
+
+Why would we do such a thing? In other words, does the new fraction on the right look familiar in any way?
+
+We hope you recognized that the fraction on the right is just the correlation coefficient squared. The whole equation can now be written as
+
+\[
+e = Var(Y) \left( 1 - r_{XY}^2 \right)
+\]
+
 \hypertarget{multiple}{%
 \chapter{Multiple regression}\label{multiple}}
 
@@ -2021,20 +2444,20 @@ Turn up the sound! If the whole class plays at the same time, your classroom wil
 \hypertarget{mediation}{%
 \chapter{Mediation}\label{mediation}}
 
-\hypertarget{path-analysis}{%
-\chapter{Path analysis}\label{path-analysis}}
+\hypertarget{path}{%
+\chapter{Path analysis}\label{path}}
 
-\hypertarget{latent-variables}{%
-\chapter{Latent variables}\label{latent-variables}}
+\hypertarget{latent}{%
+\chapter{Latent variables}\label{latent}}
 
-\hypertarget{confirmatory-factor-analysis}{%
-\chapter{Confirmatory factor analysis}\label{confirmatory-factor-analysis}}
+\hypertarget{cfa}{%
+\chapter{Confirmatory factor analysis}\label{cfa}}
 
-\hypertarget{structural-equation-models}{%
-\chapter{Structural equation models}\label{structural-equation-models}}
+\hypertarget{sem}{%
+\chapter{Structural equation models}\label{sem}}
 
-\hypertarget{structural-causal-models}{%
-\chapter{Structural causal models}\label{structural-causal-models}}
+\hypertarget{scm}{%
+\chapter{Structural causal models}\label{scm}}
 
 \hypertarget{appendix-appendix}{%
 \appendix}

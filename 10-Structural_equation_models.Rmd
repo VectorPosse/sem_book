@@ -1,1 +1,1 @@
-# Structural equation models
+# Structural equation models {#sem}

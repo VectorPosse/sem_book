@@ -1,2 +1,2 @@
-# Path analysis
+# Path analysis {#path}
 

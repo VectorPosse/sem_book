@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 4 Simple regression | Demystifying Structural Equation Modeling</title>
 <meta name="author" content="Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)">
-<meta name="description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta name="description" content="Preliminaries We need to load the packages we will need for this chapter. The tideverse package has all sorts of utilities for working with tibbles (data frames). This will also be our first...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Chapter 4 Simple regression | Demystifying Structural Equation Modeling">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://vectorposse.github.io/sem_book/simple.html">
-<meta property="og:description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta property="og:description" content="Preliminaries We need to load the packages we will need for this chapter. The tideverse package has all sorts of utilities for working with tibbles (data frames). This will also be our first...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 4 Simple regression | Demystifying Structural Equation Modeling">
-<meta name="twitter:description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta name="twitter:description" content="Preliminaries We need to load the packages we will need for this chapter. The tideverse package has all sorts of utilities for working with tibbles (data frames). This will also be our first...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -51,11 +51,11 @@
 <li><a class="active" href="simple.html"><span class="header-section-number">4</span> Simple regression</a></li>
 <li><a class="" href="multiple.html"><span class="header-section-number">5</span> Multiple regression</a></li>
 <li><a class="" href="mediation.html"><span class="header-section-number">6</span> Mediation</a></li>
-<li><a class="" href="path-analysis.html"><span class="header-section-number">7</span> Path analysis</a></li>
-<li><a class="" href="latent-variables.html"><span class="header-section-number">8</span> Latent variables</a></li>
-<li><a class="" href="confirmatory-factor-analysis.html"><span class="header-section-number">9</span> Confirmatory factor analysis</a></li>
-<li><a class="" href="structural-equation-models.html"><span class="header-section-number">10</span> Structural equation models</a></li>
-<li><a class="" href="structural-causal-models.html"><span class="header-section-number">11</span> Structural causal models</a></li>
+<li><a class="" href="path.html"><span class="header-section-number">7</span> Path analysis</a></li>
+<li><a class="" href="latent.html"><span class="header-section-number">8</span> Latent variables</a></li>
+<li><a class="" href="cfa.html"><span class="header-section-number">9</span> Confirmatory factor analysis</a></li>
+<li><a class="" href="sem.html"><span class="header-section-number">10</span> Structural equation models</a></li>
+<li><a class="" href="scm.html"><span class="header-section-number">11</span> Structural causal models</a></li>
 <li class="book-part">Appendix</li>
 <li><a class="" href="appendix-rules.html"><span class="header-section-number">A</span> Variance/covariance rules</a></li>
 <li><a class="" href="appendix-lisrel.html"><span class="header-section-number">B</span> LISREL notation</a></li>
@@ -71,14 +71,338 @@
 <span class="header-section-number">4</span> Simple regression<a class="anchor" aria-label="anchor" href="#simple"><i class="fas fa-link"></i></a>
 </h1>
 <div class="inline-figure"><img src="graphics/simple_regression.png" width="337" style="display: block; margin: auto;"></div>
+<div id="preliminaries" class="section level2 unnumbered">
+<h2>Preliminaries<a class="anchor" aria-label="anchor" href="#preliminaries"><i class="fas fa-link"></i></a>
+</h2>
+<p>We need to load the packages we will need for this chapter. The <code>tideverse</code> package has all sorts of utilities for working with tibbles (data frames). This will also be our first introduction to the <code>lavaan</code> package that will be used throughout the rest of the book.</p>
+<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be">lavaan</a></span><span class="op">)</span></code></pre></div>
+<pre><code>## This is lavaan 0.6-11
+## lavaan is FREE software! Please report any bugs.</code></pre>
+</div>
+<div id="simple-prediction" class="section level2" number="4.1">
+<h2>
+<span class="header-section-number">4.1</span> Prediction<a class="anchor" aria-label="anchor" href="#simple-prediction"><i class="fas fa-link"></i></a>
+</h2>
+<p>One of the most important tasks in statistics is <em>prediction</em>. Given some data, can we predict the value of something important about a population of interest?</p>
+<div class="rmdnote">
+<p>Suppose you have gathered some data on anxiety among Utah high school students. There are various instruments available for measuring anxiety, so say you have administered the <a href="https://en.wikipedia.org/wiki/Beck_Anxiety_Inventory">Beck Anxiety Inventory</a>. This instrument assigns a score from 0 to 63, with lower numbers indicating less anxiety and higher numbers indicating more.</p>
+<p>You take care to make sure your sample is as close to a simple random sample as possible so that it’s representative of the population (all high school students in the state of Utah). From your sample data, you can calculate summary statistics. For example, you might find that the mean anxiety score for Utah high school students is 7.1 with a standard deviation of 3.9.</p>
+<p>A random Utah high school student walks through the door. You don’t know anything about them. Can you say anything about their anxiety? What is your best guess as to what their score might be on the Beck Anxiety Inventory?</p>
+</div>
+<p>We can do a lot better if we have another variable we can measure. For example, let’s suppose our data records not only anxiety, but also the minutes of smart phone usage per day.</p>
+<div class="rmdnote">
+<p>In theory, why would having information about smart phone usage potentially help us make better predictions of anxiety?</p>
+<p>Do you suspect that the association between anxiety and smart phone usage is positive or negative? (You can Google this question to check if there is any empirical evidence out there for your guess.)</p>
+</div>
+<div class="rmdnote">
+<p>Now imagine that another random Utah high school student walks through the door. This time, I tell you that their smart phone usage is average (sitting at the mean). What is your best prediction for their anxiety score? (Give an exact value.)</p>
+<p>What if I told you that the student who walked through the door had <em>higher</em> than average smart phone usage? What would be your prediction of their anxiety score? (You can’t give an exact value here, but give a qualitatively sensible answer.)</p>
+<p>What if I told you that the student who walked through the door had <em>lower</em> than average smart phone usage? What would be your prediction of their anxiety score? (Again, just give a qualitatively sensible answer.)</p>
+</div>
+</div>
+<div id="simple-terminology" class="section level2" number="4.2">
+<h2>
+<span class="header-section-number">4.2</span> Regression terminology<a class="anchor" aria-label="anchor" href="#simple-terminology"><i class="fas fa-link"></i></a>
+</h2>
+<p>When we have one variable we suspect may help us predict another variable, one way to study it is using a simple regression model.</p>
+<p>This is related to, but somewhat different from, covariance. Covariance is symmetric, so it expresses the idea that two variables are mutually related. But there is no “directionality” to that relationship. By way of contrast, a simple regression model asserts that one of the variables is “explanatory” and the other is “response”. In other words, we start with the values or properties of the explanatory variable and try to deduce what we can about the values or properties of the response variable.</p>
+<p>Keep in mind that “directionality” is not the same as “causality”. While it’s possible that one variable causes another, there needs to be a data collection process (often a carefully controlled experiment) and a clear scientific rationale that justifies a causal relationship between variables before we can start thinking about inferring causality. For purposes of much of this book, directionality just means that we wish to establish a predictive relationship wherein we start with the properties of one variable and try to predict the properties of another variable. There is often a “sensible” order in which to do this based on the research questions asked or the hypotheses posed.</p>
+<p>There are many different terminological conventions in statistics, so be aware that “explanatory” variables are also called—often depending on the discipline and the context—predictors, features, covariates, controls, regressors, inputs, or independent variables. In fact, in the context of structural equation modeling, we will use the term “exogenous” to refer to variables that play this role. (That term has a much more precise definition that we’ll discuss in future chapters.) And “response” variables might be called outcomes, outputs, targets, explained variables, or dependent variables, among others. In this book, we will often use the term “endogenous” (again, in a very specific way yet to be explained). If there is a data collection process and a clear scientific rationale that justifies a causal relationship between variables, then we might be able to refer to variables as either “cause” or “effect”.</p>
+<p>Keep in mind that it’s the scientific question we want to ask that determines the explanatory/response relationship. A different researcher with a different hypothesis might use the same two variables but with the roles reversed.</p>
+<div class="rmdnote">
+<p>In the anxiety/smart-phone example above, which variable is explanatory and which is response, at least according to the way we stated the scenario?</p>
+</div>
+</div>
+<div id="simple-model" class="section level2" number="4.3">
+<h2>
+<span class="header-section-number">4.3</span> The simple regression model<a class="anchor" aria-label="anchor" href="#simple-model"><i class="fas fa-link"></i></a>
+</h2>
+<p>Here is the figure from the top of the chapter, only now we have decorated it with some letters (and a number):</p>
+<div class="inline-figure"><img src="graphics/simple_regression_params.png" width="337" style="display: block; margin: auto;"></div>
+<p>The goal of this section is to explain all these.</p>
+<p>The variable names are <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. <span class="math inline">\(X\)</span> is the exogenous variable and <span class="math inline">\(Y\)</span> is the endogenous variable. For example, <span class="math inline">\(X\)</span> might be smart phone usage and <span class="math inline">\(Y\)</span> might be the anxiety score from the example above. In this section, we’re going to do some concrete calculations using the example from the last chapter about wind speed and temperature from the <code>airquality</code> data set. In the last chapter, we simply calculated the (symmetric) correlation between wind speed and temperature. Here, we will consider wind speed as exogenous and temperature as endogenous. In other words, our goal is to use the wind speed as a predictor of temperature.</p>
+<p>The letter <span class="math inline">\(v\)</span> requires no further explanation. This is the variance of the variable <span class="math inline">\(X\)</span>, so we already know about it.</p>
+<p>The parameter <span class="math inline">\(b\)</span> is supposed to measure something about the predictive relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. It is attached to an arrow that is drawn a little thicker than the other arrows in the diagram. More to say about that in a moment.</p>
+<p>The really weird, new part is the circle on the right. This will be the “error” term.</p>
+<p>What is “error” and why is it here? To illustrate, let’s plot wind speed against temperature. Before plotting and analyzing these variables, we are going to mean-center them and put them in a tibble.</p>
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">X</span> <span class="op">&lt;-</span> <span class="va">airquality</span><span class="op">$</span><span class="va">Wind</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Wind</span><span class="op">)</span>
+<span class="va">Y</span> <span class="op">&lt;-</span> <span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span><span class="op">)</span>
+<span class="va">airquality_mc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">X</span>, <span class="va">Y</span><span class="op">)</span>
+<span class="va">airquality_mc</span></code></pre></div>
+<pre><code>## # A tibble: 153 × 2
+##        X      Y
+##    &lt;dbl&gt;  &lt;dbl&gt;
+##  1 -2.56 -10.9 
+##  2 -1.96  -5.88
+##  3  2.64  -3.88
+##  4  1.54 -15.9 
+##  5  4.34 -21.9 
+##  6  4.94 -11.9 
+##  7 -1.36 -12.9 
+##  8  3.84 -18.9 
+##  9 10.1  -16.9 
+## 10 -1.36  -8.88
+## # … with 143 more rows</code></pre>
+<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">airquality_mc</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Y</span>, x <span class="op">=</span> <span class="va">X</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-57-1.png" width="672"></div>
+<p>Note that the exogenous variable (wind speed) is on the x-axis and the endogenous variable (temperature) is on the y-axis.</p>
+<p>We can see a negative and reasonably linear association between these variables, so let’s add a line of best fit to the data.</p>
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">airquality_mc</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Y</span>, x <span class="op">=</span> <span class="va">X</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">lm</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula 'y ~ x'</code></pre>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-58-1.png" width="672"></div>
+<div class="rmdnote">
+<p>The line passes right through the origin <span class="math inline">\((0, 0)\)</span>. Why?</p>
+</div>
+<p>The slope of this line is <span class="math inline">\(-1.23\)</span>. We’ll see how to calculate this slope in a bit. But what does this slope mean?</p>
+<div class="rmdnote">
+<p>Look at the help file for the <code>airquality</code> data set. (Either use the Help tab in RStudio or type <code><a href="https://rdrr.io/r/datasets/airquality.html">?airquality</a></code> at the Console.)</p>
+<p>What are the units of measurement of <span class="math inline">\(X\)</span>? What are the units of measurement of <span class="math inline">\(Y\)</span>? Since slope is “rise over run”, what are the units of the slope?</p>
+</div>
+<p>So, the idea is that for every additional mile per hour of wind speed, we predict that the temperature goes down by 1.23 degrees Fahrenheit.</p>
+<div class="rmdnote">
+<p>Why is the following sentence incorrect?</p>
+<blockquote>
+<p>For every additional mile per hour of wind speed, the temperature goes down by 1.23 degrees Fahrenheit.</p>
+</blockquote>
+</div>
+<p>The point is that the line is a <em>model</em> that makes predictions. As long as <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are both mean-centered, the equation of this line is</p>
+<p><span class="math display">\[
+Y = bX
+\]</span></p>
+<p>And we can use the data to estimate that the value of <span class="math inline">\(b\)</span> is <span class="math inline">\(-1.23\)</span>:</p>
+<p><span class="math display">\[
+Y = -1.23X
+\]</span></p>
+<p>This is a multiplicative effect. Again, as long as <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are both mean-centered, knowing the value of <span class="math inline">\(X\)</span> allows us to predict the value of <span class="math inline">\(Y\)</span> by multiplying by <span class="math inline">\(b\)</span>.</p>
+<p>But those predictions will almost always be wrong. On any given day, given an increase of 1 mile per hour wind in wind speed, it will very rarely happen that the temperature will drop by <em>exactly</em> 1.23 degrees. That’s just a sort of “average” over time. On average, there’s a slight temperature change associated with 1 mph change in wind speed, and the number -1.23 is the best estimate of that average change across our whole data set. We need to be <em>especially</em> clear that an increase in wind speed does not necessary <em>cause</em> a drop in temperature. I mean, that might be partially true, but we can’t prove it from our observational data. There are all sorts of other reasons to explain both an increase in wind speed and a drop in temperature (like a cold front moving in).</p>
+<p>Since our predictions are average effects and not specific guarantees, every prediction we make will be wrong by some amount. (We could get extremely lucky, but even then, it’s difficult to imagine a situation in which our prediction is precisely correct to, say, 10 decimal places or something like that.) Therefore, there is error in our prediction. The new equation—accounting for error—is</p>
+<p><span class="math display">\[
+Y = bX + E
+\]</span>
+or</p>
+<p><span class="math display">\[
+Y = -1.23X + E
+\]</span></p>
+<p>Error is a funny word because it has a negative connotation. It sounds like we made a mistake. Well, the model did make a mistake, but not the kind of mistake that results from doing our arithmetic wrong or anything like that. It’s simply the “natural” error that results from the messiness of the real world and the impossibility of predicting anything with certainty. For this reason, we will often prefer the term “residual”. It’s what is “left over” after we have made a prediction. It’s the extra change in temperature, for example, that is not accounted for by the model with wind speed alone.</p>
+<p>The residuals are evident in the plot above. If there were no residuals, every data point would lie on a perfect straight line. But the data points are all either a little above or below the line. Those vertical distances between the data and the line are the residuals or errors. Here is an example of two residuals plotted below in red.</p>
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">airquality_mc</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Y</span>, x <span class="op">=</span> <span class="va">X</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="va">lm</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span><span class="st">"segment"</span>,
+             x <span class="op">=</span> <span class="op">-</span><span class="fl">2.56</span>, y <span class="op">=</span> <span class="fl">3.15</span>,
+             xend <span class="op">=</span> <span class="op">-</span><span class="fl">2.56</span>, yend <span class="op">=</span> <span class="fl">3.15</span> <span class="op">-</span> <span class="fl">14.03</span>,
+             color <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span><span class="st">"segment"</span>,
+             x <span class="op">=</span> <span class="fl">4.94</span>, y <span class="op">=</span> <span class="op">-</span><span class="fl">6.08</span>,
+             xend <span class="op">=</span> <span class="fl">4.94</span>, yend <span class="op">=</span> <span class="op">-</span><span class="fl">6.08</span> <span class="op">+</span> <span class="fl">9.20</span>,
+             color <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula 'y ~ x'</code></pre>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-59-1.png" width="672"></div>
+<p>Points below the line have negative residuals and points above the line have positive residuals.</p>
+<p>The residuals do not appear as observed or measured variables in our data. They are a consequence of a variety of <em>unmeasured</em> factors that determine temperature aside from wind speed. An unmeasured variable that appears in a model is called a <em>latent variable</em>. We will discuss latent variables in far greater detail in Chapter <a href="latent.html#latent">8</a>. For now, just know that latent variables are indicated by circles in the diagram. That’s why there is a circle with the letter <span class="math inline">\(E\)</span> inside.</p>
+<div class="rmdnote">
+<p>The equation</p>
+<p><span class="math display">\[
+Y = bX + E
+\]</span>
+can also be written as
+<span class="math display">\[
+Y = bX + 1 \cdot E
+\]</span></p>
+<p>How is that “1” represented in the diagram?</p>
+</div>
+<p>The only thing in the diagram that hasn’t been explained yet is <span class="math inline">\(e\)</span>.</p>
+<div class="rmdnote">
+<p>Where does <span class="math inline">\(e\)</span> appear in the diagram? Given where it appears, what does it represent mathematically?</p>
+</div>
+<p>We know that curved arrows represent variance. But what does it mean to measure the variance of a variable we can’t observe?</p>
+<div class="rmdnote">
+<p>What would the scatterplot look like if the error variance were very small. What about if the error variance were large?</p>
+</div>
+<p>There is variability in the size of the residuals. Some are small (points that are close to the line) and some are large (points that are far from the line). This spread of residuals can be estimated from data, just like any other variance calculation.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;We know that variance is close to the average squared deviation, except we divide by &lt;span class="math inline"&gt;\(n - 1\)&lt;/span&gt; instead of &lt;span class="math inline"&gt;\(n\)&lt;/span&gt;. Well, residuals are a little more weird still. To get an unbiased estimate, you have divide by &lt;span class="math inline"&gt;\(n - 2\)&lt;/span&gt;. However, the calculation that appears next is the one that uses &lt;span class="math inline"&gt;\(n - 1\)&lt;/span&gt;. This is for reasons that, regrettably, we’ll have to sweep under the rug here.&lt;/p&gt;'><sup>13</sup></a> It turns out to be about 70.8. We’ll see how to calculate that below.</p>
+<p>Let’s put everything together into a diagram.</p>
+<div class="rmdnote">
+<p>First, we need the variance of <span class="math inline">\(X\)</span> (wind speed). Calculate it in R. You should get 12.4.</p>
+<p>Does it matter if you calculate the variance of the variable <code>Wind</code> from the original <code>airquality</code> data, or the variance of the <span class="math inline">\(X\)</span> variable from <code>airqualilty_mc</code>? Why or why not?</p>
+</div>
+<div class="inline-figure"><img src="graphics/simple_regression_param_values.png" width="337" style="display: block; margin: auto;"></div>
+<p>While it’s helpful to see <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> as generic prototypes for any simple regression model, in most applied problems from now on we’ll refer to variables using contextually meaningful names. The final diagram looks like this:</p>
+<div class="inline-figure"><img src="graphics/simple_regression_param_values_named_vars.png" width="400" style="display: block; margin: auto;"></div>
+<div class="rmdnote">
+<p>Is the error variable <span class="math inline">\(E\)</span> exogenous or endogenous?</p>
+</div>
+<p>One final note about this diagram: you may have noticed that the <span class="math inline">\(Y\)</span> variable (or <span class="math inline">\(\textit{TEMP}\)</span>) does <em>not</em> have a variance term attached. There is no double-headed arrow on that box. Why not? The point here is that we are trying to explain the reasons that <span class="math inline">\(Y\)</span> varies using other elements of the model. In other words, <span class="math inline">\(Y\)</span> has a variance, but that variance is partially explained by <span class="math inline">\(X\)</span>. And the rest of the variance not explained by <span class="math inline">\(X\)</span> is explained by the error term <span class="math inline">\(E\)</span>. So all the variance is <span class="math inline">\(Y\)</span> is accounted for through the contribution of <span class="math inline">\(X\)</span> and <span class="math inline">\(E\)</span> combined.</p>
+</div>
+<div id="simple-calculating" class="section level2" number="4.4">
+<h2>
+<span class="header-section-number">4.4</span> Calculating regression parameters<a class="anchor" aria-label="anchor" href="#simple-calculating"><i class="fas fa-link"></i></a>
+</h2>
+<p>Now we’ll show one way to calculate the regression parameters (the numbers) in the above diagram. This isn’t the only way to do it. In fact, this is not the approach that is used in most intro stats classes. But this approach will be helpful to illustrate the way we will do these calculations in future chapters.</p>
+<p>Let’s go back to the diagram without the numbers:</p>
+<div class="inline-figure"><img src="graphics/simple_regression_params.png" width="337" style="display: block; margin: auto;"></div>
+<p>The letter <span class="math inline">\(v\)</span> is easy because it’s just the variance of <span class="math inline">\(X\)</span>:</p>
+<p><span class="math display">\[
+Var(X) = v
+\]</span></p>
+<p>We can estimate it directly from the data. (You already did it in R above for the temperature and wind speed data.) Through completing the activities below, we will also calculate <span class="math inline">\(b\)</span> and <span class="math inline">\(e\)</span>.</p>
+<p>To get the other parameters, we have to set up a few equations.
+The first observation we need to make is that, as important as the arrows are in a diagram, it’s just as important where the arrows are <em>not</em>.</p>
+<div class="rmdnote">
+<p>Are there any arrows directly connecting <span class="math inline">\(X\)</span> and <span class="math inline">\(E\)</span>? What does that imply about the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(E\)</span>?</p>
+<p>Given all that, what is <span class="math inline">\(Cov(X, E)\)</span>?</p>
+</div>
+<p>Next, because <span class="math inline">\(Y\)</span> is the combination of <span class="math inline">\(X\)</span> and <span class="math inline">\(E\)</span>, we’ve already seen that we can write</p>
+<p><span class="math display">\[
+Y = bX + E
+\]</span></p>
+<p>Therefore, we can calculate <span class="math inline">\(Var(Y)\)</span> according to this formula using the established rules. (A convenient list of all of them in one place is located in Appendix <a href="appendix-rules.html#appendix-rules">A</a>.)</p>
+<div class="rmdnote">
+<p>Keep simplifying the following as much as possible:</p>
+<p><span class="math display">\[\begin{align}
+Var(Y)  &amp;= Var(bX + E) \\
+        &amp;= \quad ???
+\end{align}\]</span></p>
+<p>You should end up with</p>
+<p><span class="math display">\[
+b^{2}v + e
+\]</span></p>
+<p>Don’t forget that <span class="math inline">\(Var(X) = v\)</span> and <span class="math inline">\(Var(E) = e\)</span> in the diagram!</p>
+</div>
+<div class="rmdnote">
+<p>We also need to use information about the covariance between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Keep simplifying the calculation below:</p>
+<p><span class="math display">\[\begin{align}
+Cov(X, Y)  &amp;= Cov(X, bX + E) \\
+        &amp;= \quad ???
+\end{align}\]</span></p>
+<p>You should end up with</p>
+<p><span class="math display">\[
+bv
+\]</span></p>
+</div>
+<div class="rmdnote">
+<p>Use R to calculate <span class="math inline">\(Var(X)\)</span>, <span class="math inline">\(Var(Y)\)</span> and <span class="math inline">\(Cov(X, Y)\)</span>.</p>
+<p>You should get 12.4, 89.6, and -15.3, respectively.</p>
+</div>
+<p>Now we can set up all the equations we need to solve for the various letters we want. Here are the three equations we have established:</p>
+<p><span class="math display">\[\begin{align}
+12.4 &amp;= v \\
+89.6 &amp;= b^2v + e \\
+-15.3 &amp;= bv
+\end{align}\]</span></p>
+<div class="rmdnote">
+<p>Time to do a little algebra. You know <span class="math inline">\(v\)</span>. Using that value, solve for <span class="math inline">\(b\)</span> first (using the last equation). Then, using both values of <span class="math inline">\(b\)</span> and <span class="math inline">\(v\)</span>, solve for <span class="math inline">\(e\)</span> in the second equation.</p>
+<p>Check that the values you got are the same as the ones from the diagram at the end of the last section (with the possibility of a little rounding error).</p>
+</div>
+<p>Now let’s go through that again, but this time, in full generality:</p>
+<p><span class="math display">\[\begin{align}
+Var(X) &amp;= v \\
+Var(Y) &amp;= b^2v + e \\
+Cov(X, Y) &amp;= bv
+\end{align}\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+v = Var(X)
+\]</span></p>
+<p><span class="math display">\[
+b = \frac{Cov(X, Y)}{Var(X)}
+\]</span></p>
+<p><span class="math display">\[
+e = Var(Y) - \left( \frac{Cov(X, Y)}{Var(X)} \right)^2 Var(X)
+\]</span></p>
+</div>
+<div id="simple-mim" class="section level2" number="4.5">
+<h2>
+<span class="header-section-number">4.5</span> The model-implied matrix<a class="anchor" aria-label="anchor" href="#simple-mim"><i class="fas fa-link"></i></a>
+</h2>
+<p>It will be convenient in future chapters to collect up all these numbers we need in an array of terms called a <em>covariance matrix</em>. (Sometimes this is called the variance-covariance matrix.) The idea is to take the covariance of all possible pairs of observed variables and arrange them as follows:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+Cov(X, X)    &amp;    Cov(X, Y) \\
+Cov(Y, X)    &amp;    Cov(Y, Y) \\
+\end{bmatrix}
+\]</span></p>
+<p>There are some immediate simplifications to make.</p>
+<ol style="list-style-type: decimal">
+<li>Since <span class="math inline">\(Cov(Y, X) = Cov(X, Y)\)</span>, there is no point in writing it twice. We will just use a dash (—) to replace <span class="math inline">\(Cov(Y, X)\)</span>.</li>
+<li>We can replace the upper-left and lower-right entries (the entries on the so-called “diagonal” of the matrix) with variances.</li>
+</ol>
+<p>This is our final covariance matrix:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+Var(X)       &amp;    Cov(X, Y) \\
+-   &amp;    Var(Y)    \\
+\end{bmatrix}
+\]</span></p>
+<p>When we have data, we can calculate numbers for all these quantities.</p>
+<p>There is another important matrix called the <em>model-implied matrix</em>. Given the model, what does the covariance matrix look like? From the calculations above, we know that the model-implied matrix is</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+v   &amp;    bv         \\
+-   &amp;    b^{2}v + e \\
+\end{bmatrix}
+\]</span></p>
+<p>The letters <span class="math inline">\(b\)</span>, <span class="math inline">\(v\)</span>, and <span class="math inline">\(e\)</span> are unknowns. Okay, <span class="math inline">\(v\)</span> is not <em>very</em> unknown. It’s an unknown in the sense of being a parameter in the model, but you don’t have to work very hard to find it. The point is that model parameters are estimated by equating the covariance matrix (calculated from the data) with model-implied matrix and trying to solve for all the unknown parameters.</p>
+<p>There is no new math to do in this section. The matrices are just convenient ways to organize the work we’ve already done.</p>
+</div>
+<div id="simple-error-correlation" class="section level2" number="4.6">
+<h2>
+<span class="header-section-number">4.6</span> Error variance in terms of correlation<a class="anchor" aria-label="anchor" href="#simple-error-correlation"><i class="fas fa-link"></i></a>
+</h2>
+<p>The formulas we derived are fine as far as they go. They allow you to take quantities calculated from data (variances and covariances of observed variables) and translate that into estimates of model parameters.</p>
+<p>The formula for the error variance <span class="math inline">\(e\)</span> is a little gross, though. With a little trickery, we can simplify that formula quite a bit.</p>
+<p>Here is the starting point:</p>
+<p><span class="math display">\[
+e = Var(Y) - \left( \frac{Cov(X, Y)}{Var(X)} \right)^2 Var(X)
+\]</span></p>
+<div class="rmdnote">
+<p>Explain why the right-hand side can be rewritten as</p>
+<p><span class="math display">\[
+Var(Y) - \frac{Cov(X, Y)^{2}}{Var(X)}
+\]</span></p>
+</div>
+<p>We’re going to multiply the top and bottom of the fraction on the right by <span class="math inline">\(Var(Y)\)</span>:</p>
+<p><span class="math display">\[
+Var(Y) - \frac{Cov(X, Y)^{2} Var(Y)}{Var(X) Var(Y)}
+\]</span></p>
+<p>Then we can factor out a common term of <span class="math inline">\(Var(Y)\)</span> from both pieces:</p>
+<p><span class="math display">\[
+Var(Y) \left( 1 - \frac{Cov(X, Y)^{2}}{Var(X) Var(Y)} \right)
+\]</span></p>
+<div class="rmdnote">
+<p>Why would we do such a thing? In other words, does the new fraction on the right look familiar in any way?</p>
+</div>
+<p>We hope you recognized that the fraction on the right is just the correlation coefficient squared. The whole equation can now be written as</p>
+<p><span class="math display">\[
+e = Var(Y) \left( 1 - r_{XY}^2 \right)
+\]</span></p>
 
 </div>
+</div>
+
   <div class="chapter-nav">
 <div class="prev"><a href="covariance.html"><span class="header-section-number">3</span> Covariance</a></div>
 <div class="next"><a href="multiple.html"><span class="header-section-number">5</span> Multiple regression</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#simple"><span class="header-section-number">4</span> Simple regression</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#simple"><span class="header-section-number">4</span> Simple regression</a></li>
+<li><a class="nav-link" href="#preliminaries">Preliminaries</a></li>
+<li><a class="nav-link" href="#simple-prediction"><span class="header-section-number">4.1</span> Prediction</a></li>
+<li><a class="nav-link" href="#simple-terminology"><span class="header-section-number">4.2</span> Regression terminology</a></li>
+<li><a class="nav-link" href="#simple-model"><span class="header-section-number">4.3</span> The simple regression model</a></li>
+<li><a class="nav-link" href="#simple-calculating"><span class="header-section-number">4.4</span> Calculating regression parameters</a></li>
+<li><a class="nav-link" href="#simple-mim"><span class="header-section-number">4.5</span> The model-implied matrix</a></li>
+<li><a class="nav-link" href="#simple-error-correlation"><span class="header-section-number">4.6</span> Error variance in terms of correlation</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
@@ -95,7 +419,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-12.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-16.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

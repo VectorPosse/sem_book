@@ -1,1 +1,1 @@
-# Structural causal models
+# Structural causal models {#scm}
