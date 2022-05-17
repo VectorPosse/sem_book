@@ -191,7 +191,7 @@ or</p>
 <p><span class="math display">\[
 Y = -1.23X + E
 \]</span></p>
-<p>Error is a funny word because it has a negative connotation. It sounds like we made a mistake. Well, the model did make a mistake, but not the kind of mistake that results from doing our arithmetic wrong or anything like that. It’s simply the “natural” error that results from the messiness of the real world and the impossibility of predicting anything with certainty. For this reason, we will often prefer the term “residual”. It’s what is “left over” after we have made a prediction. It’s the extra change in temperature, for example, that is not accounted for by the model with wind speed alone.</p>
+<p>Error is a funny word because it has a negative connotation. It sounds like we made a mistake. Well, the model does make mistakes. Every model prediction is technically wrong. But this is not the kind of mistake that results from doing our arithmetic wrong or anything like that. It’s simply the “natural” error that results from the messiness of the real world and the impossibility of predicting anything with certainty. For this reason, we will often prefer the term “residual”. It’s what is “left over” after we have made a prediction. It’s the extra change in temperature, for example, that is not accounted for by the model with wind speed alone.</p>
 <p>The residuals are evident in the plot above. If there were no residuals, every data point would lie on a perfect straight line. But the data points are all either a little above or below the line. Those vertical distances between the data and the line are the residuals or errors. Here is an example of two residuals plotted below in red.</p>
 <div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">airquality_mc</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Y</span>, x <span class="op">=</span> <span class="va">X</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -242,9 +242,31 @@ Y = bX + 1 \cdot E
 </div>
 <p>One final note about this diagram: you may have noticed that the <span class="math inline">\(Y\)</span> variable (or <span class="math inline">\(\textit{TEMP}\)</span>) does <em>not</em> have a variance term attached. There is no double-headed arrow on that box. Why not? The point here is that we are trying to explain the reasons that <span class="math inline">\(Y\)</span> varies using other elements of the model. In other words, <span class="math inline">\(Y\)</span> has a variance, but that variance is partially explained by <span class="math inline">\(X\)</span>. And the rest of the variance not explained by <span class="math inline">\(X\)</span> is explained by the error term <span class="math inline">\(E\)</span>. So all the variance is <span class="math inline">\(Y\)</span> is accounted for through the contribution of <span class="math inline">\(X\)</span> and <span class="math inline">\(E\)</span> combined.</p>
 </div>
-<div id="simple-calculating" class="section level2" number="4.4">
+<div id="simple-assumptions" class="section level2" number="4.4">
 <h2>
-<span class="header-section-number">4.4</span> Calculating regression parameters<a class="anchor" aria-label="anchor" href="#simple-calculating"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4</span> Simple regression assumptions<a class="anchor" aria-label="anchor" href="#simple-assumptions"><i class="fas fa-link"></i></a>
+</h2>
+<p>All the calculations we need to do, and our ability to interpret the results, depend on certain assumptions being met.</p>
+<p>If you look up regression assumptions, you might find a huge list of requirements. Most of these requirements relate to calculating statistics like P-values for regression parameters. For now, we are content simply to know that it makes sense to interpret the parameters in the model above.</p>
+<p>For that, we really only need four assumptions:</p>
+<ol style="list-style-type: decimal">
+<li>The data should come from a “good” sample.</li>
+<li>The relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> should be approximately linear.</li>
+<li>The residuals should be independent of the <span class="math inline">\(X\)</span> values.</li>
+<li>There should be no influential outliers.</li>
+</ol>
+<p>Let’s address these one at a time:</p>
+<ol style="list-style-type: decimal">
+<li>What do we mean by a “good” sample? While a simple random sample is the gold standard, it’s usually not possible to obtain one in the real world. So we make our sampling process as random as possible and ensure that the resulting sample is as representative of the population we’re trying to study as possible.</li>
+<li>You can check linearity with a scatterplot. Just make sure the pattern of dots doesn’t have strong curvature to it.</li>
+<li>There should be no patterns in the residuals at all. They should be randomly scattered around the best-fit line and the average size of the residuals should not change radically from one side of the graph to the other.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This property of similarly-sized residuals is called &lt;em&gt;homoskesdasticity&lt;/em&gt;. The violation of that condition is called &lt;em&gt;heteroskedasticity&lt;/em&gt; which is one of Sean’s favorite words ever!&lt;/p&gt;"><sup>14</sup></a>
+</li>
+<li>Check the scatterplot for outliers. If there are serious ones, assess them to make sure they are not data entry mistakes. If they correspond to valid data, you cannot just throw them away.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;In other words, don’t follow the all-too-common “rule of thumb” for outliers, which is just covering them up with your thumb and pretending they don’t exist.&lt;/p&gt;"><sup>15</sup></a> Often, the solution is to run the analysis both including and (temporarily) excluding the outliers to make sure their presence doesn’t radically alter the parameter estimates.</li>
+</ol>
+</div>
+<div id="simple-calculating" class="section level2" number="4.5">
+<h2>
+<span class="header-section-number">4.5</span> Calculating regression parameters<a class="anchor" aria-label="anchor" href="#simple-calculating"><i class="fas fa-link"></i></a>
 </h2>
 <p>Now we’ll show one way to calculate the regression parameters (the numbers) in the above diagram. This isn’t the only way to do it. In fact, this is not the approach that is used in most intro stats classes. But this approach will be helpful to illustrate the way we will do these calculations in future chapters.</p>
 <p>Let’s go back to the diagram without the numbers:</p>
@@ -257,7 +279,7 @@ Var(X) = v
 <p>To get the other parameters, we have to set up a few equations.
 The first observation we need to make is that, as important as the arrows are in a diagram, it’s just as important where the arrows are <em>not</em>.</p>
 <div class="rmdnote">
-<p>Are there any arrows directly connecting <span class="math inline">\(X\)</span> and <span class="math inline">\(E\)</span>? What does that imply about the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(E\)</span>?</p>
+<p>Are there any arrows directly connecting <span class="math inline">\(X\)</span> and <span class="math inline">\(E\)</span>? What does that imply about the relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(E\)</span>? Which regression assumption is related to this question?</p>
 <p>Given all that, what is <span class="math inline">\(Cov(X, E)\)</span>?</p>
 </div>
 <p>Next, because <span class="math inline">\(Y\)</span> is the combination of <span class="math inline">\(X\)</span> and <span class="math inline">\(E\)</span>, we’ve already seen that we can write</p>
@@ -300,7 +322,7 @@ bv
 \end{align}\]</span></p>
 <div class="rmdnote">
 <p>Time to do a little algebra. You know <span class="math inline">\(v\)</span>. Using that value, solve for <span class="math inline">\(b\)</span> first (using the last equation). Then, using both values of <span class="math inline">\(b\)</span> and <span class="math inline">\(v\)</span>, solve for <span class="math inline">\(e\)</span> in the second equation.</p>
-<p>Check that the values you got are the same as the ones from the diagram at the end of the last section (with the possibility of a little rounding error).</p>
+<p>Check that the values you got are the same as the ones from the earlier diagram (with the possibility of a little rounding error).</p>
 </div>
 <p>Now let’s go through that again, but this time, in full generality:</p>
 <p><span class="math display">\[\begin{align}
@@ -319,9 +341,9 @@ b = \frac{Cov(X, Y)}{Var(X)}
 e = Var(Y) - \left( \frac{Cov(X, Y)}{Var(X)} \right)^2 Var(X)
 \]</span></p>
 </div>
-<div id="simple-mim" class="section level2" number="4.5">
+<div id="simple-mim" class="section level2" number="4.6">
 <h2>
-<span class="header-section-number">4.5</span> The model-implied matrix<a class="anchor" aria-label="anchor" href="#simple-mim"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.6</span> The model-implied matrix<a class="anchor" aria-label="anchor" href="#simple-mim"><i class="fas fa-link"></i></a>
 </h2>
 <p>It will be convenient in future chapters to collect up all these numbers we need in an array of terms called a <em>covariance matrix</em>. (Sometimes this is called the variance-covariance matrix.) The idea is to take the covariance of all possible pairs of observed variables and arrange them as follows:</p>
 <p><span class="math display">\[
@@ -332,30 +354,30 @@ Cov(Y, X)    &amp;    Cov(Y, Y) \\
 \]</span></p>
 <p>There are some immediate simplifications to make.</p>
 <ol style="list-style-type: decimal">
-<li>Since <span class="math inline">\(Cov(Y, X) = Cov(X, Y)\)</span>, there is no point in writing it twice. We will just use a dash (—) to replace <span class="math inline">\(Cov(Y, X)\)</span>.</li>
+<li>Since <span class="math inline">\(Cov(Y, X) = Cov(X, Y)\)</span>, there is no point in writing it twice. We will just use a dot (<span class="math inline">\(\bullet\)</span>) to replace <span class="math inline">\(Cov(Y, X)\)</span>.</li>
 <li>We can replace the upper-left and lower-right entries (the entries on the so-called “diagonal” of the matrix) with variances.</li>
 </ol>
 <p>This is our final covariance matrix:</p>
 <p><span class="math display">\[
 \begin{bmatrix}
 Var(X)       &amp;    Cov(X, Y) \\
--   &amp;    Var(Y)    \\
+\bullet      &amp;    Var(Y)    \\
 \end{bmatrix}
 \]</span></p>
 <p>When we have data, we can calculate numbers for all these quantities.</p>
 <p>There is another important matrix called the <em>model-implied matrix</em>. Given the model, what does the covariance matrix look like? From the calculations above, we know that the model-implied matrix is</p>
 <p><span class="math display">\[
 \begin{bmatrix}
-v   &amp;    bv         \\
--   &amp;    b^{2}v + e \\
+v         &amp;    bv         \\
+\bullet   &amp;    b^{2}v + e \\
 \end{bmatrix}
 \]</span></p>
 <p>The letters <span class="math inline">\(b\)</span>, <span class="math inline">\(v\)</span>, and <span class="math inline">\(e\)</span> are unknowns. Okay, <span class="math inline">\(v\)</span> is not <em>very</em> unknown. It’s an unknown in the sense of being a parameter in the model, but you don’t have to work very hard to find it. The point is that model parameters are estimated by equating the covariance matrix (calculated from the data) with model-implied matrix and trying to solve for all the unknown parameters.</p>
 <p>There is no new math to do in this section. The matrices are just convenient ways to organize the work we’ve already done.</p>
 </div>
-<div id="simple-error-correlation" class="section level2" number="4.6">
+<div id="simple-error-correlation" class="section level2" number="4.7">
 <h2>
-<span class="header-section-number">4.6</span> Error variance in terms of correlation<a class="anchor" aria-label="anchor" href="#simple-error-correlation"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.7</span> Error variance in terms of correlation<a class="anchor" aria-label="anchor" href="#simple-error-correlation"><i class="fas fa-link"></i></a>
 </h2>
 <p>The formulas we derived are fine as far as they go. They allow you to take quantities calculated from data (variances and covariances of observed variables) and translate that into estimates of model parameters.</p>
 <p>The formula for the error variance <span class="math inline">\(e\)</span> is a little gross, though. With a little trickery, we can simplify that formula quite a bit.</p>
@@ -380,10 +402,114 @@ Var(Y) \left( 1 - \frac{Cov(X, Y)^{2}}{Var(X) Var(Y)} \right)
 <div class="rmdnote">
 <p>Why would we do such a thing? In other words, does the new fraction on the right look familiar in any way?</p>
 </div>
-<p>We hope you recognized that the fraction on the right is just the correlation coefficient squared. The whole equation can now be written as</p>
+<p>We hope you recognize that the fraction on the right is just the correlation coefficient squared. The whole equation can now be written as</p>
 <p><span class="math display">\[
 e = Var(Y) \left( 1 - r_{XY}^2 \right)
 \]</span></p>
+</div>
+<div id="simple-standardized" class="section level2" number="4.8">
+<h2>
+<span class="header-section-number">4.8</span> Regression with standardized variables<a class="anchor" aria-label="anchor" href="#simple-standardized"><i class="fas fa-link"></i></a>
+</h2>
+<p>Recall that if we convert our variables to z-scores, variances are all 1 and covariances become correlation coefficients. In other words, the covariance matrix becomes a <em>correlation matrix</em> and looks like this:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1       &amp;    r_{XY} \\
+\bullet &amp;    1      \\
+\end{bmatrix}
+\]</span></p>
+<p>The model-implied matrix does not change. Solving for the parameters as before is the same, then, except we can now replace <span class="math inline">\(Var(X)\)</span> with 1 and <span class="math inline">\(Cov(X, Y)\)</span> with <span class="math inline">\(r_{XY}\)</span>.</p>
+<p><span class="math display">\[
+v = 1
+\]</span></p>
+<p><span class="math display">\[
+b = r_{XY}
+\]</span></p>
+<p><span class="math display">\[
+e = 1 - r_{XY}^{2}
+\]</span></p>
+<div class="rmdnote">
+<p>We’ll use the <code>scale</code> command to create standardized variables for temperature and wind speed and put them in a new tibble.</p>
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">X_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Wind</span><span class="op">)</span>
+<span class="va">Y_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span><span class="op">)</span>
+<span class="va">airquality_std</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">X_std</span>, <span class="va">Y_std</span><span class="op">)</span>
+<span class="va">airquality_std</span></code></pre></div>
+<pre><code>## # A tibble: 153 × 2
+##    X_std[,1] Y_std[,1]
+##        &lt;dbl&gt;     &lt;dbl&gt;
+##  1    -0.726    -1.15 
+##  2    -0.556    -0.621
+##  3     0.750    -0.410
+##  4     0.438    -1.68 
+##  5     1.23     -2.31 
+##  6     1.40     -1.26 
+##  7    -0.385    -1.36 
+##  8     1.09     -1.99 
+##  9     2.88     -1.78 
+## 10    -0.385    -0.938
+## # … with 143 more rows</code></pre>
+<p>Modify the <code>ggplot</code> code from earlier in the chapter to create a scatterplot of the new standardized variables along with a best-fit line. What is the slope of this line? (Hint: calculate the correlation coefficient between the two standardized variables.)</p>
+</div>
+</div>
+<div id="simple-r" class="section level2" number="4.9">
+<h2>
+<span class="header-section-number">4.9</span> Simple regression in R<a class="anchor" aria-label="anchor" href="#simple-r"><i class="fas fa-link"></i></a>
+</h2>
+<p>The straightforward way to run regression in R is to use the <code>lm</code> command. This stands for “linear model”. It uses a special symbol, the tilde ~, to express the relationship between the endogenous variable and the exogenous variable. The endogenous (response) variable always goes on the left, before the tilde. The exogenous (predictor) variable goes on the right, after the tilde. Finally, there is a <code>data</code> argument to tell <code>lm</code> where to find the variables to model.</p>
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span>, data <span class="op">=</span> <span class="va">airquality_mc</span><span class="op">)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Y ~ X, data = airquality_mc)
+## 
+## Coefficients:
+## (Intercept)            X  
+##   1.117e-14   -1.230e+00</code></pre>
+<div class="rmdnote">
+<p>Which of the two numbers above is the slope <span class="math inline">\(b\)</span>?</p>
+<p>We haven’t talked about the intercept yet, but according to this output, what is it? (Hint: it’s not literally <span class="math inline">\(1.117 \times 10^{-14}\)</span>. What does that number really mean?)</p>
+</div>
+<div class="rmdnote">
+<p>Run the <code>lm</code> command, but this time using the standardized variables from the <code>airquality_std</code> tibble. The value of the slope should not surprise you. Explain why it is what it is.</p>
+</div>
+<p>We will also introduce you briefly to the <code>lavaan</code> package. While it’s totally overkill for simple regression, getting used to the syntax now will make it easier to continue to build up your confidence in using it when it will be the only tool we use.</p>
+<p>A <code>lavaan</code> model is built in a similar way to <code>lm</code> using the tilde ~ notation. One big difference is that the model needs to be specified inside quotation marks first and assigned to a name like this:</p>
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">TEMP_WIND_model</span> <span class="op">&lt;-</span> <span class="st">"Y ~ X"</span> </code></pre></div>
+<p>Then we pass that model text to the <code>sem</code> function from <code>lavaan</code>:</p>
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">TEMP_WIND_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span><span class="va">TEMP_WIND_model</span>, data <span class="op">=</span> <span class="va">airquality_mc</span><span class="op">)</span></code></pre></div>
+<p>The model is now stored as <code>TEMP_WIND_fit</code>. One way to learn about the model is to use the <code>parameterEstimates</code> function.</p>
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/parameterEstimates.html">parameterEstimates</a></span><span class="op">(</span><span class="va">TEMP_WIND_fit</span><span class="op">)</span></code></pre></div>
+<pre><code>##   lhs op rhs    est    se      z pvalue ci.lower ci.upper
+## 1   Y  ~   X -1.230 0.193 -6.373      0   -1.609   -0.852
+## 2   Y ~~   Y 70.337 8.042  8.746      0   54.575   86.098
+## 3   X ~~   X 12.330 0.000     NA     NA   12.330   12.330</code></pre>
+<p>There is a lot of output here, and we’re not going to talk about most of it now. Focus on the “est” column.</p>
+<div class="rmdnote">
+<p>You should recognize these three estimates. Explain what these numbers represent.</p>
+<p>In particular, pay close attention to the second line. If you are hasty, you may think this is the variance of <span class="math inline">\(Y\)</span>, but that is not correct.</p>
+</div>
+<p>We can also produce the standardized estimates.</p>
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/standardizedSolution.html">standardizedSolution</a></span><span class="op">(</span><span class="va">TEMP_WIND_fit</span><span class="op">)</span></code></pre></div>
+<pre><code>##   lhs op rhs est.std    se      z pvalue ci.lower ci.upper
+## 1   Y  ~   X  -0.458 0.060 -7.577      0   -0.576   -0.340
+## 2   Y ~~   Y   0.790 0.055 14.273      0    0.682    0.899
+## 3   X ~~   X   1.000 0.000     NA     NA    1.000    1.000</code></pre>
+<div class="rmdnote">
+<p>Again, explain these three numbers. (They are now listed in a column called <code>est.std</code> for “standardized estimates”.)</p>
+<p>Verify that the second line is actually the error variance. (Hint: remember <span class="math inline">\(1 - r_{XY}^{2}\)</span>.) How do we know it’s not the standardized variance of <span class="math inline">\(Y\)</span>? (In other words, what do you actually know to be the standardized variance of <span class="math inline">\(Y\)</span>?)</p>
+</div>
+</div>
+<div id="simple-intercepts" class="section level2" number="4.10">
+<h2>
+<span class="header-section-number">4.10</span> What about intercepts?<a class="anchor" aria-label="anchor" href="#simple-intercepts"><i class="fas fa-link"></i></a>
+</h2>
+<p>If you are familiar with regression from another course, you may be wondering where the intercepts went. Because we mean-centered and/or standardized all the data, there were no intercepts. The regression line always passes through <span class="math inline">\((0, 0)\)</span> for mean-centered or standardized data.</p>
+<p>[PUT A REFERENCE HERE IF WE DECIDE TO COVER MEAN STRUCTURE IN A FUTURE CHAPTER.]</p>
 
 </div>
 </div>
@@ -399,9 +525,13 @@ e = Var(Y) \left( 1 - r_{XY}^2 \right)
 <li><a class="nav-link" href="#simple-prediction"><span class="header-section-number">4.1</span> Prediction</a></li>
 <li><a class="nav-link" href="#simple-terminology"><span class="header-section-number">4.2</span> Regression terminology</a></li>
 <li><a class="nav-link" href="#simple-model"><span class="header-section-number">4.3</span> The simple regression model</a></li>
-<li><a class="nav-link" href="#simple-calculating"><span class="header-section-number">4.4</span> Calculating regression parameters</a></li>
-<li><a class="nav-link" href="#simple-mim"><span class="header-section-number">4.5</span> The model-implied matrix</a></li>
-<li><a class="nav-link" href="#simple-error-correlation"><span class="header-section-number">4.6</span> Error variance in terms of correlation</a></li>
+<li><a class="nav-link" href="#simple-assumptions"><span class="header-section-number">4.4</span> Simple regression assumptions</a></li>
+<li><a class="nav-link" href="#simple-calculating"><span class="header-section-number">4.5</span> Calculating regression parameters</a></li>
+<li><a class="nav-link" href="#simple-mim"><span class="header-section-number">4.6</span> The model-implied matrix</a></li>
+<li><a class="nav-link" href="#simple-error-correlation"><span class="header-section-number">4.7</span> Error variance in terms of correlation</a></li>
+<li><a class="nav-link" href="#simple-standardized"><span class="header-section-number">4.8</span> Regression with standardized variables</a></li>
+<li><a class="nav-link" href="#simple-r"><span class="header-section-number">4.9</span> Simple regression in R</a></li>
+<li><a class="nav-link" href="#simple-intercepts"><span class="header-section-number">4.10</span> What about intercepts?</a></li>
 </ul>
 
       <div class="book-extra">

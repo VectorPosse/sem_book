@@ -2184,7 +2184,7 @@ or
 Y = -1.23X + E
 \]
 
-Error is a funny word because it has a negative connotation. It sounds like we made a mistake. Well, the model did make a mistake, but not the kind of mistake that results from doing our arithmetic wrong or anything like that. It's simply the ``natural'' error that results from the messiness of the real world and the impossibility of predicting anything with certainty. For this reason, we will often prefer the term ``residual''. It's what is ``left over'' after we have made a prediction. It's the extra change in temperature, for example, that is not accounted for by the model with wind speed alone.
+Error is a funny word because it has a negative connotation. It sounds like we made a mistake. Well, the model does make mistakes. Every model prediction is technically wrong. But this is not the kind of mistake that results from doing our arithmetic wrong or anything like that. It's simply the ``natural'' error that results from the messiness of the real world and the impossibility of predicting anything with certainty. For this reason, we will often prefer the term ``residual''. It's what is ``left over'' after we have made a prediction. It's the extra change in temperature, for example, that is not accounted for by the model with wind speed alone.
 
 The residuals are evident in the plot above. If there were no residuals, every data point would lie on a perfect straight line. But the data points are all either a little above or below the line. Those vertical distances between the data and the line are the residuals or errors. Here is an example of two residuals plotted below in red.
 
@@ -2252,6 +2252,43 @@ Is the error variable \(E\) exogenous or endogenous?
 
 One final note about this diagram: you may have noticed that the \(Y\) variable (or \(\textit{TEMP}\)) does \emph{not} have a variance term attached. There is no double-headed arrow on that box. Why not? The point here is that we are trying to explain the reasons that \(Y\) varies using other elements of the model. In other words, \(Y\) has a variance, but that variance is partially explained by \(X\). And the rest of the variance not explained by \(X\) is explained by the error term \(E\). So all the variance is \(Y\) is accounted for through the contribution of \(X\) and \(E\) combined.
 
+\hypertarget{simple-assumptions}{%
+\section{Simple regression assumptions}\label{simple-assumptions}}
+
+All the calculations we need to do, and our ability to interpret the results, depend on certain assumptions being met.
+
+If you look up regression assumptions, you might find a huge list of requirements. Most of these requirements relate to calculating statistics like P-values for regression parameters. For now, we are content simply to know that it makes sense to interpret the parameters in the model above.
+
+For that, we really only need four assumptions:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The data should come from a ``good'' sample.
+\item
+  The relationship between \(X\) and \(Y\) should be approximately linear.
+\item
+  The residuals should be independent of the \(X\) values.
+\item
+  There should be no influential outliers.
+\end{enumerate}
+
+Let's address these one at a time:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  What do we mean by a ``good'' sample? While a simple random sample is the gold standard, it's usually not possible to obtain one in the real world. So we make our sampling process as random as possible and ensure that the resulting sample is as representative of the population we're trying to study as possible.
+\item
+  You can check linearity with a scatterplot. Just make sure the pattern of dots doesn't have strong curvature to it.
+\item
+  There should be no patterns in the residuals at all. They should be randomly scattered around the best-fit line and the average size of the residuals should not change radically from one side of the graph to the other.\footnote{This property of similarly-sized residuals is called \emph{homoskesdasticity}. The violation of that condition is called \emph{heteroskedasticity} which is one of Sean's favorite words ever!}
+\item
+  Check the scatterplot for outliers. If there are serious ones, assess them to make sure they are not data entry mistakes. If they correspond to valid data, you cannot just throw them away.\footnote{In other words, don't follow the all-too-common ``rule of thumb'' for outliers, which is just covering them up with your thumb and pretending they don't exist.} Often, the solution is to run the analysis both including and (temporarily) excluding the outliers to make sure their presence doesn't radically alter the parameter estimates.
+\end{enumerate}
+
 \hypertarget{simple-calculating}{%
 \section{Calculating regression parameters}\label{simple-calculating}}
 
@@ -2272,7 +2309,7 @@ We can estimate it directly from the data. (You already did it in R above for th
 To get the other parameters, we have to set up a few equations.
 The first observation we need to make is that, as important as the arrows are in a diagram, it's just as important where the arrows are \emph{not}.
 
-Are there any arrows directly connecting \(X\) and \(E\)? What does that imply about the relationship between \(X\) and \(E\)?
+Are there any arrows directly connecting \(X\) and \(E\)? What does that imply about the relationship between \(X\) and \(E\)? Which regression assumption is related to this question?
 
 Given all that, what is \(Cov(X, E)\)?
 
@@ -2326,7 +2363,7 @@ Now we can set up all the equations we need to solve for the various letters we 
 
 Time to do a little algebra. You know \(v\). Using that value, solve for \(b\) first (using the last equation). Then, using both values of \(b\) and \(v\), solve for \(e\) in the second equation.
 
-Check that the values you got are the same as the ones from the diagram at the end of the last section (with the possibility of a little rounding error).
+Check that the values you got are the same as the ones from the earlier diagram (with the possibility of a little rounding error).
 
 Now let's go through that again, but this time, in full generality:
 
@@ -2368,7 +2405,7 @@ There are some immediate simplifications to make.
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Since \(Cov(Y, X) = Cov(X, Y)\), there is no point in writing it twice. We will just use a dash (---) to replace \(Cov(Y, X)\).
+  Since \(Cov(Y, X) = Cov(X, Y)\), there is no point in writing it twice. We will just use a dot (\(\bullet\)) to replace \(Cov(Y, X)\).
 \item
   We can replace the upper-left and lower-right entries (the entries on the so-called ``diagonal'' of the matrix) with variances.
 \end{enumerate}
@@ -2378,7 +2415,7 @@ This is our final covariance matrix:
 \[
 \begin{bmatrix}
 Var(X)       &    Cov(X, Y) \\
--   &    Var(Y)    \\
+\bullet      &    Var(Y)    \\
 \end{bmatrix}
 \]
 
@@ -2388,8 +2425,8 @@ There is another important matrix called the \emph{model-implied matrix}. Given 
 
 \[
 \begin{bmatrix}
-v   &    bv         \\
--   &    b^{2}v + e \\
+v         &    bv         \\
+\bullet   &    b^{2}v + e \\
 \end{bmatrix}
 \]
 
@@ -2430,11 +2467,159 @@ Var(Y) \left( 1 - \frac{Cov(X, Y)^{2}}{Var(X) Var(Y)} \right)
 
 Why would we do such a thing? In other words, does the new fraction on the right look familiar in any way?
 
-We hope you recognized that the fraction on the right is just the correlation coefficient squared. The whole equation can now be written as
+We hope you recognize that the fraction on the right is just the correlation coefficient squared. The whole equation can now be written as
 
 \[
 e = Var(Y) \left( 1 - r_{XY}^2 \right)
 \]
+
+\hypertarget{simple-standardized}{%
+\section{Regression with standardized variables}\label{simple-standardized}}
+
+Recall that if we convert our variables to z-scores, variances are all 1 and covariances become correlation coefficients. In other words, the covariance matrix becomes a \emph{correlation matrix} and looks like this:
+
+\[
+\begin{bmatrix}
+1       &    r_{XY} \\
+\bullet &    1      \\
+\end{bmatrix}
+\]
+
+The model-implied matrix does not change. Solving for the parameters as before is the same, then, except we can now replace \(Var(X)\) with 1 and \(Cov(X, Y)\) with \(r_{XY}\).
+
+\[
+v = 1
+\]
+
+\[
+b = r_{XY}
+\]
+
+\[
+e = 1 - r_{XY}^{2}
+\]
+
+We'll use the \texttt{scale} command to create standardized variables for temperature and wind speed and put them in a new tibble.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X\_std }\OtherTok{\textless{}{-}} \FunctionTok{scale}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Wind)}
+\NormalTok{Y\_std }\OtherTok{\textless{}{-}} \FunctionTok{scale}\NormalTok{(airquality}\SpecialCharTok{$}\NormalTok{Temp)}
+\NormalTok{airquality\_std }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(X\_std, Y\_std)}
+\NormalTok{airquality\_std}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 153 x 2
+##    X_std[,1] Y_std[,1]
+##        <dbl>     <dbl>
+##  1    -0.726    -1.15 
+##  2    -0.556    -0.621
+##  3     0.750    -0.410
+##  4     0.438    -1.68 
+##  5     1.23     -2.31 
+##  6     1.40     -1.26 
+##  7    -0.385    -1.36 
+##  8     1.09     -1.99 
+##  9     2.88     -1.78 
+## 10    -0.385    -0.938
+## # ... with 143 more rows
+\end{verbatim}
+
+Modify the \texttt{ggplot} code from earlier in the chapter to create a scatterplot of the new standardized variables along with a best-fit line. What is the slope of this line? (Hint: calculate the correlation coefficient between the two standardized variables.)
+
+\hypertarget{simple-r}{%
+\section{Simple regression in R}\label{simple-r}}
+
+The straightforward way to run regression in R is to use the \texttt{lm} command. This stands for ``linear model''. It uses a special symbol, the tilde \textasciitilde, to express the relationship between the endogenous variable and the exogenous variable. The endogenous (response) variable always goes on the left, before the tilde. The exogenous (predictor) variable goes on the right, after the tilde. Finally, there is a \texttt{data} argument to tell \texttt{lm} where to find the variables to model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lm}\NormalTok{(Y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ X, }\AttributeTok{data =}\NormalTok{ airquality\_mc)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Y ~ X, data = airquality_mc)
+## 
+## Coefficients:
+## (Intercept)            X  
+##   1.117e-14   -1.230e+00
+\end{verbatim}
+
+Which of the two numbers above is the slope \(b\)?
+
+We haven't talked about the intercept yet, but according to this output, what is it? (Hint: it's not literally \(1.117 \times 10^{-14}\). What does that number really mean?)
+
+Run the \texttt{lm} command, but this time using the standardized variables from the \texttt{airquality\_std} tibble. The value of the slope should not surprise you. Explain why it is what it is.
+
+We will also introduce you briefly to the \texttt{lavaan} package. While it's totally overkill for simple regression, getting used to the syntax now will make it easier to continue to build up your confidence in using it when it will be the only tool we use.
+
+A \texttt{lavaan} model is built in a similar way to \texttt{lm} using the tilde \textasciitilde{} notation. One big difference is that the model needs to be specified inside quotation marks first and assigned to a name like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{TEMP\_WIND\_model }\OtherTok{\textless{}{-}} \StringTok{"Y \textasciitilde{} X"} 
+\end{Highlighting}
+\end{Shaded}
+
+Then we pass that model text to the \texttt{sem} function from \texttt{lavaan}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{TEMP\_WIND\_fit }\OtherTok{\textless{}{-}} \FunctionTok{sem}\NormalTok{(TEMP\_WIND\_model, }\AttributeTok{data =}\NormalTok{ airquality\_mc)}
+\end{Highlighting}
+\end{Shaded}
+
+The model is now stored as \texttt{TEMP\_WIND\_fit}. One way to learn about the model is to use the \texttt{parameterEstimates} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{parameterEstimates}\NormalTok{(TEMP\_WIND\_fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   lhs op rhs    est    se      z pvalue ci.lower ci.upper
+## 1   Y  ~   X -1.230 0.193 -6.373      0   -1.609   -0.852
+## 2   Y ~~   Y 70.337 8.042  8.746      0   54.575   86.098
+## 3   X ~~   X 12.330 0.000     NA     NA   12.330   12.330
+\end{verbatim}
+
+There is a lot of output here, and we're not going to talk about most of it now. Focus on the ``est'' column.
+
+You should recognize these three estimates. Explain what these numbers represent.
+
+In particular, pay close attention to the second line. If you are hasty, you may think this is the variance of \(Y\), but that is not correct.
+
+We can also produce the standardized estimates.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{standardizedSolution}\NormalTok{(TEMP\_WIND\_fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   lhs op rhs est.std    se      z pvalue ci.lower ci.upper
+## 1   Y  ~   X  -0.458 0.060 -7.577      0   -0.576   -0.340
+## 2   Y ~~   Y   0.790 0.055 14.273      0    0.682    0.899
+## 3   X ~~   X   1.000 0.000     NA     NA    1.000    1.000
+\end{verbatim}
+
+Again, explain these three numbers. (They are now listed in a column called \texttt{est.std} for ``standardized estimates''.)
+
+Verify that the second line is actually the error variance. (Hint: remember \(1 - r_{XY}^{2}\).) How do we know it's not the standardized variance of \(Y\)? (In other words, what do you actually know to be the standardized variance of \(Y\)?)
+
+\hypertarget{simple-intercepts}{%
+\section{What about intercepts?}\label{simple-intercepts}}
+
+If you are familiar with regression from another course, you may be wondering where the intercepts went. Because we mean-centered and/or standardized all the data, there were no intercepts. The regression line always passes through \((0, 0)\) for mean-centered or standardized data.
+
+{[}PUT A REFERENCE HERE IF WE DECIDE TO COVER MEAN STRUCTURE IN A FUTURE CHAPTER.{]}
 
 \hypertarget{multiple}{%
 \chapter{Multiple regression}\label{multiple}}

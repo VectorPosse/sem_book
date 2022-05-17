@@ -19,9 +19,13 @@ simple
 simple-prediction
 simple-terminology
 simple-model
+simple-assumptions
 simple-calculating
 simple-mim
 simple-error-correlation
+simple-standardized
+simple-r
+simple-intercepts
 multiple
 mediation
 path
