@@ -7,7 +7,7 @@ knitr::include_graphics("graphics/simple_regression.png")
 
 ## Preliminaries {-}
 
-We need to load the packages we will need for this chapter. The `tideverse` package has all sorts of utilities for working with tibbles (data frames). This will also be our first introduction to the `lavaan` package that will be used throughout the rest of the book.
+We need to load the packages we will need for this chapter. The `tidyverse` package has all sorts of utilities for working with tibbles (data frames). This will also be our first introduction to the `lavaan` package that will be used throughout the rest of the book.
 
 ```{r}
 library(tidyverse)
