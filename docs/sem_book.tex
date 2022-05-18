@@ -124,7 +124,7 @@
 
 \title{Demystifying Structural Equation Modeling}
 \author{Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)}
-\date{2022-05-16}
+\date{2022-05-18}
 
 \begin{document}
 \maketitle
@@ -2017,7 +2017,7 @@ Turn up the sound! If the whole class plays at the same time, your classroom wil
 \section*{Preliminaries}\label{preliminaries}}
 \addcontentsline{toc}{section}{Preliminaries}
 
-We need to load the packages we will need for this chapter. The \texttt{tideverse} package has all sorts of utilities for working with tibbles (data frames). This will also be our first introduction to the \texttt{lavaan} package that will be used throughout the rest of the book.
+We need to load the packages we will need for this chapter. The \texttt{tidyverse} package has all sorts of utilities for working with tibbles (data frames). This will also be our first introduction to the \texttt{lavaan} package that will be used throughout the rest of the book.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2160,13 +2160,15 @@ For every additional mile per hour of wind speed, the temperature goes down by 1
 The point is that the line is a \emph{model} that makes predictions. As long as \(X\) and \(Y\) are both mean-centered, the equation of this line is
 
 \[
-Y = bX
+\hat{Y} = bX
 \]
 
-And we can use the data to estimate that the value of \(b\) is \(-1.23\):
+There is a new piece of notation here: \(\hat{Y}\). This symbol represents the \emph{predicted} value of \(Y\) according to the model. We will not get the \emph{actual} value of \(Y\) from this piece of the model because the actual values of \(Y\) differ from the model because real-world data doesn't lie on a perfect straight line. More on that in a moment.
+
+According to the information above, we can estimate that the value of \(b\) is \(-1.23\):
 
 \[
-Y = -1.23X
+\hat{Y} = -1.23X
 \]
 
 This is a multiplicative effect. Again, as long as \(X\) and \(Y\) are both mean-centered, knowing the value of \(X\) allows us to predict the value of \(Y\) by multiplying by \(b\).
@@ -2179,10 +2181,15 @@ Since our predictions are average effects and not specific guarantees, every pre
 Y = bX + E
 \]
 or
-
 \[
 Y = -1.23X + E
 \]
+
+Now we use \(Y\) instead of \(\hat{Y}\). Once we include the error, we can recover the exact value of \(Y\), so this is no longer just a prediction from the straight-line model. Remember this:
+
+If you write down a regression equation for an endogenous variable that includes all incoming arrows, \emph{including the residual error term}, use \(Y\).
+
+If you write down a regression equation for an endogenous variable that includes all incoming arrows, \emph{excluding the residual error term}, use \(\hat{Y}\).
 
 Error is a funny word because it has a negative connotation. It sounds like we made a mistake. Well, the model does make mistakes. Every model prediction is technically wrong. But this is not the kind of mistake that results from doing our arithmetic wrong or anything like that. It's simply the ``natural'' error that results from the messiness of the real world and the impossibility of predicting anything with certainty. For this reason, we will often prefer the term ``residual''. It's what is ``left over'' after we have made a prediction. It's the extra change in temperature, for example, that is not accounted for by the model with wind speed alone.
 
@@ -2257,7 +2264,7 @@ One final note about this diagram: you may have noticed that the \(Y\) variable 
 
 All the calculations we need to do, and our ability to interpret the results, depend on certain assumptions being met.
 
-If you look up regression assumptions, you might find a huge list of requirements. Most of these requirements relate to calculating statistics like P-values for regression parameters. For now, we are content simply to know that it makes sense to interpret the parameters in the model above.
+If you look up regression assumptions, you might find a huge list of requirements. Some of these requirements relate to calculating statistics like P-values for regression parameters. For now, we are content simply to know that it makes sense to interpret the parameters in the model above.
 
 For that, we really only need four assumptions:
 
@@ -2390,7 +2397,7 @@ e = Var(Y) - \left( \frac{Cov(X, Y)}{Var(X)} \right)^2 Var(X)
 \hypertarget{simple-mim}{%
 \section{The model-implied matrix}\label{simple-mim}}
 
-It will be convenient in future chapters to collect up all these numbers we need in an array of terms called a \emph{covariance matrix}. (Sometimes this is called the variance-covariance matrix.) The idea is to take the covariance of all possible pairs of observed variables and arrange them as follows:
+It will be convenient in future chapters to collect up all these numbers we need in an array of terms called a \emph{sample covariance matrix}. (Sometimes this is called a variance-covariance matrix.) The idea is to take the covariance of all possible pairs of observed variables and arrange them as follows:
 
 \[
 \begin{bmatrix}
@@ -2410,7 +2417,7 @@ There are some immediate simplifications to make.
   We can replace the upper-left and lower-right entries (the entries on the so-called ``diagonal'' of the matrix) with variances.
 \end{enumerate}
 
-This is our final covariance matrix:
+This is our final sample covariance matrix:
 
 \[
 \begin{bmatrix}
@@ -2419,7 +2426,7 @@ Var(X)       &    Cov(X, Y) \\
 \end{bmatrix}
 \]
 
-When we have data, we can calculate numbers for all these quantities.
+With the data we have, we can calculate numbers for all these quantities.
 
 There is another important matrix called the \emph{model-implied matrix}. Given the model, what does the covariance matrix look like? From the calculations above, we know that the model-implied matrix is
 
@@ -2432,7 +2439,20 @@ v         &    bv         \\
 
 The letters \(b\), \(v\), and \(e\) are unknowns. Okay, \(v\) is not \emph{very} unknown. It's an unknown in the sense of being a parameter in the model, but you don't have to work very hard to find it. The point is that model parameters are estimated by equating the covariance matrix (calculated from the data) with model-implied matrix and trying to solve for all the unknown parameters.
 
-There is no new math to do in this section. The matrices are just convenient ways to organize the work we've already done.
+There is no new math to do in this section. The matrices are just convenient ways to organize the work we've already done. All parameter estimation in structural equation modeling is essentially setting these two matrices (the sample covariance matrix and the model-implied matrix) equal to each other and attempting to solve for the unknown parameters.
+
+\[
+\begin{bmatrix}
+Var(X)       &    Cov(X, Y) \\
+\bullet      &    Var(Y)    \\
+\end{bmatrix} =
+\begin{bmatrix}
+v         &    bv         \\
+\bullet   &    b^{2}v + e \\
+\end{bmatrix}
+\]
+
+Don't forget that the matrix on the left---the sample covariance matrix---consists of numbers that we calculate from data. The matrix on the right---the model-implied matrix---contains letters, which are the unknown parameters we're trying to find.
 
 \hypertarget{simple-error-correlation}{%
 \section{Error variance in terms of correlation}\label{simple-error-correlation}}
@@ -2473,6 +2493,12 @@ We hope you recognize that the fraction on the right is just the correlation coe
 e = Var(Y) \left( 1 - r_{XY}^2 \right)
 \]
 
+There is a nice consequence of this last equation. The term in parentheses \(\left( 1 - r_{XY}^2 \right)\) is a number between 0 and 1, right? Since we are multiplying this by the variance of \(Y\), we can think of the term in parentheses as a \emph{proportion}. All the variance of \(Y\) is explained in our model in one of two ways. The thick arrow coming in from the left uses \(X\) to predict some of the variance of \(Y\). All the rest of the variance of \(Y\) is left over in the error term \(e\). Therefore, \(\left( 1 - r_{XY}^2 \right)\) is the proportion of the variance of \(Y\) left over as error.
+
+And if that is true, it must also be the case that \(r_{XY}^2\) is the proportion of the variance of \(Y\) explained by \(X\). Calculating one minus a proportion gives the complementary proportion. For example, if \(\left( 1 - r_{XY}^2 \right) = 0.3\), then 30\% of the variance of \(Y\) is left over as error. But that implies that 70\% of the variance of \(Y\) is explained by \(X\). \(1 - 0.3 = 0.7\).
+
+Most authors will write \(R^{2}\) instead of \(r^{2}\) for some reason.
+
 \hypertarget{simple-standardized}{%
 \section{Regression with standardized variables}\label{simple-standardized}}
 
@@ -2485,7 +2511,26 @@ Recall that if we convert our variables to z-scores, variances are all 1 and cov
 \end{bmatrix}
 \]
 
-The model-implied matrix does not change. Solving for the parameters as before is the same, then, except we can now replace \(Var(X)\) with 1 and \(Cov(X, Y)\) with \(r_{XY}\).
+The model-implied matrix does not change. Solving for the parameters as before is the same, then, except we can now replace \(Var(X)\) and \(Var(Y)\) with 1, and \(Cov(X, Y)\) with \(r_{XY}\).
+
+\[
+\begin{bmatrix}
+1       &    r_{XY}  \\
+\bullet      &    1  \\
+\end{bmatrix} =
+\begin{bmatrix}
+v         &    bv         \\
+\bullet   &    b^{2}v + e \\
+\end{bmatrix}
+\]
+
+\begin{align}
+1 &= v \\
+r_{XY} &= bv \\
+1 &= b^2v + e
+\end{align}
+
+Therefore,
 
 \[
 v = 1
