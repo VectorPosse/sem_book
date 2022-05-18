@@ -21,6 +21,8 @@ options(knitr.graphics.auto_pdf = TRUE)
 
 Welcome to our book on structural equation modeling!
 
+[THIS BOOK IS A WORK IN PROGRESS. FEEL FREE TO PERUSE WHATEVER CONTENT YOU FIND HERE, BUT THE FINAL VERSION WILL NOT BE READY UNTIL SOMETIME IN 2023.]
+
 If you want, you can also download this book as a <a href="https://vectorposse.github.io/sem_book/sem_book.pdf" target="_blank">PDF</a> or <a href="https://vectorposse.github.io/sem_book/sem_book.epub" target="_blank">EPUB</a> file. Be aware that the print versions are missing some of the richer formatting of the online version.
 
 
