@@ -586,6 +586,8 @@ Modify the `ggplot` code from earlier in the chapter to create a scatterplot of 
 
 ## Simple regression in R {#simple-r}
 
+### Using `lm` {#simple-r-lm}
+
 The straightforward way to run regression in R is to use the `lm` command. This stands for "linear model". It uses a special symbol, the tilde ~, to express the relationship between the endogenous variable and the exogenous variable. The endogenous (response) variable always goes on the left, before the tilde. The exogenous (predictor) variable goes on the right, after the tilde. Finally, there is a `data` argument to tell `lm` where to find the variables to model.
 
 ```{r}
@@ -605,6 +607,8 @@ We haven't talked about the intercept yet, but according to this output, what is
 Run the `lm` command, but this time using the standardized variables from the `airquality_std` tibble. The value of the slope should not surprise you. Explain why it is what it is.
 
 :::
+
+### Using `lavaan` {#simple-r-lavaan}
 
 We will also introduce you briefly to the `lavaan` package. While it's totally overkill for simple regression, getting used to the syntax now will make it easier to continue to build up your confidence in using it when it will be the only tool we use.
 

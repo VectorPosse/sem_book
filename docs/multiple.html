@@ -102,7 +102,7 @@ Y = b_{1}X_{1} + b_{2}X_{2} + E
 <div class="rmdnote">
 <p>Why do we use <span class="math inline">\(\hat{Y}\)</span> in the first equation and <span class="math inline">\(Y\)</span> in the second equation?</p>
 </div>
-<p>Although we’ll work through the details for only two predictors, keep in mind that everything we say will also apply to any number of predictors. In full generality, then, a multiple regression model with <span class="math inline">\(k\)</span> predictors will look like</p>
+<p>Although we’ll work through the details for only two predictors, a multiple regression model with <span class="math inline">\(k\)</span> predictors will look like</p>
 <p><span class="math display">\[
 \hat{Y} = b_{1}X_{1} + b_{2}X_{2} + \dots + b_{k}X_{k}
 \]</span></p>
@@ -121,7 +121,7 @@ Y = b_{1}X_{1} + b_{2}X_{2}  + \dots + b_{k}X_{k} + E
 <li>The relationship between <span class="math inline">\(X_{1}, \dots, X_{k}\)</span>, and <span class="math inline">\(Y\)</span> should be approximately linear.</li>
 <li>The residuals should be independent of the <span class="math inline">\(X_{1}, \dots, X_{k}\)</span> values.</li>
 <li>There should be no influential outliers.</li>
-<li>The exogenous should not be highly correlated with one another.</li>
+<li>The exogenous variables should not be highly correlated with one another.</li>
 </ol>
 <p>We discuss these briefly:</p>
 <ol style="list-style-type: decimal">
@@ -131,7 +131,7 @@ Y = b_{1}X_{1} + b_{2}X_{2}  + \dots + b_{k}X_{k} + E
 <li>Nothing changes here.</li>
 <li>This is the new condition. When two or more predictors variables are highly correlated with each other, this induces a condition called <em>multicollinearity</em>.</li>
 </ol>
-<p>To illustrate why this is a problem, think about the two-variable case:</p>
+<p>To illustrate why multicollinearity is a problem, think about the two-variable case:</p>
 <p><span class="math display">\[
 \hat{Y} = b_{1}X_{1} + b_{2}X_{2}
 \]</span>
@@ -158,7 +158,7 @@ b_{1} + 2b_{2} = 10
 <h2>
 <span class="header-section-number">5.3</span> Calculating regression parameters<a class="anchor" aria-label="anchor" href="#multiple-calculating"><i class="fas fa-link"></i></a>
 </h2>
-<p>There is nothing new here, but the calculations do start to get a little messy.</p>
+<p>There is nothing new here, but the calculations do start to get a little messy. Everything that follows is for two predictors only. We will not do any calculations for three or more predictors. It gets out of hand pretty quickly.</p>
 <p>First, let’s remember what we’re trying to do. From the data, we can calculate the sample covariance matrix. These are all the variances and covariances among the observed variables:</p>
 <p><span class="math display">\[
 \begin{bmatrix}
@@ -180,7 +180,7 @@ Var(aX_{1} + bX_{2} + cX_{3}) &amp;=
 \end{align}\]</span></p>
 <p>This can be extended to any number of variables. Each variance appears with a coefficient squared and each pair of variables gets a covariance term with 2 times the product of the corresponding variable coefficients. (It’s hard to describe in words, but it’s still more trouble than it’s worth writing it down in formal mathematical notation. Hopefully you can see how the pattern of coefficients generalizes.)</p>
 </div>
-<p>Now we can compute, for example <span class="math inline">\(Var(Y)\)</span>:</p>
+<p>Now we can compute, for example, <span class="math inline">\(Var(Y)\)</span>:</p>
 <p><span class="math display">\[\begin{align}
 Var(Y)  &amp;= Var(b_{1}X_{1} + b_{2}X_{2} + E) \\
     &amp;= b_{1}^{2} Var(X_{1}) + b_{2}^{2} Var(X_{2}) + Var(E) \\
@@ -189,7 +189,7 @@ Var(Y)  &amp;= Var(b_{1}X_{1} + b_{2}X_{2} + E) \\
     &amp; \quad + 2b_{2} Cov(X_{2}, E)
 \end{align}\]</span></p>
 <div class="rmdnote">
-<p>What happens to the last two lines above?</p>
+<p>What happens to the last two lines above? Why?</p>
 </div>
 <p>Therefore,</p>
 <p><span class="math display">\[
@@ -197,7 +197,8 @@ Var(Y) = b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
 \]</span></p>
 <p><a href="./covariance.html#Rule8"><strong>Rule 8</strong></a> and <a href="./covariance.html#Rule9"><strong>Rule 9</strong></a> work the same way, but it’s even easier to apply. Just split up the covariance into as many pieces as there are terms to split.</p>
 <div class="rmdnote">
-<p>Your turn. Calculate <span class="math inline">\(Cov(X_{1}, Y)\)</span>. You should get</p>
+<p>Your turn.</p>
+<p>Calculate <span class="math inline">\(Cov(X_{1}, Y)\)</span>. You should get</p>
 <p><span class="math display">\[
 b_{1} v_{1} + b_{2} c_{12}
 \]</span>
@@ -218,16 +219,34 @@ v_{1}   &amp;    c_{12}  &amp;   b_{1} v_{1} + b_{2} c_{12} \\
 \]</span>
 If we set these expressions equal to the numbers from the sample covariance matrix, <em>in theory</em> we could then solve for the unknown parameters in the model-implied matrix above. Three of them are basically already done since we can just read off <span class="math inline">\(v_{1}\)</span>, <span class="math inline">\(c_{12}\)</span>, and <span class="math inline">\(v_{2}\)</span>. But solving for <span class="math inline">\(b_{1}\)</span>, <span class="math inline">\(b_{2}\)</span>, and <span class="math inline">\(e\)</span> is no joke! And even if we did, the resulting expressions are not particularly enlightening. This is where we are quite happy turning over the computational details to a computer.</p>
 </div>
-<div id="multiple-standardized" class="section level2" number="5.4">
+<div id="multiple-interpreting" class="section level2" number="5.4">
 <h2>
-<span class="header-section-number">5.4</span> Regression with standardized variables<a class="anchor" aria-label="anchor" href="#multiple-standardized"><i class="fas fa-link"></i></a>
+<span class="header-section-number">5.4</span> Interpreting the coefficients<a class="anchor" aria-label="anchor" href="#multiple-interpreting"><i class="fas fa-link"></i></a>
 </h2>
-<p>Things get a little easier (although not completely trivial) with standardized variables. Let’s look at the sample covariance matrix and the model-implied matrix for standardized variables:</p>
+<p>Without explicit mathematical expressions for these parameters, it’s a bit challenging to explain their interpretation. For now, we’ll take it on faith that the following is true:</p>
+<div class="rmdnote">
+<p>In a multiple regression model, each <span class="math inline">\(b_{i}\)</span> represents the slope of the linear association between <span class="math inline">\(X_{i}\)</span> and <span class="math inline">\(Y\)</span> <em>while holding the value of all other predictors constant</em>.</p>
+</div>
+<p>What does this mean?</p>
+<p>Let’s work with a concrete example. Suppose we think that college GPA can be predicted using high school GPA along with the number of hours per week spent studying in college. Here is what such a model might look like:</p>
+<div class="inline-figure"><img src="graphics/multiple_regression_example.png" width="516" style="display: block; margin: auto;"></div>
+<p>If high school GPA and hours per week studying are correlated (and they likely are), they influence each other, and some of the influence has the danger of “corrupting” the estimates of the path coefficients. For example, if <span class="math inline">\(b_{2}\)</span> is positive, that would suggest that hours spend studying is associated with predicted increases in college GPA. But how do we know that’s really due to the studying? Maybe students who did well in high school are just “smarter”. Sure, they also put in more hours studying, but maybe that doesn’t matter. Maybe those students would do just as well in college even if they didn’t study a whole lot. If that were the case, the coefficient <span class="math inline">\(b_{2}\)</span> would be positive just because that set of students (who happen to study more, even though it doesn’t matter) also are the ones who have high college GPAs.</p>
+<p>This is why it’s important to <em>control</em> for other variables. All this means is that we need to temporarily fix the value of other variables to make the comparison fair. For example, we could look only at students with a 3.0 in high school. Among those students, there will be variability in the number of hours they study in college. If that variability is associated with variability in college GPA, we know that the hours spent studying is at least partly “responsible” for explaining that change. (There are lots of other factors too, but those will be swept up in the error variance.) The high school GPA can’t explain that because it was fixed at 3.0, so we’re comparing apples to apples. Students who got a 2.0 in high school may do more poorly overall, but the relative increase in GPA due to studying would be the same.</p>
+<p>If the parameter <span class="math inline">\(b_{2}\)</span> is estimated to be 0.13, that suggests that each additional hour of study time per week predicts an increase of 0.13 points in the college GPA, holding high school GPA constant. This means that the increase of 0.13 is only predicted among groups of students with the same high school GPA.</p>
+<p>Let’s say that <span class="math inline">\(b_{1}\)</span> is estimated to be 1.2. That means that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. But this is a multiple regression model, so this coefficient can only be interpreting holding <code>HOURS</code> constant. This means that this coefficient only holds among groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA.</p>
+</div>
+<div id="multiple-standardized" class="section level2" number="5.5">
+<h2>
+<span class="header-section-number">5.5</span> Regression with standardized variables<a class="anchor" aria-label="anchor" href="#multiple-standardized"><i class="fas fa-link"></i></a>
+</h2>
+<p>Things get a little easier (although not completely trivial) with standardized variables.</p>
+<p>First, a notational simplification. The correlations between our variables—according to our convention—would be called <span class="math inline">\(r_{X_{1}X_{2}}\)</span>, <span class="math inline">\(r_{X_{1}Y}\)</span>, and <span class="math inline">\(r_{X_{2}Y}\)</span>. These are a little hard to look at in complex expressions, so we will replace them with <span class="math inline">\(r_{12}\)</span>, <span class="math inline">\(r_{1Y}\)</span>, and <span class="math inline">\(r_{2Y}\)</span>.</p>
+<p>Let’s look at the sample covariance matrix and the model-implied matrix for standardized variables:</p>
 <p><span class="math display">\[
 \begin{bmatrix}
-1           &amp;   r_{X_{1}X_{2}}      &amp;   r_{X_{1}Y} \\
-\bullet     &amp;   1                   &amp;   r_{X_{2}Y} \\
-\bullet     &amp;   \bullet             &amp;   1
+1           &amp;   r_{12}      &amp;   r_{1Y} \\
+\bullet     &amp;   1           &amp;   r_{2Y} \\
+\bullet     &amp;   \bullet     &amp;   1
 \end{bmatrix} =
 \begin{bmatrix}
 v_{1}   &amp;    c_{12}  &amp;   b_{1} v_{1} + b_{2} c_{12} \\
@@ -237,53 +256,224 @@ v_{1}   &amp;    c_{12}  &amp;   b_{1} v_{1} + b_{2} c_{12} \\
 \]</span>
 The entry in the upper-right corner yields</p>
 <p><span class="math display">\[
-r_{X_{1}Y} = b_{1} v_{1} + b_{2} c_{12}
+r_{1Y} = b_{1} v_{1} + b_{2} c_{12}
 \]</span>
 which simplifies to
 <span class="math display">\[
-r_{X_{1}Y} = b_{1} + b_{2} r_{X_{1}X_{2}}
+r_{1Y} = b_{1} + b_{2} r_{12}
 \]</span>
 The next entry below that yields</p>
 <p><span class="math display">\[
-r_{X_{2}Y} = b_{2} v_{2} + b_{1} c_{12}
+r_{2Y} = b_{2} v_{2} + b_{1} c_{12}
 \]</span>
 which simplifies to
 <span class="math display">\[
-r_{X_{2}Y} = b_{2} + b_{1} r_{X_{1}X_{2}}
+r_{2Y} = b_{2} + b_{1} r_{12}
 \]</span></p>
 <p>These two equations can be solved for the two unknown parameters <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span>.</p>
 <div class="rmdnote">
 <p>Are you feeling brave? Are your algebra skills sharp? Totally optional, but see if you can derive the final answers below:</p>
 <p><span class="math display">\[
-b_{1} = \frac{r_{X_{1}Y} - r_{X_{2}Y}r_{X_{1}X_{2}}}{1 - r_{X_{1}X_{2}}^{2}}
+b_{1} = \frac{r_{1Y} - r_{2Y}r_{12}}{1 - r_{12}^{2}}
 \]</span></p>
 <p><span class="math display">\[
-b_{2} = \frac{r_{X_{2}Y} - r_{X_{1}Y}r_{X_{1}X_{2}}}{1 - r_{X_{1}X_{2}}^{2}}
+b_{2} = \frac{r_{2Y} - r_{1Y}r_{12}}{1 - r_{12}^{2}}
 \]</span></p>
 </div>
-<p>These are still pretty gross, but there is some intuitive content to them. Look at the numerator of the fraction for <span class="math inline">\(b_{1}\)</span>. Essentially, this is just <span class="math inline">\(r_{X_{1}Y}\)</span> with some extra stuff. If this were simple regression, we would expect the slope <span class="math inline">\(b_{1}\)</span> to simply be the correlation between <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y\)</span>. But in multiple regression, we also have to <em>control</em> for any contribution to the model coming from <span class="math inline">\(X_{2}\)</span>. How do we do that? By subtracting off that contribution, which turns out to be <span class="math inline">\(r_{X_{2}Y}r_{X_{1}X_{2}}\)</span>. And why does the latter term appear the way it does? Because we only need to control for the effect of <span class="math inline">\(X_{2}\)</span> if <span class="math inline">\(X_{2}\)</span> is providing some of the same “information” to the regression model as <span class="math inline">\(X_{1}\)</span>. Therefore, we don’t need to subtract <em>all</em> of <span class="math inline">\(r_{X_{2}Y}\)</span> to control for <span class="math inline">\(X_{2}\)</span>, just a fraction of <span class="math inline">\(r_{X_{2}Y}\)</span>. We just need the part of <span class="math inline">\(X_{2}\)</span> that it has in common with <span class="math inline">\(X_{1}\)</span>. We don’t want to “double-count” the contribution to the model that is common to both <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>.</p>
+<p>These are still pretty gross, but there is some intuitive content to them. Look at the numerator of the fraction for <span class="math inline">\(b_{1}\)</span>. Essentially, this is just <span class="math inline">\(r_{1Y}\)</span> with some extra stuff. If this were simple regression, we would expect the slope <span class="math inline">\(b_{1}\)</span> to simply be the correlation between <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y\)</span>. But in multiple regression, we also have to <em>control</em> for any contribution to the model coming from <span class="math inline">\(X_{2}\)</span>. How do we do that? By subtracting off that contribution, which turns out to be <span class="math inline">\(r_{2Y}r_{12}\)</span>. And why does the latter term appear the way it does? Because we only need to control for the effect of <span class="math inline">\(X_{2}\)</span> if <span class="math inline">\(X_{2}\)</span> is providing some of the same “information” to the regression model as <span class="math inline">\(X_{1}\)</span>. Therefore, we don’t need to subtract <em>all</em> of <span class="math inline">\(r_{2Y}\)</span> to control for <span class="math inline">\(X_{2}\)</span>, just a fraction of <span class="math inline">\(r_{2Y}\)</span>. We just need the part of <span class="math inline">\(X_{2}\)</span> that it has in common with <span class="math inline">\(X_{1}\)</span>. We don’t want to “double-count” the contribution to the model that is common to both <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>.</p>
 <div class="rmdnote">
-<p>Here’s another way to think about it. What if <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent? Calculate <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> from the above formulas in this much easier case. (Don’t overthink this. What is <span class="math inline">\(r_{X_{1}{X_{2}}}\)</span> in this case?)</p>
+<p>Here’s another way to think about it. What if <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent? Calculate <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> from the above formulas in this much easier case. (Don’t overthink this. What is <span class="math inline">\(r_{12}\)</span> in this case?)</p>
 </div>
-<p>So if <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent, they both offer a unique contribution to predicting <span class="math inline">\(Y\)</span> in the model. And that contribution is just their correlation with <span class="math inline">\(Y\)</span> (<span class="math inline">\(r_{X_{1}Y}\)</span> and <span class="math inline">\(r_{X_{2}Y}\)</span>, respectively). There is no overlap. But if <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are correlated, then some of their “influence” is counted twice. We have to subtract out that influence so that <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> are only measuring the “pure” contribution of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>, controlling for the other one.</p>
-<p>What about the <span class="math inline">\(1 - r_{X_{1}X_{2}}^{2}\)</span> in the denominator? There’s less of a good intuitive explanation here. It’s there because—mathematically speaking—it has to be there. It rescales the slope coefficients to make everything work out the way it has to.</p>
+<p>So if <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent, they both offer a unique contribution to predicting <span class="math inline">\(Y\)</span> in the model. And that contribution is just their correlation with <span class="math inline">\(Y\)</span> (<span class="math inline">\(r_{1Y}\)</span> and <span class="math inline">\(r_{2Y}\)</span>, respectively). There is no overlap. But if <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are correlated, then some of their “influence” is counted twice. We have to subtract out that influence so that <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> are only measuring the “pure” contribution of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>, controlling for the other one.</p>
+<p>What about the <span class="math inline">\(1 - r_{12}^{2}\)</span> in the denominator? There’s less of a good intuitive explanation here. It’s there because—mathematically speaking—it has to be there. It rescales the slope coefficients to make everything work out the way it has to.</p>
 <p>The final equation is the one for <span class="math inline">\(Var(Y)\)</span> in the lower-right corner of the matrix. It says</p>
 <p><span class="math display">\[
 1 = b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
 \]</span>
 which simplifies to
 <span class="math display">\[
-1 = b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{X_{1}X_{2}} + e
+1 = b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12} + e
 \]</span>
 Rearranging to solve for <span class="math inline">\(e\)</span>,
 <span class="math display">\[
-e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{X_{1}X_{2}}\right)
+e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12}\right)
 \]</span>
 It is <em>not</em> enlightening in any way to replace <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> here with the earlier fractions. We can leave <span class="math inline">\(e\)</span> like this.</p>
 <p>Since the variance of <span class="math inline">\(Y\)</span> is 1, the stuff inside the parentheses above represents the variance <em>explained by the model</em>. (That is subtracted from 1, then, to be left with <span class="math inline">\(e\)</span>, the error variance.) This is analogous to the <span class="math inline">\(R^{2}\)</span> term described in the <a href="simple.html#simple-error-correlation">last chapter</a>.</p>
+<p>This makes some conceptual sense too. All the pieces of <span class="math inline">\(\left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12}\right)\)</span> correspond to various pieces of the model. The first two relate to the direct effects of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> and the third piece relates to an “indirect” effect shared between them.</p>
+</div>
+<div id="multiple-r" class="section level2" number="5.6">
+<h2>
+<span class="header-section-number">5.6</span> Multiple regression in R<a class="anchor" aria-label="anchor" href="#multiple-r"><i class="fas fa-link"></i></a>
+</h2>
+<p>Let’s fit a multiple regression model on some data about music. The data is a sample of 10,000 songs from the <a href="http://millionsongdataset.com/">Million Song Dataset</a>, a collection of metrics about the audio for a million contemporary popular music tracks.</p>
+<p>This data set was downloaded from the <a href="https://corgis-edu.github.io/corgis/csv/">CORGIS Dataset Project</a> and more information about the variables in this data set can be found <a href="https://corgis-edu.github.io/corgis/csv/music/">here</a>.</p>
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">music</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/VectorPosse/sem_book/main/data/music.csv"</span><span class="op">)</span></code></pre></div>
+<pre><code>## Rows: 10000 Columns: 35
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## chr  (4): artist.id, artist.name, artist.terms, song.id
+## dbl (31): artist.familiarity, artist.hotttnesss, artist.latitude, artist.loc...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>The endogenous variable of interest to us will be the measure of the song’s popularity, called <code>song.hotttnesss</code> (on a scale from 0 to 1).<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Very important that there are three t’s and three s’s!&lt;/p&gt;"><sup>16</sup></a> There are many possible exogenous predictors, but let’s focus on three:</p>
+<ul>
+<li>
+<code>artist.hotttnesss</code>
+<ul>
+<li>This is the popularity of the artist (on a scale from 0 to 1).</li>
+</ul>
+</li>
+<li>
+<code>song.loudness</code>
+<ul>
+<li>Not clear from the website what this is exactly, but it appears to be some kind of average dBFS (decibels relative to full scale). Numbers close to zero are actually as loud as recordings reasonably go and increasingly negative numbers represent softer volumes.</li>
+</ul>
+</li>
+<li>
+<code>song.tempo</code>
+<ul>
+<li>This is measured in beats per minute (BPM).</li>
+</ul>
+</li>
+</ul>
+<div id="multiple-r-lm" class="section level3" number="5.6.1">
+<h3>
+<span class="header-section-number">5.6.1</span> Using <code>lm</code><a class="anchor" aria-label="anchor" href="#multiple-r-lm"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code>lm</code> model specification is a minor extension of what you learned for simple regression. Just use plus signs on the right side of the tilde ~ to add more predictors.</p>
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">song.hotttnesss</span> <span class="op">~</span> <span class="va">artist.hotttnesss</span> <span class="op">+</span> <span class="va">song.loudness</span> <span class="op">+</span> 
+       <span class="va">song.tempo</span>,
+   data <span class="op">=</span> <span class="va">music</span><span class="op">)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = song.hotttnesss ~ artist.hotttnesss + song.loudness + 
+##     song.tempo, data = music)
+## 
+## Coefficients:
+##       (Intercept)  artist.hotttnesss      song.loudness         song.tempo  
+##        -5.708e-01          1.157e+00          1.187e-02          6.415e-05</code></pre>
+<p>We didn’t go to the trouble of mean-centering the data this time, so the intercept is no longer 0. But we will not attempt to interpret the intercept anyway. The other three coefficients are <span class="math inline">\(b_{1}\)</span>, <span class="math inline">\(b_{2}\)</span> and <span class="math inline">\(b_{3}\)</span>, the path coefficients of the model. These are interpreted as follows:</p>
+<ul>
+<li>
+<span class="math inline">\(b_{1}\)</span>:
+<ul>
+<li>Song popularity is predicted to increase 1.157 points for every point increase in artist popularity.</li>
+</ul>
+</li>
+</ul>
+<p>While this is mathematically true, it’s kind of nonsensical to report using numbers of that magnitude. Both scales only go from 0 to 1, so an increase in 1 point would be measuring the difference between an artist with 0 popularity (the least popular artists in the data set) to an artist with 1 popularity (the most popular artists in the data set).</p>
+<p>A better way to report this would be to scale everything down by a factor of 10:</p>
+<ul>
+<li><p>Song popularity is predicted to increase 0.1157 points for every 0.1 increase in artist popularity.</p></li>
+<li>
+<p><span class="math inline">\(b_{2}\)</span>:</p>
+<ul>
+<li>Song popularity is predicted to increase 0.01187 points for every increase of 1 dB of loudness.</li>
+</ul>
+</li>
+</ul>
+<p>An increase of 1 dB is not very much, so again, we can scale the result to make it more meaningful. This time we’ll multiply by a factor of 10:</p>
+<ul>
+<li><p>Song popularity is predicted to increase 0.1187 points for every increase of 10 dB of loudness.</p></li>
+<li>
+<p><span class="math inline">\(b_{3}\)</span>:</p>
+<ul>
+<li>Song popularity is predicted to increase 0.00006415 points for every increase of 1 BPM in the tempo.</li>
+</ul>
+</li>
+</ul>
+<div class="rmdnote">
+<p>Restate the interpretation of <span class="math inline">\(b_{3}\)</span> on a scale that makes sense. If you’re not familiar with BPM, Google it to get a sense of what a reasonably jump in tempo might be.</p>
+</div>
+</div>
+<div id="multiple-r-lavaan" class="section level3" number="5.6.2">
+<h3>
+<span class="header-section-number">5.6.2</span> Using <code>lavaan</code><a class="anchor" aria-label="anchor" href="#multiple-r-lavaan"><i class="fas fa-link"></i></a>
+</h3>
+<p>Model specification in <code>lavaan</code> happens in a separate step.</p>
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SONG_model</span> <span class="op">&lt;-</span> <span class="st">"song.hotttnesss ~ artist.hotttnesss +
+    song.loudness + 
+    song.tempo"</span> </code></pre></div>
+<p>Then the model is fit with the <code>sem</code> function.</p>
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SONG_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span><span class="va">SONG_model</span>, data <span class="op">=</span> <span class="va">music</span><span class="op">)</span></code></pre></div>
+<p>Here are the unstandardized parameter estimates:</p>
+<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/parameterEstimates.html">parameterEstimates</a></span><span class="op">(</span><span class="va">SONG_fit</span><span class="op">)</span></code></pre></div>
+<pre><code>##                  lhs op               rhs      est    se      z pvalue ci.lower
+## 1    song.hotttnesss  ~ artist.hotttnesss    1.157 0.047 24.546  0.000    1.064
+## 2    song.hotttnesss  ~     song.loudness    0.012 0.001  9.333  0.000    0.009
+## 3    song.hotttnesss  ~        song.tempo    0.000 0.000  0.334  0.738    0.000
+## 4    song.hotttnesss ~~   song.hotttnesss    0.442 0.006 70.711  0.000    0.430
+## 5  artist.hotttnesss ~~ artist.hotttnesss    0.021 0.000     NA     NA    0.021
+## 6  artist.hotttnesss ~~     song.loudness    0.145 0.000     NA     NA    0.145
+## 7  artist.hotttnesss ~~        song.tempo    0.255 0.000     NA     NA    0.255
+## 8      song.loudness ~~     song.loudness   29.154 0.000     NA     NA   29.154
+## 9      song.loudness ~~        song.tempo   33.970 0.000     NA     NA   33.970
+## 10        song.tempo ~~        song.tempo 1239.250 0.000     NA     NA 1239.250
+##    ci.upper
+## 1     1.249
+## 2     0.014
+## 3     0.000
+## 4     0.454
+## 5     0.021
+## 6     0.145
+## 7     0.255
+## 8    29.154
+## 9    33.970
+## 10 1239.250</code></pre>
+<p>Focus on the estimate column (<code>est</code>).</p>
+<div class="rmdnote">
+<p>Do you recognize the values from lines 1 through 3?</p>
+<p>What does line 4 mean? (Hint: it’s not the variance of <code>song.hotttnesss</code> even though the notation makes it look like that.)</p>
+<p>What’s going on in lines 5 through 10?</p>
+</div>
+<p>Here are the standardized parameter estimates:</p>
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/standardizedSolution.html">standardizedSolution</a></span><span class="op">(</span><span class="va">SONG_fit</span><span class="op">)</span></code></pre></div>
+<pre><code>##                  lhs op               rhs est.std    se       z pvalue ci.lower
+## 1    song.hotttnesss  ~ artist.hotttnesss   0.240 0.009  25.612  0.000    0.222
+## 2    song.hotttnesss  ~     song.loudness   0.093 0.010   9.388  0.000    0.073
+## 3    song.hotttnesss  ~        song.tempo   0.003 0.010   0.334  0.738   -0.016
+## 4    song.hotttnesss ~~   song.hotttnesss   0.925 0.005 186.180  0.000    0.915
+## 5  artist.hotttnesss ~~ artist.hotttnesss   1.000 0.000      NA     NA    1.000
+## 6  artist.hotttnesss ~~     song.loudness   0.187 0.000      NA     NA    0.187
+## 7  artist.hotttnesss ~~        song.tempo   0.050 0.000      NA     NA    0.050
+## 8      song.loudness ~~     song.loudness   1.000 0.000      NA     NA    1.000
+## 9      song.loudness ~~        song.tempo   0.179 0.000      NA     NA    0.179
+## 10        song.tempo ~~        song.tempo   1.000 0.000      NA     NA    1.000
+##    ci.upper
+## 1     0.259
+## 2     0.112
+## 3     0.022
+## 4     0.935
+## 5     1.000
+## 6     0.187
+## 7     0.050
+## 8     1.000
+## 9     0.179
+## 10    1.000</code></pre>
+<p>Focus on the estimates again (<code>est.std</code>).</p>
+<div class="rmdnote">
+<p>Why is it easier to compare the values in lines 1 though 3 in this output than it was in the unstandardized table? (Hint: think about units of measurement or lack thereof.)</p>
+<p>What does the value in line 4 tell you? (Hint: it’s awfully close to 1.)</p>
+<p>Why are lines 5, 8, and 10 equal to 1?</p>
+<p>How do you interpret lines 6, 7, and 9?</p>
+</div>
+<p>This is the final model with all variables labeled and all unstandardized parameter estimates identified:</p>
+<div class="inline-figure"><img src="graphics/multiple_regression_music.png" width="785" style="display: block; margin: auto;"></div>
+<p>This is the same thing, but with standardized parameter estimates:</p>
+<div class="inline-figure"><img src="graphics/multiple_regression_music_std.png" width="785" style="display: block; margin: auto;"></div>
 
 </div>
 </div>
+</div>
+
   <div class="chapter-nav">
 <div class="prev"><a href="simple.html"><span class="header-section-number">4</span> Simple regression</a></div>
 <div class="next"><a href="mediation.html"><span class="header-section-number">6</span> Mediation</a></div>
@@ -295,7 +485,14 @@ It is <em>not</em> enlightening in any way to replace <span class="math inline">
 <li><a class="nav-link" href="#multiple-model"><span class="header-section-number">5.1</span> The multiple regression model</a></li>
 <li><a class="nav-link" href="#multiple-assumptions"><span class="header-section-number">5.2</span> Multiple regression assumptions</a></li>
 <li><a class="nav-link" href="#multiple-calculating"><span class="header-section-number">5.3</span> Calculating regression parameters</a></li>
-<li><a class="nav-link" href="#multiple-standardized"><span class="header-section-number">5.4</span> Regression with standardized variables</a></li>
+<li><a class="nav-link" href="#multiple-interpreting"><span class="header-section-number">5.4</span> Interpreting the coefficients</a></li>
+<li><a class="nav-link" href="#multiple-standardized"><span class="header-section-number">5.5</span> Regression with standardized variables</a></li>
+<li>
+<a class="nav-link" href="#multiple-r"><span class="header-section-number">5.6</span> Multiple regression in R</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#multiple-r-lm"><span class="header-section-number">5.6.1</span> Using lm</a></li>
+<li><a class="nav-link" href="#multiple-r-lavaan"><span class="header-section-number">5.6.2</span> Using lavaan</a></li>
+</ul>
+</li>
 </ul>
 
       <div class="book-extra">

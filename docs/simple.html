@@ -499,6 +499,10 @@ e = 1 - r_{XY}^{2}
 <h2>
 <span class="header-section-number">4.9</span> Simple regression in R<a class="anchor" aria-label="anchor" href="#simple-r"><i class="fas fa-link"></i></a>
 </h2>
+<div id="simple-r-lm" class="section level3" number="4.9.1">
+<h3>
+<span class="header-section-number">4.9.1</span> Using <code>lm</code><a class="anchor" aria-label="anchor" href="#simple-r-lm"><i class="fas fa-link"></i></a>
+</h3>
 <p>The straightforward way to run regression in R is to use the <code>lm</code> command. This stands for “linear model”. It uses a special symbol, the tilde ~, to express the relationship between the endogenous variable and the exogenous variable. The endogenous (response) variable always goes on the left, before the tilde. The exogenous (predictor) variable goes on the right, after the tilde. Finally, there is a <code>data</code> argument to tell <code>lm</code> where to find the variables to model.</p>
 <div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span>, data <span class="op">=</span> <span class="va">airquality_mc</span><span class="op">)</span></code></pre></div>
@@ -516,6 +520,11 @@ e = 1 - r_{XY}^{2}
 <div class="rmdnote">
 <p>Run the <code>lm</code> command, but this time using the standardized variables from the <code>airquality_std</code> tibble. The value of the slope should not surprise you. Explain why it is what it is.</p>
 </div>
+</div>
+<div id="simple-r-lavaan" class="section level3" number="4.9.2">
+<h3>
+<span class="header-section-number">4.9.2</span> Using <code>lavaan</code><a class="anchor" aria-label="anchor" href="#simple-r-lavaan"><i class="fas fa-link"></i></a>
+</h3>
 <p>We will also introduce you briefly to the <code>lavaan</code> package. While it’s totally overkill for simple regression, getting used to the syntax now will make it easier to continue to build up your confidence in using it when it will be the only tool we use.</p>
 <p>A <code>lavaan</code> model is built in a similar way to <code>lm</code> using the tilde ~ notation. One big difference is that the model needs to be specified inside quotation marks first and assigned to a name like this:</p>
 <div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
@@ -547,6 +556,7 @@ e = 1 - r_{XY}^{2}
 <p>Verify that the second line is actually the error variance. (Hint: remember <span class="math inline">\(1 - r_{XY}^{2}\)</span>.) How do we know it’s not the standardized variance of <span class="math inline">\(Y\)</span>? (In other words, what do you actually know to be the standardized variance of <span class="math inline">\(Y\)</span>?)</p>
 </div>
 </div>
+</div>
 <div id="simple-intercepts" class="section level2" number="4.10">
 <h2>
 <span class="header-section-number">4.10</span> What about intercepts?<a class="anchor" aria-label="anchor" href="#simple-intercepts"><i class="fas fa-link"></i></a>
@@ -573,7 +583,12 @@ e = 1 - r_{XY}^{2}
 <li><a class="nav-link" href="#simple-mim"><span class="header-section-number">4.6</span> The model-implied matrix</a></li>
 <li><a class="nav-link" href="#simple-error-correlation"><span class="header-section-number">4.7</span> Error variance in terms of correlation</a></li>
 <li><a class="nav-link" href="#simple-standardized"><span class="header-section-number">4.8</span> Regression with standardized variables</a></li>
-<li><a class="nav-link" href="#simple-r"><span class="header-section-number">4.9</span> Simple regression in R</a></li>
+<li>
+<a class="nav-link" href="#simple-r"><span class="header-section-number">4.9</span> Simple regression in R</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#simple-r-lm"><span class="header-section-number">4.9.1</span> Using lm</a></li>
+<li><a class="nav-link" href="#simple-r-lavaan"><span class="header-section-number">4.9.2</span> Using lavaan</a></li>
+</ul>
+</li>
 <li><a class="nav-link" href="#simple-intercepts"><span class="header-section-number">4.10</span> What about intercepts?</a></li>
 </ul>
 

@@ -2581,6 +2581,9 @@ Modify the \texttt{ggplot} code from earlier in the chapter to create a scatterp
 \hypertarget{simple-r}{%
 \section{Simple regression in R}\label{simple-r}}
 
+\hypertarget{simple-r-lm}{%
+\subsection{\texorpdfstring{Using \texttt{lm}}{Using lm}}\label{simple-r-lm}}
+
 The straightforward way to run regression in R is to use the \texttt{lm} command. This stands for ``linear model''. It uses a special symbol, the tilde \textasciitilde, to express the relationship between the endogenous variable and the exogenous variable. The endogenous (response) variable always goes on the left, before the tilde. The exogenous (predictor) variable goes on the right, after the tilde. Finally, there is a \texttt{data} argument to tell \texttt{lm} where to find the variables to model.
 
 \begin{Shaded}
@@ -2604,6 +2607,9 @@ Which of the two numbers above is the slope \(b\)?
 We haven't talked about the intercept yet, but according to this output, what is it? (Hint: it's not literally \(1.117 \times 10^{-14}\). What does that number really mean?)
 
 Run the \texttt{lm} command, but this time using the standardized variables from the \texttt{airquality\_std} tibble. The value of the slope should not surprise you. Explain why it is what it is.
+
+\hypertarget{simple-r-lavaan}{%
+\subsection{\texorpdfstring{Using \texttt{lavaan}}{Using lavaan}}\label{simple-r-lavaan}}
 
 We will also introduce you briefly to the \texttt{lavaan} package. While it's totally overkill for simple regression, getting used to the syntax now will make it easier to continue to build up your confidence in using it when it will be the only tool we use.
 
@@ -2717,7 +2723,7 @@ Y = b_{1}X_{1} + b_{2}X_{2} + E
 
 Why do we use \(\hat{Y}\) in the first equation and \(Y\) in the second equation?
 
-Although we'll work through the details for only two predictors, keep in mind that everything we say will also apply to any number of predictors. In full generality, then, a multiple regression model with \(k\) predictors will look like
+Although we'll work through the details for only two predictors, a multiple regression model with \(k\) predictors will look like
 
 \[
 \hat{Y} = b_{1}X_{1} + b_{2}X_{2} + \dots + b_{k}X_{k}
@@ -2746,7 +2752,7 @@ Fortunately, the assumptions for multiple regression are basically the same as t
 \item
   There should be no influential outliers.
 \item
-  The exogenous should not be highly correlated with one another.
+  The exogenous variables should not be highly correlated with one another.
 \end{enumerate}
 
 We discuss these briefly:
@@ -2766,7 +2772,7 @@ We discuss these briefly:
   This is the new condition. When two or more predictors variables are highly correlated with each other, this induces a condition called \emph{multicollinearity}.
 \end{enumerate}
 
-To illustrate why this is a problem, think about the two-variable case:
+To illustrate why multicollinearity is a problem, think about the two-variable case:
 
 \[
 \hat{Y} = b_{1}X_{1} + b_{2}X_{2}
@@ -2800,7 +2806,7 @@ To be clear, it's not a problem that there is covariance among our predictors. W
 \hypertarget{multiple-calculating}{%
 \section{Calculating regression parameters}\label{multiple-calculating}}
 
-There is nothing new here, but the calculations do start to get a little messy.
+There is nothing new here, but the calculations do start to get a little messy. Everything that follows is for two predictors only. We will not do any calculations for three or more predictors. It gets out of hand pretty quickly.
 
 First, let's remember what we're trying to do. From the data, we can calculate the sample covariance matrix. These are all the variances and covariances among the observed variables:
 
@@ -2828,7 +2834,7 @@ Var(aX_{1} + bX_{2} + cX_{3}) &=
 
 This can be extended to any number of variables. Each variance appears with a coefficient squared and each pair of variables gets a covariance term with 2 times the product of the corresponding variable coefficients. (It's hard to describe in words, but it's still more trouble than it's worth writing it down in formal mathematical notation. Hopefully you can see how the pattern of coefficients generalizes.)
 
-Now we can compute, for example \(Var(Y)\):
+Now we can compute, for example, \(Var(Y)\):
 
 \begin{align}
 Var(Y)  &= Var(b_{1}X_{1} + b_{2}X_{2} + E) \\
@@ -2838,7 +2844,7 @@ Var(Y)  &= Var(b_{1}X_{1} + b_{2}X_{2} + E) \\
     & \quad + 2b_{2} Cov(X_{2}, E)
 \end{align}
 
-What happens to the last two lines above?
+What happens to the last two lines above? Why?
 
 Therefore,
 
@@ -2848,7 +2854,9 @@ Var(Y) = b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
 
 \href{./covariance.html\#Rule8}{\textbf{Rule 8}} and \href{./covariance.html\#Rule9}{\textbf{Rule 9}} work the same way, but it's even easier to apply. Just split up the covariance into as many pieces as there are terms to split.
 
-Your turn. Calculate \(Cov(X_{1}, Y)\). You should get
+Your turn.
+
+Calculate \(Cov(X_{1}, Y)\). You should get
 
 \[
 b_{1} v_{1} + b_{2} c_{12}
@@ -2874,16 +2882,41 @@ v_{1}   &    c_{12}  &   b_{1} v_{1} + b_{2} c_{12} \\
 \]
 If we set these expressions equal to the numbers from the sample covariance matrix, \emph{in theory} we could then solve for the unknown parameters in the model-implied matrix above. Three of them are basically already done since we can just read off \(v_{1}\), \(c_{12}\), and \(v_{2}\). But solving for \(b_{1}\), \(b_{2}\), and \(e\) is no joke! And even if we did, the resulting expressions are not particularly enlightening. This is where we are quite happy turning over the computational details to a computer.
 
+\hypertarget{multiple-interpreting}{%
+\section{Interpreting the coefficients}\label{multiple-interpreting}}
+
+Without explicit mathematical expressions for these parameters, it's a bit challenging to explain their interpretation. For now, we'll take it on faith that the following is true:
+
+In a multiple regression model, each \(b_{i}\) represents the slope of the linear association between \(X_{i}\) and \(Y\) \emph{while holding the value of all other predictors constant}.
+
+What does this mean?
+
+Let's work with a concrete example. Suppose we think that college GPA can be predicted using high school GPA along with the number of hours per week spent studying in college. Here is what such a model might look like:
+
+\begin{center}\includegraphics{graphics/multiple_regression_example} \end{center}
+
+If high school GPA and hours per week studying are correlated (and they likely are), they influence each other, and some of the influence has the danger of ``corrupting'' the estimates of the path coefficients. For example, if \(b_{2}\) is positive, that would suggest that hours spend studying is associated with predicted increases in college GPA. But how do we know that's really due to the studying? Maybe students who did well in high school are just ``smarter''. Sure, they also put in more hours studying, but maybe that doesn't matter. Maybe those students would do just as well in college even if they didn't study a whole lot. If that were the case, the coefficient \(b_{2}\) would be positive just because that set of students (who happen to study more, even though it doesn't matter) also are the ones who have high college GPAs.
+
+This is why it's important to \emph{control} for other variables. All this means is that we need to temporarily fix the value of other variables to make the comparison fair. For example, we could look only at students with a 3.0 in high school. Among those students, there will be variability in the number of hours they study in college. If that variability is associated with variability in college GPA, we know that the hours spent studying is at least partly ``responsible'' for explaining that change. (There are lots of other factors too, but those will be swept up in the error variance.) The high school GPA can't explain that because it was fixed at 3.0, so we're comparing apples to apples. Students who got a 2.0 in high school may do more poorly overall, but the relative increase in GPA due to studying would be the same.
+
+If the parameter \(b_{2}\) is estimated to be 0.13, that suggests that each additional hour of study time per week predicts an increase of 0.13 points in the college GPA, holding high school GPA constant. This means that the increase of 0.13 is only predicted among groups of students with the same high school GPA.
+
+Let's say that \(b_{1}\) is estimated to be 1.2. That means that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. But this is a multiple regression model, so this coefficient can only be interpreting holding \texttt{HOURS} constant. This means that this coefficient only holds among groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA.
+
 \hypertarget{multiple-standardized}{%
 \section{Regression with standardized variables}\label{multiple-standardized}}
 
-Things get a little easier (although not completely trivial) with standardized variables. Let's look at the sample covariance matrix and the model-implied matrix for standardized variables:
+Things get a little easier (although not completely trivial) with standardized variables.
+
+First, a notational simplification. The correlations between our variables---according to our convention---would be called \(r_{X_{1}X_{2}}\), \(r_{X_{1}Y}\), and \(r_{X_{2}Y}\). These are a little hard to look at in complex expressions, so we will replace them with \(r_{12}\), \(r_{1Y}\), and \(r_{2Y}\).
+
+Let's look at the sample covariance matrix and the model-implied matrix for standardized variables:
 
 \[
 \begin{bmatrix}
-1           &   r_{X_{1}X_{2}}      &   r_{X_{1}Y} \\
-\bullet     &   1                   &   r_{X_{2}Y} \\
-\bullet     &   \bullet             &   1
+1           &   r_{12}      &   r_{1Y} \\
+\bullet     &   1           &   r_{2Y} \\
+\bullet     &   \bullet     &   1
 \end{bmatrix} = 
 \begin{bmatrix}
 v_{1}   &    c_{12}  &   b_{1} v_{1} + b_{2} c_{12} \\
@@ -2894,20 +2927,20 @@ v_{1}   &    c_{12}  &   b_{1} v_{1} + b_{2} c_{12} \\
 The entry in the upper-right corner yields
 
 \[
-r_{X_{1}Y} = b_{1} v_{1} + b_{2} c_{12}
+r_{1Y} = b_{1} v_{1} + b_{2} c_{12}
 \]
 which simplifies to
 \[
-r_{X_{1}Y} = b_{1} + b_{2} r_{X_{1}X_{2}}
+r_{1Y} = b_{1} + b_{2} r_{12}
 \]
 The next entry below that yields
 
 \[
-r_{X_{2}Y} = b_{2} v_{2} + b_{1} c_{12}
+r_{2Y} = b_{2} v_{2} + b_{1} c_{12}
 \]
 which simplifies to
 \[
-r_{X_{2}Y} = b_{2} + b_{1} r_{X_{1}X_{2}}
+r_{2Y} = b_{2} + b_{1} r_{12}
 \]
 
 These two equations can be solved for the two unknown parameters \(b_{1}\) and \(b_{2}\).
@@ -2915,20 +2948,20 @@ These two equations can be solved for the two unknown parameters \(b_{1}\) and \
 Are you feeling brave? Are your algebra skills sharp? Totally optional, but see if you can derive the final answers below:
 
 \[
-b_{1} = \frac{r_{X_{1}Y} - r_{X_{2}Y}r_{X_{1}X_{2}}}{1 - r_{X_{1}X_{2}}^{2}}
+b_{1} = \frac{r_{1Y} - r_{2Y}r_{12}}{1 - r_{12}^{2}}
 \]
 
 \[
-b_{2} = \frac{r_{X_{2}Y} - r_{X_{1}Y}r_{X_{1}X_{2}}}{1 - r_{X_{1}X_{2}}^{2}}
+b_{2} = \frac{r_{2Y} - r_{1Y}r_{12}}{1 - r_{12}^{2}}
 \]
 
-These are still pretty gross, but there is some intuitive content to them. Look at the numerator of the fraction for \(b_{1}\). Essentially, this is just \(r_{X_{1}Y}\) with some extra stuff. If this were simple regression, we would expect the slope \(b_{1}\) to simply be the correlation between \(X_{1}\) and \(Y\). But in multiple regression, we also have to \emph{control} for any contribution to the model coming from \(X_{2}\). How do we do that? By subtracting off that contribution, which turns out to be \(r_{X_{2}Y}r_{X_{1}X_{2}}\). And why does the latter term appear the way it does? Because we only need to control for the effect of \(X_{2}\) if \(X_{2}\) is providing some of the same ``information'' to the regression model as \(X_{1}\). Therefore, we don't need to subtract \emph{all} of \(r_{X_{2}Y}\) to control for \(X_{2}\), just a fraction of \(r_{X_{2}Y}\). We just need the part of \(X_{2}\) that it has in common with \(X_{1}\). We don't want to ``double-count'' the contribution to the model that is common to both \(X_{1}\) and \(X_{2}\).
+These are still pretty gross, but there is some intuitive content to them. Look at the numerator of the fraction for \(b_{1}\). Essentially, this is just \(r_{1Y}\) with some extra stuff. If this were simple regression, we would expect the slope \(b_{1}\) to simply be the correlation between \(X_{1}\) and \(Y\). But in multiple regression, we also have to \emph{control} for any contribution to the model coming from \(X_{2}\). How do we do that? By subtracting off that contribution, which turns out to be \(r_{2Y}r_{12}\). And why does the latter term appear the way it does? Because we only need to control for the effect of \(X_{2}\) if \(X_{2}\) is providing some of the same ``information'' to the regression model as \(X_{1}\). Therefore, we don't need to subtract \emph{all} of \(r_{2Y}\) to control for \(X_{2}\), just a fraction of \(r_{2Y}\). We just need the part of \(X_{2}\) that it has in common with \(X_{1}\). We don't want to ``double-count'' the contribution to the model that is common to both \(X_{1}\) and \(X_{2}\).
 
-Here's another way to think about it. What if \(X_{1}\) and \(X_{2}\) are independent? Calculate \(b_{1}\) and \(b_{2}\) from the above formulas in this much easier case. (Don't overthink this. What is \(r_{X_{1}{X_{2}}}\) in this case?)
+Here's another way to think about it. What if \(X_{1}\) and \(X_{2}\) are independent? Calculate \(b_{1}\) and \(b_{2}\) from the above formulas in this much easier case. (Don't overthink this. What is \(r_{12}\) in this case?)
 
-So if \(X_{1}\) and \(X_{2}\) are independent, they both offer a unique contribution to predicting \(Y\) in the model. And that contribution is just their correlation with \(Y\) (\(r_{X_{1}Y}\) and \(r_{X_{2}Y}\), respectively). There is no overlap. But if \(X_{1}\) and \(X_{2}\) are correlated, then some of their ``influence'' is counted twice. We have to subtract out that influence so that \(b_{1}\) and \(b_{2}\) are only measuring the ``pure'' contribution of \(X_{1}\) and \(X_{2}\), controlling for the other one.
+So if \(X_{1}\) and \(X_{2}\) are independent, they both offer a unique contribution to predicting \(Y\) in the model. And that contribution is just their correlation with \(Y\) (\(r_{1Y}\) and \(r_{2Y}\), respectively). There is no overlap. But if \(X_{1}\) and \(X_{2}\) are correlated, then some of their ``influence'' is counted twice. We have to subtract out that influence so that \(b_{1}\) and \(b_{2}\) are only measuring the ``pure'' contribution of \(X_{1}\) and \(X_{2}\), controlling for the other one.
 
-What about the \(1 - r_{X_{1}X_{2}}^{2}\) in the denominator? There's less of a good intuitive explanation here. It's there because---mathematically speaking---it has to be there. It rescales the slope coefficients to make everything work out the way it has to.
+What about the \(1 - r_{12}^{2}\) in the denominator? There's less of a good intuitive explanation here. It's there because---mathematically speaking---it has to be there. It rescales the slope coefficients to make everything work out the way it has to.
 
 The final equation is the one for \(Var(Y)\) in the lower-right corner of the matrix. It says
 
@@ -2937,15 +2970,256 @@ The final equation is the one for \(Var(Y)\) in the lower-right corner of the ma
 \]
 which simplifies to
 \[
-1 = b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{X_{1}X_{2}} + e
+1 = b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12} + e
 \]
 Rearranging to solve for \(e\),
 \[
-e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{X_{1}X_{2}}\right)
+e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12}\right)
 \]
 It is \emph{not} enlightening in any way to replace \(b_{1}\) and \(b_{2}\) here with the earlier fractions. We can leave \(e\) like this.
 
 Since the variance of \(Y\) is 1, the stuff inside the parentheses above represents the variance \emph{explained by the model}. (That is subtracted from 1, then, to be left with \(e\), the error variance.) This is analogous to the \(R^{2}\) term described in the \protect\hyperlink{simple-error-correlation}{last chapter}.
+
+This makes some conceptual sense too. All the pieces of \(\left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12}\right)\) correspond to various pieces of the model. The first two relate to the direct effects of \(X_{1}\) and \(X_{2}\) and the third piece relates to an ``indirect'' effect shared between them.
+
+\hypertarget{multiple-r}{%
+\section{Multiple regression in R}\label{multiple-r}}
+
+Let's fit a multiple regression model on some data about music. The data is a sample of 10,000 songs from the \href{http://millionsongdataset.com/}{Million Song Dataset}, a collection of metrics about the audio for a million contemporary popular music tracks.
+
+This data set was downloaded from the \href{https://corgis-edu.github.io/corgis/csv/}{CORGIS Dataset Project} and more information about the variables in this data set can be found \href{https://corgis-edu.github.io/corgis/csv/music/}{here}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{music }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/VectorPosse/sem\_book/main/data/music.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 10000 Columns: 35
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr  (4): artist.id, artist.name, artist.terms, song.id
+## dbl (31): artist.familiarity, artist.hotttnesss, artist.latitude, artist.loc...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+The endogenous variable of interest to us will be the measure of the song's popularity, called \texttt{song.hotttnesss} (on a scale from 0 to 1).\footnote{Very important that there are three t's and three s's!} There are many possible exogenous predictors, but let's focus on three:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{artist.hotttnesss}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is the popularity of the artist (on a scale from 0 to 1).
+  \end{itemize}
+\item
+  \texttt{song.loudness}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Not clear from the website what this is exactly, but it appears to be some kind of average dBFS (decibels relative to full scale). Numbers close to zero are actually as loud as recordings reasonably go and increasingly negative numbers represent softer volumes.
+  \end{itemize}
+\item
+  \texttt{song.tempo}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is measured in beats per minute (BPM).
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{multiple-r-lm}{%
+\subsection{\texorpdfstring{Using \texttt{lm}}{Using lm}}\label{multiple-r-lm}}
+
+The \texttt{lm} model specification is a minor extension of what you learned for simple regression. Just use plus signs on the right side of the tilde \textasciitilde{} to add more predictors.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{lm}\NormalTok{(song.hotttnesss }\SpecialCharTok{\textasciitilde{}}\NormalTok{ artist.hotttnesss }\SpecialCharTok{+}\NormalTok{ song.loudness }\SpecialCharTok{+} 
+\NormalTok{       song.tempo,}
+   \AttributeTok{data =}\NormalTok{ music)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = song.hotttnesss ~ artist.hotttnesss + song.loudness + 
+##     song.tempo, data = music)
+## 
+## Coefficients:
+##       (Intercept)  artist.hotttnesss      song.loudness         song.tempo  
+##        -5.708e-01          1.157e+00          1.187e-02          6.415e-05
+\end{verbatim}
+
+We didn't go to the trouble of mean-centering the data this time, so the intercept is no longer 0. But we will not attempt to interpret the intercept anyway. The other three coefficients are \(b_{1}\), \(b_{2}\) and \(b_{3}\), the path coefficients of the model. These are interpreted as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \(b_{1}\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Song popularity is predicted to increase 1.157 points for every point increase in artist popularity.
+  \end{itemize}
+\end{itemize}
+
+While this is mathematically true, it's kind of nonsensical to report using numbers of that magnitude. Both scales only go from 0 to 1, so an increase in 1 point would be measuring the difference between an artist with 0 popularity (the least popular artists in the data set) to an artist with 1 popularity (the most popular artists in the data set).
+
+A better way to report this would be to scale everything down by a factor of 10:
+
+\begin{itemize}
+\item
+  Song popularity is predicted to increase 0.1157 points for every 0.1 increase in artist popularity.
+\item
+  \(b_{2}\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Song popularity is predicted to increase 0.01187 points for every increase of 1 dB of loudness.
+  \end{itemize}
+\end{itemize}
+
+An increase of 1 dB is not very much, so again, we can scale the result to make it more meaningful. This time we'll multiply by a factor of 10:
+
+\begin{itemize}
+\item
+  Song popularity is predicted to increase 0.1187 points for every increase of 10 dB of loudness.
+\item
+  \(b_{3}\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Song popularity is predicted to increase 0.00006415 points for every increase of 1 BPM in the tempo.
+  \end{itemize}
+\end{itemize}
+
+Restate the interpretation of \(b_{3}\) on a scale that makes sense. If you're not familiar with BPM, Google it to get a sense of what a reasonably jump in tempo might be.
+
+\hypertarget{multiple-r-lavaan}{%
+\subsection{\texorpdfstring{Using \texttt{lavaan}}{Using lavaan}}\label{multiple-r-lavaan}}
+
+Model specification in \texttt{lavaan} happens in a separate step.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{SONG\_model }\OtherTok{\textless{}{-}} \StringTok{"song.hotttnesss \textasciitilde{} artist.hotttnesss +}
+\StringTok{    song.loudness + }
+\StringTok{    song.tempo"} 
+\end{Highlighting}
+\end{Shaded}
+
+Then the model is fit with the \texttt{sem} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{SONG\_fit }\OtherTok{\textless{}{-}} \FunctionTok{sem}\NormalTok{(SONG\_model, }\AttributeTok{data =}\NormalTok{ music)}
+\end{Highlighting}
+\end{Shaded}
+
+Here are the unstandardized parameter estimates:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{parameterEstimates}\NormalTok{(SONG\_fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                  lhs op               rhs      est    se      z pvalue ci.lower
+## 1    song.hotttnesss  ~ artist.hotttnesss    1.157 0.047 24.546  0.000    1.064
+## 2    song.hotttnesss  ~     song.loudness    0.012 0.001  9.333  0.000    0.009
+## 3    song.hotttnesss  ~        song.tempo    0.000 0.000  0.334  0.738    0.000
+## 4    song.hotttnesss ~~   song.hotttnesss    0.442 0.006 70.711  0.000    0.430
+## 5  artist.hotttnesss ~~ artist.hotttnesss    0.021 0.000     NA     NA    0.021
+## 6  artist.hotttnesss ~~     song.loudness    0.145 0.000     NA     NA    0.145
+## 7  artist.hotttnesss ~~        song.tempo    0.255 0.000     NA     NA    0.255
+## 8      song.loudness ~~     song.loudness   29.154 0.000     NA     NA   29.154
+## 9      song.loudness ~~        song.tempo   33.970 0.000     NA     NA   33.970
+## 10        song.tempo ~~        song.tempo 1239.250 0.000     NA     NA 1239.250
+##    ci.upper
+## 1     1.249
+## 2     0.014
+## 3     0.000
+## 4     0.454
+## 5     0.021
+## 6     0.145
+## 7     0.255
+## 8    29.154
+## 9    33.970
+## 10 1239.250
+\end{verbatim}
+
+Focus on the estimate column (\texttt{est}).
+
+Do you recognize the values from lines 1 through 3?
+
+What does line 4 mean? (Hint: it's not the variance of \texttt{song.hotttnesss} even though the notation makes it look like that.)
+
+What's going on in lines 5 through 10?
+
+Here are the standardized parameter estimates:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{standardizedSolution}\NormalTok{(SONG\_fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                  lhs op               rhs est.std    se       z pvalue ci.lower
+## 1    song.hotttnesss  ~ artist.hotttnesss   0.240 0.009  25.612  0.000    0.222
+## 2    song.hotttnesss  ~     song.loudness   0.093 0.010   9.388  0.000    0.073
+## 3    song.hotttnesss  ~        song.tempo   0.003 0.010   0.334  0.738   -0.016
+## 4    song.hotttnesss ~~   song.hotttnesss   0.925 0.005 186.180  0.000    0.915
+## 5  artist.hotttnesss ~~ artist.hotttnesss   1.000 0.000      NA     NA    1.000
+## 6  artist.hotttnesss ~~     song.loudness   0.187 0.000      NA     NA    0.187
+## 7  artist.hotttnesss ~~        song.tempo   0.050 0.000      NA     NA    0.050
+## 8      song.loudness ~~     song.loudness   1.000 0.000      NA     NA    1.000
+## 9      song.loudness ~~        song.tempo   0.179 0.000      NA     NA    0.179
+## 10        song.tempo ~~        song.tempo   1.000 0.000      NA     NA    1.000
+##    ci.upper
+## 1     0.259
+## 2     0.112
+## 3     0.022
+## 4     0.935
+## 5     1.000
+## 6     0.187
+## 7     0.050
+## 8     1.000
+## 9     0.179
+## 10    1.000
+\end{verbatim}
+
+Focus on the estimates again (\texttt{est.std}).
+
+Why is it easier to compare the values in lines 1 though 3 in this output than it was in the unstandardized table? (Hint: think about units of measurement or lack thereof.)
+
+What does the value in line 4 tell you? (Hint: it's awfully close to 1.)
+
+Why are lines 5, 8, and 10 equal to 1?
+
+How do you interpret lines 6, 7, and 9?
+
+This is the final model with all variables labeled and all unstandardized parameter estimates identified:
+
+\begin{center}\includegraphics{graphics/multiple_regression_music} \end{center}
+
+This is the same thing, but with standardized parameter estimates:
+
+\begin{center}\includegraphics{graphics/multiple_regression_music_std} \end{center}
 
 \hypertarget{mediation}{%
 \chapter{Mediation}\label{mediation}}

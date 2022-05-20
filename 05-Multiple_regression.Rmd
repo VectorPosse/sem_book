@@ -53,7 +53,7 @@ Why do we use $\hat{Y}$ in the first equation and $Y$ in the second equation?
 
 :::
 
-Although we'll work through the details for only two predictors, keep in mind that everything we say will also apply to any number of predictors. In full generality, then, a multiple regression model with $k$ predictors will look like
+Although we'll work through the details for only two predictors, a multiple regression model with $k$ predictors will look like
 
 $$
 \hat{Y} = b_{1}X_{1} + b_{2}X_{2} + \dots + b_{k}X_{k}
@@ -74,7 +74,7 @@ Fortunately, the assumptions for multiple regression are basically the same as t
 2. The relationship between $X_{1}, \dots, X_{k}$, and $Y$ should be approximately linear.
 3. The residuals should be independent of the $X_{1}, \dots, X_{k}$ values.
 4. There should be no influential outliers.
-5. The exogenous should not be highly correlated with one another.
+5. The exogenous variables should not be highly correlated with one another.
 
 We discuss these briefly:
 
@@ -84,7 +84,7 @@ We discuss these briefly:
 4. Nothing changes here.
 5. This is the new condition. When two or more predictors variables are highly correlated with each other, this induces a condition called *multicollinearity*.
 
-To illustrate why this is a problem, think about the two-variable case:
+To illustrate why multicollinearity is a problem, think about the two-variable case:
 
 $$
 \hat{Y} = b_{1}X_{1} + b_{2}X_{2}
@@ -122,7 +122,7 @@ To be clear, it's not a problem that there is covariance among our predictors. W
 
 ## Calculating regression parameters {#multiple-calculating}
 
-There is nothing new here, but the calculations do start to get a little messy.
+There is nothing new here, but the calculations do start to get a little messy. Everything that follows is for two predictors only. We will not do any calculations for three or more predictors. It gets out of hand pretty quickly.
 
 First, let's remember what we're trying to do. From the data, we can calculate the sample covariance matrix. These are all the variances and covariances among the observed variables:
 
@@ -154,7 +154,7 @@ This can be extended to any number of variables. Each variance appears with a co
 
 :::
 
-Now we can compute, for example $Var(Y)$:
+Now we can compute, for example, $Var(Y)$:
 
 \begin{align}
 Var(Y)  &= Var(b_{1}X_{1} + b_{2}X_{2} + E) \\
@@ -166,7 +166,7 @@ Var(Y)  &= Var(b_{1}X_{1} + b_{2}X_{2} + E) \\
 
 ::: {.rmdnote}
 
-What happens to the last two lines above?
+What happens to the last two lines above? Why?
 
 :::
 
@@ -180,7 +180,9 @@ $$
 
 ::: {.rmdnote}
 
-Your turn. Calculate $Cov(X_{1}, Y)$. You should get
+Your turn.
+
+Calculate $Cov(X_{1}, Y)$. You should get
 
 $$
 b_{1} v_{1} + b_{2} c_{12}
@@ -208,15 +210,46 @@ $$
 If we set these expressions equal to the numbers from the sample covariance matrix, *in theory* we could then solve for the unknown parameters in the model-implied matrix above. Three of them are basically already done since we can just read off $v_{1}$, $c_{12}$, and $v_{2}$. But solving for $b_{1}$, $b_{2}$, and $e$ is no joke! And even if we did, the resulting expressions are not particularly enlightening. This is where we are quite happy turning over the computational details to a computer.
 
 
+## Interpreting the coefficients {#multiple-interpreting}
+
+Without explicit mathematical expressions for these parameters, it's a bit challenging to explain their interpretation. For now, we'll take it on faith that the following is true:
+
+::: {.rmdnote}
+
+In a multiple regression model, each $b_{i}$ represents the slope of the linear association between $X_{i}$ and $Y$ *while holding the value of all other predictors constant*.
+
+:::
+
+What does this mean?
+
+Let's work with a concrete example. Suppose we think that college GPA can be predicted using high school GPA along with the number of hours per week spent studying in college. Here is what such a model might look like:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/multiple_regression_example.png")
+```
+
+If high school GPA and hours per week studying are correlated (and they likely are), they influence each other, and some of the influence has the danger of "corrupting" the estimates of the path coefficients. For example, if $b_{2}$ is positive, that would suggest that hours spend studying is associated with predicted increases in college GPA. But how do we know that's really due to the studying? Maybe students who did well in high school are just "smarter". Sure, they also put in more hours studying, but maybe that doesn't matter. Maybe those students would do just as well in college even if they didn't study a whole lot. If that were the case, the coefficient $b_{2}$ would be positive just because that set of students (who happen to study more, even though it doesn't matter) also are the ones who have high college GPAs.
+
+This is why it's important to *control* for other variables. All this means is that we need to temporarily fix the value of other variables to make the comparison fair. For example, we could look only at students with a 3.0 in high school. Among those students, there will be variability in the number of hours they study in college. If that variability is associated with variability in college GPA, we know that the hours spent studying is at least partly "responsible" for explaining that change. (There are lots of other factors too, but those will be swept up in the error variance.) The high school GPA can't explain that because it was fixed at 3.0, so we're comparing apples to apples. Students who got a 2.0 in high school may do more poorly overall, but the relative increase in GPA due to studying would be the same.
+
+If the parameter $b_{2}$ is estimated to be 0.13, that suggests that each additional hour of study time per week predicts an increase of 0.13 points in the college GPA, holding high school GPA constant. This means that the increase of 0.13 is only predicted among groups of students with the same high school GPA.
+
+Let's say that $b_{1}$ is estimated to be 1.2. That means that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. But this is a multiple regression model, so this coefficient can only be interpreting holding `HOURS` constant. This means that this coefficient only holds among groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA.
+
+
 ## Regression with standardized variables {#multiple-standardized}
 
-Things get a little easier (although not completely trivial) with standardized variables. Let's look at the sample covariance matrix and the model-implied matrix for standardized variables:
+Things get a little easier (although not completely trivial) with standardized variables.
+
+First, a notational simplification. The correlations between our variables---according to our convention---would be called $r_{X_{1}X_{2}}$, $r_{X_{1}Y}$, and $r_{X_{2}Y}$. These are a little hard to look at in complex expressions, so we will replace them with $r_{12}$, $r_{1Y}$, and $r_{2Y}$. 
+
+Let's look at the sample covariance matrix and the model-implied matrix for standardized variables:
 
 $$
 \begin{bmatrix}
-1           &   r_{X_{1}X_{2}}      &   r_{X_{1}Y} \\
-\bullet     &   1                   &   r_{X_{2}Y} \\
-\bullet     &   \bullet             &   1
+1           &   r_{12}      &   r_{1Y} \\
+\bullet     &   1           &   r_{2Y} \\
+\bullet     &   \bullet     &   1
 \end{bmatrix} = 
 \begin{bmatrix}
 v_{1}   &    c_{12}  &   b_{1} v_{1} + b_{2} c_{12} \\
@@ -227,20 +260,20 @@ $$
 The entry in the upper-right corner yields
 
 $$
-r_{X_{1}Y} = b_{1} v_{1} + b_{2} c_{12}
+r_{1Y} = b_{1} v_{1} + b_{2} c_{12}
 $$
 which simplifies to
 $$
-r_{X_{1}Y} = b_{1} + b_{2} r_{X_{1}X_{2}}
+r_{1Y} = b_{1} + b_{2} r_{12}
 $$
 The next entry below that yields
 
 $$
-r_{X_{2}Y} = b_{2} v_{2} + b_{1} c_{12}
+r_{2Y} = b_{2} v_{2} + b_{1} c_{12}
 $$
 which simplifies to
 $$
-r_{X_{2}Y} = b_{2} + b_{1} r_{X_{1}X_{2}}
+r_{2Y} = b_{2} + b_{1} r_{12}
 $$
 
 These two equations can be solved for the two unknown parameters $b_{1}$ and $b_{2}$.
@@ -250,26 +283,26 @@ These two equations can be solved for the two unknown parameters $b_{1}$ and $b_
 Are you feeling brave? Are your algebra skills sharp? Totally optional, but see if you can derive the final answers below:
 
 $$
-b_{1} = \frac{r_{X_{1}Y} - r_{X_{2}Y}r_{X_{1}X_{2}}}{1 - r_{X_{1}X_{2}}^{2}}
+b_{1} = \frac{r_{1Y} - r_{2Y}r_{12}}{1 - r_{12}^{2}}
 $$
 
 $$
-b_{2} = \frac{r_{X_{2}Y} - r_{X_{1}Y}r_{X_{1}X_{2}}}{1 - r_{X_{1}X_{2}}^{2}}
+b_{2} = \frac{r_{2Y} - r_{1Y}r_{12}}{1 - r_{12}^{2}}
 $$
 
 :::
 
-These are still pretty gross, but there is some intuitive content to them. Look at the numerator of the fraction for $b_{1}$. Essentially, this is just $r_{X_{1}Y}$ with some extra stuff. If this were simple regression, we would expect the slope $b_{1}$ to simply be the correlation between $X_{1}$ and $Y$. But in multiple regression, we also have to *control* for any contribution to the model coming from $X_{2}$. How do we do that? By subtracting off that contribution, which turns out to be $r_{X_{2}Y}r_{X_{1}X_{2}}$. And why does the latter term appear the way it does? Because we only need to control for the effect of $X_{2}$ if $X_{2}$ is providing some of the same "information" to the regression model as $X_{1}$. Therefore, we don't need to subtract *all* of $r_{X_{2}Y}$ to control for $X_{2}$, just a fraction of $r_{X_{2}Y}$. We just need the part of $X_{2}$ that it has in common with $X_{1}$. We don't want to "double-count" the contribution to the model that is common to both $X_{1}$ and $X_{2}$.
+These are still pretty gross, but there is some intuitive content to them. Look at the numerator of the fraction for $b_{1}$. Essentially, this is just $r_{1Y}$ with some extra stuff. If this were simple regression, we would expect the slope $b_{1}$ to simply be the correlation between $X_{1}$ and $Y$. But in multiple regression, we also have to *control* for any contribution to the model coming from $X_{2}$. How do we do that? By subtracting off that contribution, which turns out to be $r_{2Y}r_{12}$. And why does the latter term appear the way it does? Because we only need to control for the effect of $X_{2}$ if $X_{2}$ is providing some of the same "information" to the regression model as $X_{1}$. Therefore, we don't need to subtract *all* of $r_{2Y}$ to control for $X_{2}$, just a fraction of $r_{2Y}$. We just need the part of $X_{2}$ that it has in common with $X_{1}$. We don't want to "double-count" the contribution to the model that is common to both $X_{1}$ and $X_{2}$.
 
 ::: {.rmdnote}
 
-Here's another way to think about it. What if $X_{1}$ and $X_{2}$ are independent? Calculate $b_{1}$ and $b_{2}$ from the above formulas in this much easier case. (Don't overthink this. What is $r_{X_{1}{X_{2}}}$ in this case?)
+Here's another way to think about it. What if $X_{1}$ and $X_{2}$ are independent? Calculate $b_{1}$ and $b_{2}$ from the above formulas in this much easier case. (Don't overthink this. What is $r_{12}$ in this case?)
 
 :::
 
-So if $X_{1}$ and $X_{2}$ are independent, they both offer a unique contribution to predicting $Y$ in the model. And that contribution is just their correlation with $Y$ ($r_{X_{1}Y}$ and $r_{X_{2}Y}$, respectively). There is no overlap. But if $X_{1}$ and $X_{2}$ are correlated, then some of their "influence" is counted twice. We have to subtract out that influence so that $b_{1}$ and $b_{2}$ are only measuring the "pure" contribution of $X_{1}$ and $X_{2}$, controlling for the other one.
+So if $X_{1}$ and $X_{2}$ are independent, they both offer a unique contribution to predicting $Y$ in the model. And that contribution is just their correlation with $Y$ ($r_{1Y}$ and $r_{2Y}$, respectively). There is no overlap. But if $X_{1}$ and $X_{2}$ are correlated, then some of their "influence" is counted twice. We have to subtract out that influence so that $b_{1}$ and $b_{2}$ are only measuring the "pure" contribution of $X_{1}$ and $X_{2}$, controlling for the other one.
 
-What about the $1 - r_{X_{1}X_{2}}^{2}$ in the denominator? There's less of a good intuitive explanation here. It's there because---mathematically speaking---it has to be there. It rescales the slope coefficients to make everything work out the way it has to.
+What about the $1 - r_{12}^{2}$ in the denominator? There's less of a good intuitive explanation here. It's there because---mathematically speaking---it has to be there. It rescales the slope coefficients to make everything work out the way it has to.
 
 The final equation is the one for $Var(Y)$ in the lower-right corner of the matrix. It says
 
@@ -278,15 +311,136 @@ $$
 $$
 which simplifies to
 $$
-1 = b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{X_{1}X_{2}} + e
+1 = b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12} + e
 $$
 Rearranging to solve for $e$,
 $$
-e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{X_{1}X_{2}}\right)
+e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12}\right)
 $$
 It is *not* enlightening in any way to replace $b_{1}$ and $b_{2}$ here with the earlier fractions. We can leave $e$ like this.
 
 Since the variance of $Y$ is 1, the stuff inside the parentheses above represents the variance *explained by the model*. (That is subtracted from 1, then, to be left with $e$, the error variance.) This is analogous to the $R^{2}$ term described in the [last chapter](#simple-error-correlation).
 
+This makes some conceptual sense too. All the pieces of $\left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12}\right)$ correspond to various pieces of the model. The first two relate to the direct effects of $X_{1}$ and $X_{2}$ and the third piece relates to an "indirect" effect shared between them.
 
 
+## Multiple regression in R {#multiple-r}
+
+Let's fit a multiple regression model on some data about music. The data is a sample of 10,000 songs from the [Million Song Dataset](http://millionsongdataset.com/), a collection of metrics about the audio for a million contemporary popular music tracks.
+
+This data set was downloaded from the [CORGIS Dataset Project](https://corgis-edu.github.io/corgis/csv/) and more information about the variables in this data set can be found [here](https://corgis-edu.github.io/corgis/csv/music/).
+
+```{r}
+music <- read_csv("https://raw.githubusercontent.com/VectorPosse/sem_book/main/data/music.csv")
+```
+
+The endogenous variable of interest to us will be the measure of the song's popularity, called `song.hotttnesss` (on a scale from 0 to 1).^[Very important that there are three t's and three s's!] There are many possible exogenous predictors, but let's focus on three:
+
+-  `artist.hotttnesss`
+    -  This is the popularity of the artist (on a scale from 0 to 1).
+-  `song.loudness`
+    -  Not clear from the website what this is exactly, but it appears to be some kind of average dBFS (decibels relative to full scale). Numbers close to zero are actually as loud as recordings reasonably go and increasingly negative numbers represent softer volumes.
+-  `song.tempo`
+    -  This is measured in beats per minute (BPM).
+
+### Using `lm` {#multiple-r-lm}
+
+The `lm` model specification is a minor extension of what you learned for simple regression. Just use plus signs on the right side of the tilde ~ to add more predictors.
+
+```{r}
+lm(song.hotttnesss ~ artist.hotttnesss + song.loudness + 
+       song.tempo,
+   data = music)
+```
+
+We didn't go to the trouble of mean-centering the data this time, so the intercept is no longer 0. But we will not attempt to interpret the intercept anyway. The other three coefficients are $b_{1}$, $b_{2}$ and $b_{3}$, the path coefficients of the model. These are interpreted as follows:
+
+-  $b_{1}$:
+    -  Song popularity is predicted to increase 1.157 points for every point increase in artist popularity.
+
+While this is mathematically true, it's kind of nonsensical to report using numbers of that magnitude. Both scales only go from 0 to 1, so an increase in 1 point would be measuring the difference between an artist with 0 popularity (the least popular artists in the data set) to an artist with 1 popularity (the most popular artists in the data set).
+
+A better way to report this would be to scale everything down by a factor of 10:
+
+-  Song popularity is predicted to increase 0.1157 points for every 0.1 increase in artist popularity.
+
+-  $b_{2}$:
+    -  Song popularity is predicted to increase 0.01187 points for every increase of 1 dB of loudness.
+    
+An increase of 1 dB is not very much, so again, we can scale the result to make it more meaningful. This time we'll multiply by a factor of 10:
+
+-  Song popularity is predicted to increase 0.1187 points for every increase of 10 dB of loudness.
+
+-  $b_{3}$:
+    -  Song popularity is predicted to increase 0.00006415 points for every increase of 1 BPM in the tempo.
+    
+::: {.rmdnote}
+
+Restate the interpretation of $b_{3}$ on a scale that makes sense. If you're not familiar with BPM, Google it to get a sense of what a reasonably jump in tempo might be.
+
+:::
+
+### Using `lavaan` {#multiple-r-lavaan}
+
+Model specification in `lavaan` happens in a separate step.
+
+```{r}
+SONG_model <- "song.hotttnesss ~ artist.hotttnesss +
+    song.loudness + 
+    song.tempo" 
+```
+
+Then the model is fit with the `sem` function.
+
+```{r}
+SONG_fit <- sem(SONG_model, data = music)
+```
+
+Here are the unstandardized parameter estimates:
+
+```{r}
+parameterEstimates(SONG_fit)
+```
+Focus on the estimate column (`est`).
+
+::: {.rmdnote}
+
+Do you recognize the values from lines 1 through 3?
+
+What does line 4 mean? (Hint: it's not the variance of `song.hotttnesss` even though the notation makes it look like that.)
+
+What's going on in lines 5 through 10?
+
+:::
+
+Here are the standardized parameter estimates:
+
+```{r}
+standardizedSolution(SONG_fit)
+```
+
+Focus on the estimates again (`est.std`).
+
+::: {.rmdnote}
+
+Why is it easier to compare the values in lines 1 though 3 in this output than it was in the unstandardized table? (Hint: think about units of measurement or lack thereof.)
+
+What does the value in line 4 tell you? (Hint: it's awfully close to 1.)
+
+Why are lines 5, 8, and 10 equal to 1?
+
+How do you interpret lines 6, 7, and 9?
+
+:::
+
+This is the final model with all variables labeled and all unstandardized parameter estimates identified:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/multiple_regression_music.png")
+```
+
+This is the same thing, but with standardized parameter estimates:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/multiple_regression_music_std.png")
+```
