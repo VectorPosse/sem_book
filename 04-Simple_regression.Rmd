@@ -214,6 +214,8 @@ How is that "1" represented in the diagram?
 
 :::
 
+The letters $v$, $b$, and $e$ are called *free parameters* because they are free to vary depending on the data. The "1" is called a *fixed parameter*. It is attached to an arrow, so it's technically a parameter of the model, but it is not a parameter that we need to calculate. It is "fixed" at the value 1 because the error term in the model is represented by $+E$ with a fixed coefficient of 1. In general, thoughout the book, if the word "parameter" is used without qualification, you can assume we are talking only about the free parameters, the ones we need to calculate. 
+
 The only thing in the diagram that hasn't been explained yet is $e$.
 
 ::: {.rmdnote}

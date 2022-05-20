@@ -109,6 +109,17 @@ Var(aX_{1} + bX_{2}) =
     a^2Var(X_{1}) + b^2Var(X_{2}) + 2abCov(X_{1}, X_{2})
 $$
 
+For any three variables $X_{1}$, $X_{2}$, and $X_{3}$:
+
+\begin{align}
+Var(aX_{1} + bX_{2} + cX_{3}) &= 
+    a^2Var(X_{1}) + b^2Var(X_{2}) + c^2Var(X_{3}) \\
+    & \quad + 2abCov(X_{1}, X_{2}) \\
+    & \quad + 2acCov(X_{1}, X_{3}) \\
+    & \quad + 2bcCov(X_{2}, X_{3})
+\end{align}
+
+This can be extended to any number of variables. Each variance appears with a coefficient squared and each pair of variables gets a covariance term with 2 times the product of the corresponding variable coefficients.
 
 
 # LISREL notation {#appendix-lisrel}

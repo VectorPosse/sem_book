@@ -124,7 +124,7 @@
 
 \title{Demystifying Structural Equation Modeling}
 \author{Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)}
-\date{2022-05-18}
+\date{2022-05-19}
 
 \begin{document}
 \maketitle
@@ -2235,6 +2235,8 @@ Y = bX + 1 \cdot E
 
 How is that ``1'' represented in the diagram?
 
+The letters \(v\), \(b\), and \(e\) are called \emph{free parameters} because they are free to vary depending on the data. The ``1'' is called a \emph{fixed parameter}. It is attached to an arrow, so it's technically a parameter of the model, but it is not a parameter that we need to calculate. It is ``fixed'' at the value 1 because the error term in the model is represented by \(+E\) with a fixed coefficient of 1. In general, thoughout the book, if the word ``parameter'' is used without qualification, you can assume we are talking only about the free parameters, the ones we need to calculate.
+
 The only thing in the diagram that hasn't been explained yet is \(e\).
 
 Where does \(e\) appear in the diagram? Given where it appears, what does it represent mathematically?
@@ -2673,6 +2675,278 @@ If you are familiar with regression from another course, you may be wondering wh
 
 \begin{center}\includegraphics{graphics/multiple_regression} \end{center}
 
+\hypertarget{preliminaries-1}{%
+\section*{Preliminaries}\label{preliminaries-1}}
+\addcontentsline{toc}{section}{Preliminaries}
+
+We will load the \texttt{tidyverse} package and \texttt{lavaan}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(lavaan)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{multiple-model}{%
+\section{The multiple regression model}\label{multiple-model}}
+
+This chapter is an extension of all the ideas established in the \protect\hyperlink{simple}{last chapter}. Even if you have seen regression before reading this book, be sure to read and study the last chapter and this chapter thoroughly. If nothing else, you need to be comfortable with the notation and terminology established here. But we will also take special care to motivate and justify all the calculations that are taken for granted in some treatments of regression. This framework will be important as we move into mediation and path analysis in the next few chapters. If you are comfortable with the content of this chapter, there won't be much ``new'' to say about mediation and path analysis more generally.
+
+Multiple regression is like simple regression, but with more exogenous variables. There will still be only one endogenous variable. Although the archetype illustrated at the beginning of the chapter has three predictor variables, we will start with only two predictor variables to keep things simple. If you understand what happens with two variables, it's fairly straightforward to generalize that knowledge to three or more predictors. The logic is the same.
+
+Here is a multiple regression model with two predictors and with all paths given parameter labels:
+
+\begin{center}\includegraphics{graphics/multiple_regression_2} \end{center}
+
+How many free parameters appear in this model?
+
+How many fixed parameters appear in this model?
+
+The equation describing the relationship among these variables can be written as either
+
+\[
+\hat{Y} = b_{1}X_{1} + b_{2}X_{2}
+\]
+
+or
+
+\[
+Y = b_{1}X_{1} + b_{2}X_{2} + E
+\]
+
+Why do we use \(\hat{Y}\) in the first equation and \(Y\) in the second equation?
+
+Although we'll work through the details for only two predictors, keep in mind that everything we say will also apply to any number of predictors. In full generality, then, a multiple regression model with \(k\) predictors will look like
+
+\[
+\hat{Y} = b_{1}X_{1} + b_{2}X_{2} + \dots + b_{k}X_{k}
+\]
+
+or
+
+\[
+Y = b_{1}X_{1} + b_{2}X_{2}  + \dots + b_{k}X_{k} + E
+\]
+
+\hypertarget{multiple-assumptions}{%
+\section{Multiple regression assumptions}\label{multiple-assumptions}}
+
+Fortunately, the assumptions for multiple regression are basically the same as they are for simple regression with a few minor modifications and one addition:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The data should come from a ``good'' sample.
+\item
+  The relationship between \(X_{1}, \dots, X_{k}\), and \(Y\) should be approximately linear.
+\item
+  The residuals should be independent of the \(X_{1}, \dots, X_{k}\) values.
+\item
+  There should be no influential outliers.
+\item
+  The exogenous should not be highly correlated with one another.
+\end{enumerate}
+
+We discuss these briefly:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Nothing has changed here. Good analysis starts with good data collection practices.
+\item
+  With only \(Y\) against \(X\), the regression model is a line. With \(Y\) against \(X_{1}\) and \(X_{2}\), the regression model is a plane (a 2-dimensional plane sitting in 3-dimensional space) which is a little challenging to graph. With more predictors, the regression model lives in even higher dimensions and it's impossible to visualize. To check this condition, the best you can usually do is to check that the scatterplots of \(Y\) against each \(X_{i}\) individually are approximately linear.
+\item
+  Nothing changes here.
+\item
+  Nothing changes here.
+\item
+  This is the new condition. When two or more predictors variables are highly correlated with each other, this induces a condition called \emph{multicollinearity}.
+\end{enumerate}
+
+To illustrate why this is a problem, think about the two-variable case:
+
+\[
+\hat{Y} = b_{1}X_{1} + b_{2}X_{2}
+\]
+In general, we will be able to compute the values of \(b_{1}\) and \(b_{2}\) that best fit the model to data.
+
+But now suppose that \(X_{2}\) is just a multiple of \(X_{1}\), say \(X_{2} = 2X_{1}\). Now the equation looks more like
+
+\begin{align}
+\hat{Y} &= b_{1}X_{1} + b_{2}X_{2} \\
+        &= b_{1}X_{1} + b_{2}(2 X_{1}) \\
+        &= (b_{1} + 2b_{2})X_{1}
+\end{align}
+
+So even though it ``looked like'' there were two distinct predictors variables, this is just a simple regression in disguise. Okay, so now let's suppose we try to calculate the slope of this simple regression. Say it's 10. What are the values of \(b_{1}\) and \(b_{2}\)? In other words, what values of \(b_{1}\) and \(b_{2}\) solve the following equation?
+
+\[
+b_{1} + 2b_{2} = 10
+\]
+
+Explain why it is impossible to pin down unique values for \(b_{1}\) and \(b_{2}\) that make the above equation true.
+
+If you choose a large, negative value of \(b_{1}\), what does that imply about the value of \(b_{2}\)?
+
+If you choose a large, positive value of \(b_{1}\), what does that imply about the value of \(b_{2}\)?
+
+Multicollinearity works a lot like that. Even when variables are not exact multiples of each other, sets of highly correlated variables will result in equations with a large range of possible values that are consistent with the data. Even more dangerously, your fitting algorithm may estimate values for these coefficients, but those numbers will likely be meaningless. A completely different set of numbers may also be perfectly consistent with the data.
+
+To be clear, it's not a problem that there is covariance among our predictors. We expect that. The problem only arises when two or more predictors are \emph{highly} correlated with each other.
+
+\hypertarget{multiple-calculating}{%
+\section{Calculating regression parameters}\label{multiple-calculating}}
+
+There is nothing new here, but the calculations do start to get a little messy.
+
+First, let's remember what we're trying to do. From the data, we can calculate the sample covariance matrix. These are all the variances and covariances among the observed variables:
+
+\[
+\begin{bmatrix}
+Var(X_{1})  &   Cov(X_{1}, X_{2})   &   Cov(X_{1}, Y) \\
+\bullet     &   Var(X_{2})          &   Cov(X_{2}, Y) \\
+\bullet     &   \bullet             &   Var(Y)
+\end{bmatrix}
+\]
+
+Remember that these entries are all just numbers that we calculate directly from the data.
+
+To get started on the model-implied matrix, let's extend \href{./covariance.html\#Rule12}{\textbf{Rule 12}} a little.
+
+For any three variables \(X_{1}\), \(X_{2}\), and \(X_{3}\):
+
+\begin{align}
+Var(aX_{1} + bX_{2} + cX_{3}) &= 
+    a^2Var(X_{1}) + b^2Var(X_{2}) + c^2Var(X_{3}) \\
+    & \quad + 2abCov(X_{1}, X_{2}) \\
+    & \quad + 2acCov(X_{1}, X_{3}) \\
+    & \quad + 2bcCov(X_{2}, X_{3})
+\end{align}
+
+This can be extended to any number of variables. Each variance appears with a coefficient squared and each pair of variables gets a covariance term with 2 times the product of the corresponding variable coefficients. (It's hard to describe in words, but it's still more trouble than it's worth writing it down in formal mathematical notation. Hopefully you can see how the pattern of coefficients generalizes.)
+
+Now we can compute, for example \(Var(Y)\):
+
+\begin{align}
+Var(Y)  &= Var(b_{1}X_{1} + b_{2}X_{2} + E) \\
+    &= b_{1}^{2} Var(X_{1}) + b_{2}^{2} Var(X_{2}) + Var(E) \\
+    & \quad + 2b_{1}b_{2} Cov(X_{1}, X_{2}) \\
+    & \quad + 2b_{1} Cov(X_{1}, E) \\
+    & \quad + 2b_{2} Cov(X_{2}, E)
+\end{align}
+
+What happens to the last two lines above?
+
+Therefore,
+
+\[
+Var(Y) = b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
+\]
+
+\href{./covariance.html\#Rule8}{\textbf{Rule 8}} and \href{./covariance.html\#Rule9}{\textbf{Rule 9}} work the same way, but it's even easier to apply. Just split up the covariance into as many pieces as there are terms to split.
+
+Your turn. Calculate \(Cov(X_{1}, Y)\). You should get
+
+\[
+b_{1} v_{1} + b_{2} c_{12}
+\]
+Calculate \(Cov(X_{2}, Y)\). You should get
+
+\[
+b_{2} v_{2} + b_{1} c_{12}
+\]
+
+That turns out to be all the computation we need to write down the model-implied matrix.
+
+The first three entries are easy because they are just the parameters \(v_{1}\), \(c_{12}\), and \(v_{2}\). The last column contains the entries we just calculated above.
+
+Therefore, the model-implied matrix is
+
+\[
+\begin{bmatrix}
+v_{1}   &    c_{12}  &   b_{1} v_{1} + b_{2} c_{12} \\
+\bullet &    v_{2}   &   b_{2} v_{2} + b_{1} c_{12} \\
+\bullet &    \bullet &   b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
+\end{bmatrix}
+\]
+If we set these expressions equal to the numbers from the sample covariance matrix, \emph{in theory} we could then solve for the unknown parameters in the model-implied matrix above. Three of them are basically already done since we can just read off \(v_{1}\), \(c_{12}\), and \(v_{2}\). But solving for \(b_{1}\), \(b_{2}\), and \(e\) is no joke! And even if we did, the resulting expressions are not particularly enlightening. This is where we are quite happy turning over the computational details to a computer.
+
+\hypertarget{multiple-standardized}{%
+\section{Regression with standardized variables}\label{multiple-standardized}}
+
+Things get a little easier (although not completely trivial) with standardized variables. Let's look at the sample covariance matrix and the model-implied matrix for standardized variables:
+
+\[
+\begin{bmatrix}
+1           &   r_{X_{1}X_{2}}      &   r_{X_{1}Y} \\
+\bullet     &   1                   &   r_{X_{2}Y} \\
+\bullet     &   \bullet             &   1
+\end{bmatrix} = 
+\begin{bmatrix}
+v_{1}   &    c_{12}  &   b_{1} v_{1} + b_{2} c_{12} \\
+\bullet &    v_{2}   &   b_{2} v_{2} + b_{1} c_{12} \\
+\bullet &    \bullet &   b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
+\end{bmatrix}
+\]
+The entry in the upper-right corner yields
+
+\[
+r_{X_{1}Y} = b_{1} v_{1} + b_{2} c_{12}
+\]
+which simplifies to
+\[
+r_{X_{1}Y} = b_{1} + b_{2} r_{X_{1}X_{2}}
+\]
+The next entry below that yields
+
+\[
+r_{X_{2}Y} = b_{2} v_{2} + b_{1} c_{12}
+\]
+which simplifies to
+\[
+r_{X_{2}Y} = b_{2} + b_{1} r_{X_{1}X_{2}}
+\]
+
+These two equations can be solved for the two unknown parameters \(b_{1}\) and \(b_{2}\).
+
+Are you feeling brave? Are your algebra skills sharp? Totally optional, but see if you can derive the final answers below:
+
+\[
+b_{1} = \frac{r_{X_{1}Y} - r_{X_{2}Y}r_{X_{1}X_{2}}}{1 - r_{X_{1}X_{2}}^{2}}
+\]
+
+\[
+b_{2} = \frac{r_{X_{2}Y} - r_{X_{1}Y}r_{X_{1}X_{2}}}{1 - r_{X_{1}X_{2}}^{2}}
+\]
+
+These are still pretty gross, but there is some intuitive content to them. Look at the numerator of the fraction for \(b_{1}\). Essentially, this is just \(r_{X_{1}Y}\) with some extra stuff. If this were simple regression, we would expect the slope \(b_{1}\) to simply be the correlation between \(X_{1}\) and \(Y\). But in multiple regression, we also have to \emph{control} for any contribution to the model coming from \(X_{2}\). How do we do that? By subtracting off that contribution, which turns out to be \(r_{X_{2}Y}r_{X_{1}X_{2}}\). And why does the latter term appear the way it does? Because we only need to control for the effect of \(X_{2}\) if \(X_{2}\) is providing some of the same ``information'' to the regression model as \(X_{1}\). Therefore, we don't need to subtract \emph{all} of \(r_{X_{2}Y}\) to control for \(X_{2}\), just a fraction of \(r_{X_{2}Y}\). We just need the part of \(X_{2}\) that it has in common with \(X_{1}\). We don't want to ``double-count'' the contribution to the model that is common to both \(X_{1}\) and \(X_{2}\).
+
+Here's another way to think about it. What if \(X_{1}\) and \(X_{2}\) are independent? Calculate \(b_{1}\) and \(b_{2}\) from the above formulas in this much easier case. (Don't overthink this. What is \(r_{X_{1}{X_{2}}}\) in this case?)
+
+So if \(X_{1}\) and \(X_{2}\) are independent, they both offer a unique contribution to predicting \(Y\) in the model. And that contribution is just their correlation with \(Y\) (\(r_{X_{1}Y}\) and \(r_{X_{2}Y}\), respectively). There is no overlap. But if \(X_{1}\) and \(X_{2}\) are correlated, then some of their ``influence'' is counted twice. We have to subtract out that influence so that \(b_{1}\) and \(b_{2}\) are only measuring the ``pure'' contribution of \(X_{1}\) and \(X_{2}\), controlling for the other one.
+
+What about the \(1 - r_{X_{1}X_{2}}^{2}\) in the denominator? There's less of a good intuitive explanation here. It's there because---mathematically speaking---it has to be there. It rescales the slope coefficients to make everything work out the way it has to.
+
+The final equation is the one for \(Var(Y)\) in the lower-right corner of the matrix. It says
+
+\[
+1 = b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
+\]
+which simplifies to
+\[
+1 = b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{X_{1}X_{2}} + e
+\]
+Rearranging to solve for \(e\),
+\[
+e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{X_{1}X_{2}}\right)
+\]
+It is \emph{not} enlightening in any way to replace \(b_{1}\) and \(b_{2}\) here with the earlier fractions. We can leave \(e\) like this.
+
+Since the variance of \(Y\) is 1, the stuff inside the parentheses above represents the variance \emph{explained by the model}. (That is subtracted from 1, then, to be left with \(e\), the error variance.) This is analogous to the \(R^{2}\) term described in the \protect\hyperlink{simple-error-correlation}{last chapter}.
+
 \hypertarget{mediation}{%
 \chapter{Mediation}\label{mediation}}
 
@@ -2848,6 +3122,18 @@ For \emph{any} two variables \(X_{1}\) and \(X_{2}\):
 Var(aX_{1} + bX_{2}) = 
     a^2Var(X_{1}) + b^2Var(X_{2}) + 2abCov(X_{1}, X_{2})
 \]
+
+For any three variables \(X_{1}\), \(X_{2}\), and \(X_{3}\):
+
+\begin{align}
+Var(aX_{1} + bX_{2} + cX_{3}) &= 
+    a^2Var(X_{1}) + b^2Var(X_{2}) + c^2Var(X_{3}) \\
+    & \quad + 2abCov(X_{1}, X_{2}) \\
+    & \quad + 2acCov(X_{1}, X_{3}) \\
+    & \quad + 2bcCov(X_{2}, X_{3})
+\end{align}
+
+This can be extended to any number of variables. Each variance appears with a coefficient squared and each pair of variables gets a covariance term with 2 times the product of the corresponding variable coefficients.
 
 \hypertarget{appendix-lisrel}{%
 \chapter{LISREL notation}\label{appendix-lisrel}}

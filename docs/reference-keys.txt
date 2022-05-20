@@ -27,6 +27,10 @@ simple-standardized
 simple-r
 simple-intercepts
 multiple
+multiple-model
+multiple-assumptions
+multiple-calculating
+multiple-standardized
 mediation
 path
 latent

@@ -161,6 +161,15 @@ Cov\left(X_{1}, X_{2}\right) = 0
 Var(aX_{1} + bX_{2}) =
     a^2Var(X_{1}) + b^2Var(X_{2}) + 2abCov(X_{1}, X_{2})
 \]</span></p>
+<p>For any three variables <span class="math inline">\(X_{1}\)</span>, <span class="math inline">\(X_{2}\)</span>, and <span class="math inline">\(X_{3}\)</span>:</p>
+<p><span class="math display">\[\begin{align}
+Var(aX_{1} + bX_{2} + cX_{3}) &amp;=
+    a^2Var(X_{1}) + b^2Var(X_{2}) + c^2Var(X_{3}) \\
+    &amp; \quad + 2abCov(X_{1}, X_{2}) \\
+    &amp; \quad + 2acCov(X_{1}, X_{3}) \\
+    &amp; \quad + 2bcCov(X_{2}, X_{3})
+\end{align}\]</span></p>
+<p>This can be extended to any number of variables. Each variance appears with a coefficient squared and each pair of variables gets a covariance term with 2 times the product of the corresponding variable coefficients.</p>
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="scm.html"><span class="header-section-number">11</span> Structural causal models</a></div>
@@ -184,7 +193,7 @@ Var(aX_{1} + bX_{2}) =
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-18.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-19.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

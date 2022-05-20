@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 5 Multiple regression | Demystifying Structural Equation Modeling</title>
 <meta name="author" content="Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)">
-<meta name="description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta name="description" content="Preliminaries We will load the tidyverse package and lavaan. library(tidyverse) library(lavaan)  5.1 The multiple regression model This chapter is an extension of all the ideas established in the...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Chapter 5 Multiple regression | Demystifying Structural Equation Modeling">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://vectorposse.github.io/sem_book/multiple.html">
-<meta property="og:description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta property="og:description" content="Preliminaries We will load the tidyverse package and lavaan. library(tidyverse) library(lavaan)  5.1 The multiple regression model This chapter is an extension of all the ideas established in the...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 5 Multiple regression | Demystifying Structural Equation Modeling">
-<meta name="twitter:description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta name="twitter:description" content="Preliminaries We will load the tidyverse package and lavaan. library(tidyverse) library(lavaan)  5.1 The multiple regression model This chapter is an extension of all the ideas established in the...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -71,14 +71,232 @@
 <span class="header-section-number">5</span> Multiple regression<a class="anchor" aria-label="anchor" href="#multiple"><i class="fas fa-link"></i></a>
 </h1>
 <div class="inline-figure"><img src="graphics/multiple_regression.png" width="450" style="display: block; margin: auto;"></div>
+<div id="preliminaries-1" class="section level2 unnumbered">
+<h2>Preliminaries<a class="anchor" aria-label="anchor" href="#preliminaries-1"><i class="fas fa-link"></i></a>
+</h2>
+<p>We will load the <code>tidyverse</code> package and <code>lavaan</code>.</p>
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be">lavaan</a></span><span class="op">)</span></code></pre></div>
+</div>
+<div id="multiple-model" class="section level2" number="5.1">
+<h2>
+<span class="header-section-number">5.1</span> The multiple regression model<a class="anchor" aria-label="anchor" href="#multiple-model"><i class="fas fa-link"></i></a>
+</h2>
+<p>This chapter is an extension of all the ideas established in the <a href="simple.html#simple">last chapter</a>. Even if you have seen regression before reading this book, be sure to read and study the last chapter and this chapter thoroughly. If nothing else, you need to be comfortable with the notation and terminology established here. But we will also take special care to motivate and justify all the calculations that are taken for granted in some treatments of regression. This framework will be important as we move into mediation and path analysis in the next few chapters. If you are comfortable with the content of this chapter, there won’t be much “new” to say about mediation and path analysis more generally.</p>
+<p>Multiple regression is like simple regression, but with more exogenous variables. There will still be only one endogenous variable. Although the archetype illustrated at the beginning of the chapter has three predictor variables, we will start with only two predictor variables to keep things simple. If you understand what happens with two variables, it’s fairly straightforward to generalize that knowledge to three or more predictors. The logic is the same.</p>
+<p>Here is a multiple regression model with two predictors and with all paths given parameter labels:</p>
+<div class="inline-figure"><img src="graphics/multiple_regression_2.png" width="438" style="display: block; margin: auto;"></div>
+<div class="rmdnote">
+<p>How many free parameters appear in this model?</p>
+<p>How many fixed parameters appear in this model?</p>
+</div>
+<p>The equation describing the relationship among these variables can be written as either</p>
+<p><span class="math display">\[
+\hat{Y} = b_{1}X_{1} + b_{2}X_{2}
+\]</span></p>
+<p>or</p>
+<p><span class="math display">\[
+Y = b_{1}X_{1} + b_{2}X_{2} + E
+\]</span></p>
+<div class="rmdnote">
+<p>Why do we use <span class="math inline">\(\hat{Y}\)</span> in the first equation and <span class="math inline">\(Y\)</span> in the second equation?</p>
+</div>
+<p>Although we’ll work through the details for only two predictors, keep in mind that everything we say will also apply to any number of predictors. In full generality, then, a multiple regression model with <span class="math inline">\(k\)</span> predictors will look like</p>
+<p><span class="math display">\[
+\hat{Y} = b_{1}X_{1} + b_{2}X_{2} + \dots + b_{k}X_{k}
+\]</span></p>
+<p>or</p>
+<p><span class="math display">\[
+Y = b_{1}X_{1} + b_{2}X_{2}  + \dots + b_{k}X_{k} + E
+\]</span></p>
+</div>
+<div id="multiple-assumptions" class="section level2" number="5.2">
+<h2>
+<span class="header-section-number">5.2</span> Multiple regression assumptions<a class="anchor" aria-label="anchor" href="#multiple-assumptions"><i class="fas fa-link"></i></a>
+</h2>
+<p>Fortunately, the assumptions for multiple regression are basically the same as they are for simple regression with a few minor modifications and one addition:</p>
+<ol style="list-style-type: decimal">
+<li>The data should come from a “good” sample.</li>
+<li>The relationship between <span class="math inline">\(X_{1}, \dots, X_{k}\)</span>, and <span class="math inline">\(Y\)</span> should be approximately linear.</li>
+<li>The residuals should be independent of the <span class="math inline">\(X_{1}, \dots, X_{k}\)</span> values.</li>
+<li>There should be no influential outliers.</li>
+<li>The exogenous should not be highly correlated with one another.</li>
+</ol>
+<p>We discuss these briefly:</p>
+<ol style="list-style-type: decimal">
+<li>Nothing has changed here. Good analysis starts with good data collection practices.</li>
+<li>With only <span class="math inline">\(Y\)</span> against <span class="math inline">\(X\)</span>, the regression model is a line. With <span class="math inline">\(Y\)</span> against <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>, the regression model is a plane (a 2-dimensional plane sitting in 3-dimensional space) which is a little challenging to graph. With more predictors, the regression model lives in even higher dimensions and it’s impossible to visualize. To check this condition, the best you can usually do is to check that the scatterplots of <span class="math inline">\(Y\)</span> against each <span class="math inline">\(X_{i}\)</span> individually are approximately linear.</li>
+<li>Nothing changes here.</li>
+<li>Nothing changes here.</li>
+<li>This is the new condition. When two or more predictors variables are highly correlated with each other, this induces a condition called <em>multicollinearity</em>.</li>
+</ol>
+<p>To illustrate why this is a problem, think about the two-variable case:</p>
+<p><span class="math display">\[
+\hat{Y} = b_{1}X_{1} + b_{2}X_{2}
+\]</span>
+In general, we will be able to compute the values of <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> that best fit the model to data.</p>
+<p>But now suppose that <span class="math inline">\(X_{2}\)</span> is just a multiple of <span class="math inline">\(X_{1}\)</span>, say <span class="math inline">\(X_{2} = 2X_{1}\)</span>. Now the equation looks more like</p>
+<p><span class="math display">\[\begin{align}
+\hat{Y} &amp;= b_{1}X_{1} + b_{2}X_{2} \\
+        &amp;= b_{1}X_{1} + b_{2}(2 X_{1}) \\
+        &amp;= (b_{1} + 2b_{2})X_{1}
+\end{align}\]</span></p>
+<p>So even though it “looked like” there were two distinct predictors variables, this is just a simple regression in disguise. Okay, so now let’s suppose we try to calculate the slope of this simple regression. Say it’s 10. What are the values of <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span>? In other words, what values of <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> solve the following equation?</p>
+<p><span class="math display">\[
+b_{1} + 2b_{2} = 10
+\]</span></p>
+<div class="rmdnote">
+<p>Explain why it is impossible to pin down unique values for <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> that make the above equation true.</p>
+<p>If you choose a large, negative value of <span class="math inline">\(b_{1}\)</span>, what does that imply about the value of <span class="math inline">\(b_{2}\)</span>?</p>
+<p>If you choose a large, positive value of <span class="math inline">\(b_{1}\)</span>, what does that imply about the value of <span class="math inline">\(b_{2}\)</span>?</p>
+</div>
+<p>Multicollinearity works a lot like that. Even when variables are not exact multiples of each other, sets of highly correlated variables will result in equations with a large range of possible values that are consistent with the data. Even more dangerously, your fitting algorithm may estimate values for these coefficients, but those numbers will likely be meaningless. A completely different set of numbers may also be perfectly consistent with the data.</p>
+<p>To be clear, it’s not a problem that there is covariance among our predictors. We expect that. The problem only arises when two or more predictors are <em>highly</em> correlated with each other.</p>
+</div>
+<div id="multiple-calculating" class="section level2" number="5.3">
+<h2>
+<span class="header-section-number">5.3</span> Calculating regression parameters<a class="anchor" aria-label="anchor" href="#multiple-calculating"><i class="fas fa-link"></i></a>
+</h2>
+<p>There is nothing new here, but the calculations do start to get a little messy.</p>
+<p>First, let’s remember what we’re trying to do. From the data, we can calculate the sample covariance matrix. These are all the variances and covariances among the observed variables:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+Var(X_{1})  &amp;   Cov(X_{1}, X_{2})   &amp;   Cov(X_{1}, Y) \\
+\bullet     &amp;   Var(X_{2})          &amp;   Cov(X_{2}, Y) \\
+\bullet     &amp;   \bullet             &amp;   Var(Y)
+\end{bmatrix}
+\]</span></p>
+<p>Remember that these entries are all just numbers that we calculate directly from the data.</p>
+<p>To get started on the model-implied matrix, let’s extend <a href="./covariance.html#Rule12"><strong>Rule 12</strong></a> a little.</p>
+<div class="rmdimportant">
+<p>For any three variables <span class="math inline">\(X_{1}\)</span>, <span class="math inline">\(X_{2}\)</span>, and <span class="math inline">\(X_{3}\)</span>:</p>
+<p><span class="math display">\[\begin{align}
+Var(aX_{1} + bX_{2} + cX_{3}) &amp;=
+    a^2Var(X_{1}) + b^2Var(X_{2}) + c^2Var(X_{3}) \\
+    &amp; \quad + 2abCov(X_{1}, X_{2}) \\
+    &amp; \quad + 2acCov(X_{1}, X_{3}) \\
+    &amp; \quad + 2bcCov(X_{2}, X_{3})
+\end{align}\]</span></p>
+<p>This can be extended to any number of variables. Each variance appears with a coefficient squared and each pair of variables gets a covariance term with 2 times the product of the corresponding variable coefficients. (It’s hard to describe in words, but it’s still more trouble than it’s worth writing it down in formal mathematical notation. Hopefully you can see how the pattern of coefficients generalizes.)</p>
+</div>
+<p>Now we can compute, for example <span class="math inline">\(Var(Y)\)</span>:</p>
+<p><span class="math display">\[\begin{align}
+Var(Y)  &amp;= Var(b_{1}X_{1} + b_{2}X_{2} + E) \\
+    &amp;= b_{1}^{2} Var(X_{1}) + b_{2}^{2} Var(X_{2}) + Var(E) \\
+    &amp; \quad + 2b_{1}b_{2} Cov(X_{1}, X_{2}) \\
+    &amp; \quad + 2b_{1} Cov(X_{1}, E) \\
+    &amp; \quad + 2b_{2} Cov(X_{2}, E)
+\end{align}\]</span></p>
+<div class="rmdnote">
+<p>What happens to the last two lines above?</p>
+</div>
+<p>Therefore,</p>
+<p><span class="math display">\[
+Var(Y) = b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
+\]</span></p>
+<p><a href="./covariance.html#Rule8"><strong>Rule 8</strong></a> and <a href="./covariance.html#Rule9"><strong>Rule 9</strong></a> work the same way, but it’s even easier to apply. Just split up the covariance into as many pieces as there are terms to split.</p>
+<div class="rmdnote">
+<p>Your turn. Calculate <span class="math inline">\(Cov(X_{1}, Y)\)</span>. You should get</p>
+<p><span class="math display">\[
+b_{1} v_{1} + b_{2} c_{12}
+\]</span>
+Calculate <span class="math inline">\(Cov(X_{2}, Y)\)</span>. You should get</p>
+<p><span class="math display">\[
+b_{2} v_{2} + b_{1} c_{12}
+\]</span></p>
+</div>
+<p>That turns out to be all the computation we need to write down the model-implied matrix.</p>
+<p>The first three entries are easy because they are just the parameters <span class="math inline">\(v_{1}\)</span>, <span class="math inline">\(c_{12}\)</span>, and <span class="math inline">\(v_{2}\)</span>. The last column contains the entries we just calculated above.</p>
+<p>Therefore, the model-implied matrix is</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+v_{1}   &amp;    c_{12}  &amp;   b_{1} v_{1} + b_{2} c_{12} \\
+\bullet &amp;    v_{2}   &amp;   b_{2} v_{2} + b_{1} c_{12} \\
+\bullet &amp;    \bullet &amp;   b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
+\end{bmatrix}
+\]</span>
+If we set these expressions equal to the numbers from the sample covariance matrix, <em>in theory</em> we could then solve for the unknown parameters in the model-implied matrix above. Three of them are basically already done since we can just read off <span class="math inline">\(v_{1}\)</span>, <span class="math inline">\(c_{12}\)</span>, and <span class="math inline">\(v_{2}\)</span>. But solving for <span class="math inline">\(b_{1}\)</span>, <span class="math inline">\(b_{2}\)</span>, and <span class="math inline">\(e\)</span> is no joke! And even if we did, the resulting expressions are not particularly enlightening. This is where we are quite happy turning over the computational details to a computer.</p>
+</div>
+<div id="multiple-standardized" class="section level2" number="5.4">
+<h2>
+<span class="header-section-number">5.4</span> Regression with standardized variables<a class="anchor" aria-label="anchor" href="#multiple-standardized"><i class="fas fa-link"></i></a>
+</h2>
+<p>Things get a little easier (although not completely trivial) with standardized variables. Let’s look at the sample covariance matrix and the model-implied matrix for standardized variables:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1           &amp;   r_{X_{1}X_{2}}      &amp;   r_{X_{1}Y} \\
+\bullet     &amp;   1                   &amp;   r_{X_{2}Y} \\
+\bullet     &amp;   \bullet             &amp;   1
+\end{bmatrix} =
+\begin{bmatrix}
+v_{1}   &amp;    c_{12}  &amp;   b_{1} v_{1} + b_{2} c_{12} \\
+\bullet &amp;    v_{2}   &amp;   b_{2} v_{2} + b_{1} c_{12} \\
+\bullet &amp;    \bullet &amp;   b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
+\end{bmatrix}
+\]</span>
+The entry in the upper-right corner yields</p>
+<p><span class="math display">\[
+r_{X_{1}Y} = b_{1} v_{1} + b_{2} c_{12}
+\]</span>
+which simplifies to
+<span class="math display">\[
+r_{X_{1}Y} = b_{1} + b_{2} r_{X_{1}X_{2}}
+\]</span>
+The next entry below that yields</p>
+<p><span class="math display">\[
+r_{X_{2}Y} = b_{2} v_{2} + b_{1} c_{12}
+\]</span>
+which simplifies to
+<span class="math display">\[
+r_{X_{2}Y} = b_{2} + b_{1} r_{X_{1}X_{2}}
+\]</span></p>
+<p>These two equations can be solved for the two unknown parameters <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span>.</p>
+<div class="rmdnote">
+<p>Are you feeling brave? Are your algebra skills sharp? Totally optional, but see if you can derive the final answers below:</p>
+<p><span class="math display">\[
+b_{1} = \frac{r_{X_{1}Y} - r_{X_{2}Y}r_{X_{1}X_{2}}}{1 - r_{X_{1}X_{2}}^{2}}
+\]</span></p>
+<p><span class="math display">\[
+b_{2} = \frac{r_{X_{2}Y} - r_{X_{1}Y}r_{X_{1}X_{2}}}{1 - r_{X_{1}X_{2}}^{2}}
+\]</span></p>
+</div>
+<p>These are still pretty gross, but there is some intuitive content to them. Look at the numerator of the fraction for <span class="math inline">\(b_{1}\)</span>. Essentially, this is just <span class="math inline">\(r_{X_{1}Y}\)</span> with some extra stuff. If this were simple regression, we would expect the slope <span class="math inline">\(b_{1}\)</span> to simply be the correlation between <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y\)</span>. But in multiple regression, we also have to <em>control</em> for any contribution to the model coming from <span class="math inline">\(X_{2}\)</span>. How do we do that? By subtracting off that contribution, which turns out to be <span class="math inline">\(r_{X_{2}Y}r_{X_{1}X_{2}}\)</span>. And why does the latter term appear the way it does? Because we only need to control for the effect of <span class="math inline">\(X_{2}\)</span> if <span class="math inline">\(X_{2}\)</span> is providing some of the same “information” to the regression model as <span class="math inline">\(X_{1}\)</span>. Therefore, we don’t need to subtract <em>all</em> of <span class="math inline">\(r_{X_{2}Y}\)</span> to control for <span class="math inline">\(X_{2}\)</span>, just a fraction of <span class="math inline">\(r_{X_{2}Y}\)</span>. We just need the part of <span class="math inline">\(X_{2}\)</span> that it has in common with <span class="math inline">\(X_{1}\)</span>. We don’t want to “double-count” the contribution to the model that is common to both <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>.</p>
+<div class="rmdnote">
+<p>Here’s another way to think about it. What if <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent? Calculate <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> from the above formulas in this much easier case. (Don’t overthink this. What is <span class="math inline">\(r_{X_{1}{X_{2}}}\)</span> in this case?)</p>
+</div>
+<p>So if <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are independent, they both offer a unique contribution to predicting <span class="math inline">\(Y\)</span> in the model. And that contribution is just their correlation with <span class="math inline">\(Y\)</span> (<span class="math inline">\(r_{X_{1}Y}\)</span> and <span class="math inline">\(r_{X_{2}Y}\)</span>, respectively). There is no overlap. But if <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are correlated, then some of their “influence” is counted twice. We have to subtract out that influence so that <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> are only measuring the “pure” contribution of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>, controlling for the other one.</p>
+<p>What about the <span class="math inline">\(1 - r_{X_{1}X_{2}}^{2}\)</span> in the denominator? There’s less of a good intuitive explanation here. It’s there because—mathematically speaking—it has to be there. It rescales the slope coefficients to make everything work out the way it has to.</p>
+<p>The final equation is the one for <span class="math inline">\(Var(Y)\)</span> in the lower-right corner of the matrix. It says</p>
+<p><span class="math display">\[
+1 = b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
+\]</span>
+which simplifies to
+<span class="math display">\[
+1 = b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{X_{1}X_{2}} + e
+\]</span>
+Rearranging to solve for <span class="math inline">\(e\)</span>,
+<span class="math display">\[
+e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{X_{1}X_{2}}\right)
+\]</span>
+It is <em>not</em> enlightening in any way to replace <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> here with the earlier fractions. We can leave <span class="math inline">\(e\)</span> like this.</p>
+<p>Since the variance of <span class="math inline">\(Y\)</span> is 1, the stuff inside the parentheses above represents the variance <em>explained by the model</em>. (That is subtracted from 1, then, to be left with <span class="math inline">\(e\)</span>, the error variance.) This is analogous to the <span class="math inline">\(R^{2}\)</span> term described in the <a href="simple.html#simple-error-correlation">last chapter</a>.</p>
 
+</div>
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="simple.html"><span class="header-section-number">4</span> Simple regression</a></div>
 <div class="next"><a href="mediation.html"><span class="header-section-number">6</span> Mediation</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#multiple"><span class="header-section-number">5</span> Multiple regression</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#multiple"><span class="header-section-number">5</span> Multiple regression</a></li>
+<li><a class="nav-link" href="#preliminaries-1">Preliminaries</a></li>
+<li><a class="nav-link" href="#multiple-model"><span class="header-section-number">5.1</span> The multiple regression model</a></li>
+<li><a class="nav-link" href="#multiple-assumptions"><span class="header-section-number">5.2</span> Multiple regression assumptions</a></li>
+<li><a class="nav-link" href="#multiple-calculating"><span class="header-section-number">5.3</span> Calculating regression parameters</a></li>
+<li><a class="nav-link" href="#multiple-standardized"><span class="header-section-number">5.4</span> Regression with standardized variables</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
@@ -95,7 +313,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-18.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-19.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
