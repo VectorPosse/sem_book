@@ -435,6 +435,15 @@ $$
 Var(X) = SD(X)^2
 $$
 
+Often, if more concise notation is required, we write $s_{X}$ for $SD(X)$.
+
+$$
+s_{X} = \sqrt{Var(X)}
+$$
+$$
+Var(X) = s_{X}^2
+$$
+
 Due to its interpretability, an intro stats class will focus far more on the standard deviation than on the variance. The downside is that the mathematical rules aren't so nice for standard deviations. For example, what is
 $$
 SD\left(X_{1} + X_{2}\right)?

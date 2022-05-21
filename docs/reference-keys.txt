@@ -22,7 +22,7 @@ simple-model
 simple-assumptions
 simple-calculating
 simple-mim
-simple-error-correlation
+simple-coefficients-correlation
 simple-standardized
 simple-r
 simple-r-lm

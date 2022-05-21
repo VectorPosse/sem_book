@@ -7,10 +7,11 @@ knitr::include_graphics("graphics/multiple_regression.png")
 
 ## Preliminaries {-}
 
-We will load the `tidyverse` package and `lavaan`.
+We will load the `tidyverse` package to work with tibbles, the `broom` package to calculate residuals, and `lavaan`.
 
 ```{r}
 library(tidyverse)
+library(broom)
 library(lavaan)
 ```
 
@@ -80,7 +81,7 @@ We discuss these briefly:
 
 1. Nothing has changed here. Good analysis starts with good data collection practices.
 2. With only $Y$ against $X$, the regression model is a line. With $Y$ against $X_{1}$ and $X_{2}$, the regression model is a plane (a 2-dimensional plane sitting in 3-dimensional space) which is a little challenging to graph. With more predictors, the regression model lives in even higher dimensions and it's impossible to visualize. To check this condition, the best you can usually do is to check that the scatterplots of $Y$ against each $X_{i}$ individually are approximately linear.
-3. Nothing changes here.
+3. Once we fit the model, we can check the residuals. Rather than plotting the residuals against each $X_{i}$ separately, we can employ a trick that we'll explain later in the chapter.
 4. Nothing changes here.
 5. This is the new condition. When two or more predictors variables are highly correlated with each other, this induces a condition called *multicollinearity*.
 
@@ -234,7 +235,7 @@ This is why it's important to *control* for other variables. All this means is t
 
 If the parameter $b_{2}$ is estimated to be 0.13, that suggests that each additional hour of study time per week predicts an increase of 0.13 points in the college GPA, holding high school GPA constant. This means that the increase of 0.13 is only predicted among groups of students with the same high school GPA.
 
-Let's say that $b_{1}$ is estimated to be 1.2. That means that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. But this is a multiple regression model, so this coefficient can only be interpreting holding `HOURS` constant. This means that this coefficient only holds among groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA.
+If the parameter $b_{1}$ is estimated to be 1.2, that suggests that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. This coefficient can only be interpreted while holding `HOURS` constant. This means that this estimate only holds among groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA to explain changes in college GPA.
 
 
 ## Regression with standardized variables {#multiple-standardized}
@@ -332,6 +333,7 @@ This data set was downloaded from the [CORGIS Dataset Project](https://corgis-ed
 
 ```{r}
 music <- read_csv("https://raw.githubusercontent.com/VectorPosse/sem_book/main/data/music.csv")
+music
 ```
 
 The endogenous variable of interest to us will be the measure of the song's popularity, called `song.hotttnesss` (on a scale from 0 to 1).^[Very important that there are three t's and three s's!] There are many possible exogenous predictors, but let's focus on three:
@@ -343,46 +345,161 @@ The endogenous variable of interest to us will be the measure of the song's popu
 -  `song.tempo`
     -  This is measured in beats per minute (BPM).
 
-### Using `lm` {#multiple-r-lm}
-
-The `lm` model specification is a minor extension of what you learned for simple regression. Just use plus signs on the right side of the tilde ~ to add more predictors.
+Let's plot `song.hotttnesss` against each of the three proposed predictors to test the linearity assumption, starting with `artist.hotttnesss`:
 
 ```{r}
-lm(song.hotttnesss ~ artist.hotttnesss + song.loudness + 
-       song.tempo,
-   data = music)
+ggplot(music, aes(y = song.hotttnesss,
+                  x = artist.hotttnesss)) +
+    geom_point()
+```
+
+Uh, we've got some issues here to deal with. Since `song.hotttness` is supposed to be from 0 to 1, we can guess that the -1 values are likely coded to represent "missing" data. Even the values of 0 don't seem valid given that there is a big gap between the row of zeros and any of the rest of the cluster of actual data. The `artist.hotttness` variable also seems to have some zeros that are disconnected from the rest of the data. These may be genuine outliers, but it's more likely that these were artists for whom no data was collected.
+
+While we're suspecting issues, let's also check `song.loudness` and `song.tempo`.
+
+```{r}
+ggplot(music, aes(y = song.hotttnesss,
+                  x = song.loudness)) +
+    geom_point()
+```
+
+The `song.loudness` distribution looks reasonable. It's definitely skewed to the left, but there are no strict requirements about the predictor variables having any particular type of distribution.
+
+```{r}
+ggplot(music, aes(y = song.hotttnesss,
+                  x = song.tempo)) +
+    geom_point()
+```
+
+::: {.rndnote}
+
+Is it possible for a song tempo to be 0 BPM?
+
+:::
+
+To make it a little cleaner, the following code will `select` only the variables in which we're interested. Then it will `filter` out the values we want to keep (discarding the ones that represent missing/invalid data). We'll put this into a new tibble called `music_clean`.
+
+```{r}
+music_clean <- music %>%
+    select(song.hotttnesss, artist.hotttnesss,
+           song.loudness, song.tempo) %>%
+    filter(song.hotttnesss > 0,
+           artist.hotttnesss > 0,
+           song.tempo > 0)
+music_clean
+```
+This has reduced the number of rows to 4,157, but that is still a huge sample size.
+
+Let's check the scatterplots once more, now with the `music_clean` data.
+
+```{r}
+ggplot(music_clean, aes(y = song.hotttnesss,
+                        x = artist.hotttnesss)) +
+    geom_point()
+```
+
+```{r}
+ggplot(music_clean, aes(y = song.hotttnesss,
+                        x = song.loudness)) +
+    geom_point()
+```
+
+```{r}
+ggplot(music_clean, aes(y = song.hotttnesss,
+                        x = song.tempo)) +
+    geom_point()
+```
+
+There doesn't appear to be much of an association with loudness or tempo. But that doesn't violate any assumptions. (A violation of the assumptions would be a decidedly non-linear association, not just a near-zero association.) Given these graphs, we will expect the model to tell us that song popularity is somewhat associated with artist popularity, but not much with loudness or tempo.
+
+### Using `lm` {#multiple-r-lm}
+
+The `lm` model specification is a minor extension of what you learned for simple regression. Just use plus signs on the right side of the tilde ~ to add more predictors. Be sure to use `music_clean` and not `music`!
+
+```{r}
+SONG_lm <- lm(song.hotttnesss ~ artist.hotttnesss +
+                  song.loudness +
+                  song.tempo,
+              data = music_clean)
+SONG_lm
 ```
 
 We didn't go to the trouble of mean-centering the data this time, so the intercept is no longer 0. But we will not attempt to interpret the intercept anyway. The other three coefficients are $b_{1}$, $b_{2}$ and $b_{3}$, the path coefficients of the model. These are interpreted as follows:
 
 -  $b_{1}$:
-    -  Song popularity is predicted to increase 1.157 points for every point increase in artist popularity.
+    -  Song popularity is predicted to increase 0.7 points for every point increase in artist popularity.
 
 While this is mathematically true, it's kind of nonsensical to report using numbers of that magnitude. Both scales only go from 0 to 1, so an increase in 1 point would be measuring the difference between an artist with 0 popularity (the least popular artists in the data set) to an artist with 1 popularity (the most popular artists in the data set).
 
 A better way to report this would be to scale everything down by a factor of 10:
 
--  Song popularity is predicted to increase 0.1157 points for every 0.1 increase in artist popularity.
+-  Song popularity is predicted to increase 0.07 points for every 0.1 increase in artist popularity.
 
 -  $b_{2}$:
-    -  Song popularity is predicted to increase 0.01187 points for every increase of 1 dB of loudness.
+    -  Song popularity is predicted to increase 0.004 points for every increase of 1 dB of loudness.
     
 An increase of 1 dB is not very much, so again, we can scale the result to make it more meaningful. This time we'll multiply by a factor of 10:
 
--  Song popularity is predicted to increase 0.1187 points for every increase of 10 dB of loudness.
+-  Song popularity is predicted to increase 0.04 points for every increase of 10 dB of loudness.
 
 -  $b_{3}$:
-    -  Song popularity is predicted to increase 0.00006415 points for every increase of 1 BPM in the tempo.
+    -  Song popularity is predicted to increase 0.0002 points for every increase of 1 BPM in the tempo.
     
 ::: {.rmdnote}
 
-Restate the interpretation of $b_{3}$ on a scale that makes sense. If you're not familiar with BPM, Google it to get a sense of what a reasonably jump in tempo might be.
+Restate the interpretation of $b_{3}$ on a scale that makes sense. If you're not familiar with BPM, Google it to get a sense of what a reasonable jump in tempo might be.
+
+:::
+
+Now that we have the model fit, we can use `broom` to capture the residuals.
+
+```{r}
+SONG_aug <- augment(SONG_lm)
+SONG_aug
+```
+
+But how do we graph them now that there are three predictor variables? We could graph the residuals against all three predictors separately, but there's a more efficient method.
+
+::: {.rmdnote}
+
+Calculate
+
+$$
+Cov(E, \hat{Y})
+$$
+by substituting
+
+$$
+\hat{Y} = b_{1}X_{1} + b_{2}X_{2} + b_{3}X_{3} 
+$$
+
+If we assume that $E$ is independent of all the predictors, what is the value of $Cov(E, \hat{Y})$?
+
+:::
+
+Of course, if $Cov(E, \hat{Y}) = 0$, that does not necessarily imply that all the $Cov(E, X_{i})$ must be zero. And even if those are zero, that doesn't imply independence. But if $Cov(E, \hat{Y}) \neq 0$, then we know at least one of the $Cov(E, X_{i})$ also must be non-zero. **Therefore, we can plot the residuals against the fitted values and this will serve as *disqualifying* evidence of a problem with the model.**
+
+One of the nice features of the `augment` output is that it also has a column called `.fitted` that stores the $\hat{Y}$ values.
+
+Here are the (standardized) residuals graphed against the fitted values:
+
+```{r}
+ggplot(SONG_aug, aes(y = .std.resid, x = .fitted)) +
+    geom_point() +
+    geom_hline(yintercept = 0, color = "red")
+```
+
+The weirdness in the residuals is not ideal. It doesn't prevent us from fitting the model, but we will state our results cautiously knowing that variance toward the left half of the graph is compressed relative to the right side of the graph. Therefore, the error variance is not "acting" in the model the same way across all combinations of the predictor variables.
+
+::: {.rmdnote}
+
+Go back and look at the original scatterplots of the data (from `music_clean` and see if you can figure out why the residuals are cut off funny like that in the lower left quadrant.)
 
 :::
 
 ### Using `lavaan` {#multiple-r-lavaan}
 
-Model specification in `lavaan` happens in a separate step.
+Model specification in `lavaan` happens in a separate step with the model in quotes:
 
 ```{r}
 SONG_model <- "song.hotttnesss ~ artist.hotttnesss +
@@ -393,7 +510,7 @@ SONG_model <- "song.hotttnesss ~ artist.hotttnesss +
 Then the model is fit with the `sem` function.
 
 ```{r}
-SONG_fit <- sem(SONG_model, data = music)
+SONG_fit <- sem(SONG_model, data = music_clean)
 ```
 
 Here are the unstandardized parameter estimates:
@@ -401,6 +518,7 @@ Here are the unstandardized parameter estimates:
 ```{r}
 parameterEstimates(SONG_fit)
 ```
+
 Focus on the estimate column (`est`).
 
 ::: {.rmdnote}
@@ -425,7 +543,7 @@ Focus on the estimates again (`est.std`).
 
 Why is it easier to compare the values in lines 1 though 3 in this output than it was in the unstandardized table? (Hint: think about units of measurement or lack thereof.)
 
-What does the value in line 4 tell you? (Hint: it's awfully close to 1.)
+What does the value in line 4 tell you? (Hint: it's closer to 1 than to 0.)
 
 Why are lines 5, 8, and 10 equal to 1?
 

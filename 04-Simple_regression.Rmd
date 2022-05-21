@@ -7,10 +7,11 @@ knitr::include_graphics("graphics/simple_regression.png")
 
 ## Preliminaries {-}
 
-We need to load the packages we will need for this chapter. The `tidyverse` package has all sorts of utilities for working with tibbles (data frames). This will also be our first introduction to the `lavaan` package that will be used throughout the rest of the book.
+We need to load the packages we will need for this chapter. The `tidyverse` package has all sorts of utilities for working with tibbles (data frames). The `broom` package will be used to calculate and store the residuals of the model. This will also be our first introduction to the `lavaan` package that will be used throughout the rest of the book.
 
 ```{r}
 library(tidyverse)
+library(broom)
 library(lavaan)
 ```
 
@@ -214,7 +215,7 @@ How is that "1" represented in the diagram?
 
 :::
 
-The letters $v$, $b$, and $e$ are called *free parameters* because they are free to vary depending on the data. The "1" is called a *fixed parameter*. It is attached to an arrow, so it's technically a parameter of the model, but it is not a parameter that we need to calculate. It is "fixed" at the value 1 because the error term in the model is represented by $+E$ with a fixed coefficient of 1. In general, thoughout the book, if the word "parameter" is used without qualification, you can assume we are talking only about the free parameters, the ones we need to calculate. 
+The letters $v$, $b$, and $e$ are called *free parameters* because they are free to vary depending on the data. The "1" is called a *fixed parameter*. It is attached to an arrow, so it's technically a parameter of the model, but it is not a parameter that we need to calculate. It is "fixed" at the value 1 because the error term in the model is represented by $+E$ with a fixed coefficient of 1. In general, throughout the book, if the word "parameter" is used without qualification, you can assume we are talking only about the free parameters, the ones we need to calculate. 
 
 The only thing in the diagram that hasn't been explained yet is $e$.
 
@@ -282,7 +283,7 @@ Let's address these one at a time:
 
 1. What do we mean by a "good" sample? While a simple random sample is the gold standard, it's usually not possible to obtain one in the real world. So we make our sampling process as random as possible and ensure that the resulting sample is as representative of the population we're trying to study as possible.
 2. You can check linearity with a scatterplot. Just make sure the pattern of dots doesn't have strong curvature to it.
-3. There should be no patterns in the residuals at all. They should be randomly scattered around the best-fit line and the average size of the residuals should not change radically from one side of the graph to the other.^[This property of similarly-sized residuals is called *homoskesdasticity*. The violation of that condition is called *heteroskedasticity* which is one of Sean's favorite words ever!]
+3. There should be no patterns in the residuals at all. They should be randomly scattered around the best-fit line and the average size of the residuals should not change radically from one side of the graph to the other.^[This property of similarly-sized residuals is called *homoskesdasticity*. The violation of that condition is called *heteroskedasticity* which is one of Sean's favorite words ever!] You can check this by plotting the residuals, but that can't be done until after the model is fit. (The residuals don't exist until we have a value of $\hat{Y}$ with which to compare $Y$.)
 4. Check the scatterplot for outliers. If there are serious ones, assess them to make sure they are not data entry mistakes. If they correspond to valid data, you cannot just throw them away.^[In other words, don't follow the all-too-common "rule of thumb" for outliers, which is just covering them up with your thumb and pretending they don't exist.] Often, the solution is to run the analysis both including and (temporarily) excluding the outliers to make sure their presence doesn't radically alter the parameter estimates.
 
 
@@ -464,11 +465,69 @@ $$
 Don't forget that the matrix on the left---the sample covariance matrix---consists of numbers that we calculate from data. The matrix on the right---the model-implied matrix---contains letters, which are the unknown parameters we're trying to find.
 
 
-## Error variance in terms of correlation {#simple-error-correlation}
+## Coefficients in terms of correlation {#simple-coefficients-correlation}
 
 The formulas we derived are fine as far as they go. They allow you to take quantities calculated from data (variances and covariances of observed variables) and translate that into estimates of model parameters.
 
-The formula for the error variance $e$ is a little gross, though. With a little trickery, we can simplify that formula quite a bit.
+The formula for the slope parameter $b$ is pretty simple and has some intuitive content. It's the covariance between $X$ and $Y$, but dividing by the variance of $X$ to make sure it has the right units.
+
+$$
+b = \frac{Cov(X, Y)}{Var(X)}
+$$
+
+Another way to look at this formula is to rearrange things a bit as follows:
+
+::: {.rmdnote}
+
+The formula for $b$ above is equivalent to
+
+$$
+b = \frac{Cov(X, Y) \sqrt{Var (Y)}}{Var(X)\sqrt{Var(Y)}}
+$$
+
+Why?
+
+Now write it like this:
+
+$$
+b = \frac{Cov(X, Y) \sqrt{Var (Y)}}{\sqrt{Var(X)}\sqrt{Var(X)}\sqrt{Var(Y)}}
+$$
+
+What happened here?
+
+Finally, write it like this:
+
+$$
+b = \left(\frac{Cov(X, Y)}{\sqrt{Var(X)} \sqrt{Var(Y)}}\right) \left(\frac{\sqrt{Var(Y)}}{\sqrt{Var(X)}}\right)
+$$
+
+Explain why this simplifies to
+
+$$
+b = Corr(X, Y)\left(\frac{SD(Y)}{SD(X)}\right)
+$$
+
+:::
+
+This is often the formula taught in intro stats classes. In more concise notation:
+
+::: {.rmdimportant}
+
+$$
+b = r_{XY}\left(\frac{s_{Y}}{s_{X}}\right)
+$$
+
+:::
+
+The intuition here is that $b$ is basically just the correlation between $X$ and $Y$, but it has to account for the scales and units of $Y$ and $X$.
+
+::: {.rmdnote}
+
+Why does the standard deviation of $Y$ have to be in the numerator and the standard deviation of $X$ have to be in the denominator? Think about the units $b$ must have.
+
+:::
+
+The formula for the error variance $e$ is a little more gross. With similar trickery, though, we can simplify that formula quite a bit.
 
 Here is the starting point:
 
@@ -484,21 +543,17 @@ $$
 Var(Y) - \frac{Cov(X, Y)^{2}}{Var(X)}
 $$
 
-:::
-
-We're going to multiply the top and bottom of the fraction on the right by $Var(Y)$:
+Explain why the next step is valid:
 
 $$
 Var(Y) - \frac{Cov(X, Y)^{2} Var(Y)}{Var(X) Var(Y)}
 $$
 
-Then we can factor out a common term of $Var(Y)$ from both pieces:
+What about this next one?
 
 $$
 Var(Y) \left( 1 - \frac{Cov(X, Y)^{2}}{Var(X) Var(Y)} \right)
 $$
-
-::: {.rmdnote}
 
 Why would we do such a thing? In other words, does the new fraction on the right look familiar in any way?
 
@@ -518,7 +573,17 @@ There is a nice consequence of this last equation. The term in parentheses $\lef
 
 And if that is true, it must also be the case that $r_{XY}^2$ is the proportion of the variance of $Y$ explained by $X$. Calculating one minus a proportion gives the complementary proportion. For example, if $\left( 1 - r_{XY}^2 \right) = 0.3$, then 30% of the variance of $Y$ is left over as error. But that implies that 70% of the variance of $Y$ is explained by $X$. $1 - 0.3 = 0.7$.
 
-Most authors will write $R^{2}$ instead of $r^{2}$ for some reason.
+Most authors will write $R^{2}$ instead of $r^{2}$ for some reason. Rearranging the top equation, replacing $r_{XY}^{2}$ with $R^{2}$, and writing $e$ as $Var(E)$ looks like
+
+::: {.rmdimportant}
+
+$$
+R^{2} = 1 - \frac{Var(E)}{Var(Y)}
+$$
+
+:::
+
+In other words, we can think of the error variance as a *proportion* of the total variance of $Y$, and then $R^2$ is the complementary proportion. Therefore, $R^{2}$ is the proportion of the variance *explained by the model*.
 
 
 ## Regression with standardized variables {#simple-standardized}
@@ -566,7 +631,10 @@ $$
 $$
 e = 1 - r_{XY}^{2}
 $$
+
 :::
+
+The slope of the regression is just the correlation! And the error variance is just a proportion between 0 and 1 which is complementary to $r_{xy}^{2}$ (AKA, $R^{2}$, or the variance explained by the model). Those two variances, $e$ and $R^{2}$ now add up to 1.
 
 ::: {.rmdnote}
 
@@ -591,7 +659,8 @@ Modify the `ggplot` code from earlier in the chapter to create a scatterplot of 
 The straightforward way to run regression in R is to use the `lm` command. This stands for "linear model". It uses a special symbol, the tilde ~, to express the relationship between the endogenous variable and the exogenous variable. The endogenous (response) variable always goes on the left, before the tilde. The exogenous (predictor) variable goes on the right, after the tilde. Finally, there is a `data` argument to tell `lm` where to find the variables to model.
 
 ```{r}
-lm(Y ~ X, data = airquality_mc)
+YX_lm <- lm(Y ~ X, data = airquality_mc)
+YX_lm
 ```
 
 ::: {.rmdnote}
@@ -608,6 +677,40 @@ Run the `lm` command, but this time using the standardized variables from the `a
 
 :::
 
+Don't forget: these parameters make no sense to interpret unless the regression assumptions are met. We looked at a scatterplot already and determined that is was approximately linear. But we haven't checked the residuals.
+
+The residuals can be obtained most easily from the model by using the `augment` command from the `broom` package in the following way:
+
+```{r}
+YX_aug <- augment(YX_lm)
+YX_aug
+```
+
+There are many columns here and we're not going to discuss most of them, but the residuals of the model are stored in the column called `.resid`. There are also standardized residuals stored in column `std.resid`. Both will look exactly the same except for the scale of the axes, so it doesn't much matter which we use.
+
+The residuals are now stored in a new tibble called `YX_aug`, so be sure to use that in the following `ggplot` command and *not* the original data. We'll put the residuals on the y-axis. Since we're interested in checking that the residuals are independent of the $X$ variable, we will put that, unsurprisingly, on the x-axis. A reference line at $y = 0$ helps us see where the residuals are centered.
+
+```{r}
+ggplot(YX_aug, aes(y = .resid, x = X)) +
+    geom_point() +
+    geom_hline(yintercept = 0, color = "red")
+```
+
+or
+
+```{r}
+ggplot(YX_aug, aes(y = .std.resid, x = X)) +
+    geom_point() +
+    geom_hline(yintercept = 0, color = "red")
+```
+
+::: {.rmdnote}
+
+What do you see in the graphs above? Is this good or bad? What indicates in these graphs that the residuals are independent of $X$?
+
+:::
+
+
 ### Using `lavaan` {#simple-r-lavaan}
 
 We will also introduce you briefly to the `lavaan` package. While it's totally overkill for simple regression, getting used to the syntax now will make it easier to continue to build up your confidence in using it when it will be the only tool we use.
@@ -615,7 +718,7 @@ We will also introduce you briefly to the `lavaan` package. While it's totally o
 A `lavaan` model is built in a similar way to `lm` using the tilde ~ notation. One big difference is that the model needs to be specified inside quotation marks first and assigned to a name like this:
 
 ```{r}
-TEMP_WIND_model <- "Y ~ X" 
+TEMP_WIND_model <- "Y ~ X"
 ```
 
 
@@ -654,6 +757,8 @@ Again, explain these three numbers. (They are now listed in a column called `est
 Verify that the second line is actually the error variance. (Hint: remember $1 - r_{XY}^{2}$.) How do we know it's not the standardized variance of $Y$? (In other words, what do you actually know to be the standardized variance of $Y$?)
 
 :::
+
+One downside of using `lavaan` is that it doesn't store the residuals, so we have no way of checking that regression assumption. For more complex models in future chapters where `lavaan` (or some comparable package) is the only choice, the residual independence assumption will be just that: an assumption. We must have substantive reason to believe that's true when we specify the model.
 
 
 ## What about intercepts? {#simple-intercepts}

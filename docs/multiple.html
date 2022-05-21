@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 5 Multiple regression | Demystifying Structural Equation Modeling</title>
 <meta name="author" content="Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)">
-<meta name="description" content="Preliminaries We will load the tidyverse package and lavaan. library(tidyverse) library(lavaan)  5.1 The multiple regression model This chapter is an extension of all the ideas established in the...">
+<meta name="description" content="Preliminaries We will load the tidyverse package to work with tibbles, the broom package to calculate residuals, and lavaan. library(tidyverse) library(broom) library(lavaan)  5.1 The multiple...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Chapter 5 Multiple regression | Demystifying Structural Equation Modeling">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://vectorposse.github.io/sem_book/multiple.html">
-<meta property="og:description" content="Preliminaries We will load the tidyverse package and lavaan. library(tidyverse) library(lavaan)  5.1 The multiple regression model This chapter is an extension of all the ideas established in the...">
+<meta property="og:description" content="Preliminaries We will load the tidyverse package to work with tibbles, the broom package to calculate residuals, and lavaan. library(tidyverse) library(broom) library(lavaan)  5.1 The multiple...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 5 Multiple regression | Demystifying Structural Equation Modeling">
-<meta name="twitter:description" content="Preliminaries We will load the tidyverse package and lavaan. library(tidyverse) library(lavaan)  5.1 The multiple regression model This chapter is an extension of all the ideas established in the...">
+<meta name="twitter:description" content="Preliminaries We will load the tidyverse package to work with tibbles, the broom package to calculate residuals, and lavaan. library(tidyverse) library(broom) library(lavaan)  5.1 The multiple...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -74,9 +74,10 @@
 <div id="preliminaries-1" class="section level2 unnumbered">
 <h2>Preliminaries<a class="anchor" aria-label="anchor" href="#preliminaries-1"><i class="fas fa-link"></i></a>
 </h2>
-<p>We will load the <code>tidyverse</code> package and <code>lavaan</code>.</p>
-<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<p>We will load the <code>tidyverse</code> package to work with tibbles, the <code>broom</code> package to calculate residuals, and <code>lavaan</code>.</p>
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be">lavaan</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="multiple-model" class="section level2" number="5.1">
@@ -127,7 +128,7 @@ Y = b_{1}X_{1} + b_{2}X_{2}  + \dots + b_{k}X_{k} + E
 <ol style="list-style-type: decimal">
 <li>Nothing has changed here. Good analysis starts with good data collection practices.</li>
 <li>With only <span class="math inline">\(Y\)</span> against <span class="math inline">\(X\)</span>, the regression model is a line. With <span class="math inline">\(Y\)</span> against <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>, the regression model is a plane (a 2-dimensional plane sitting in 3-dimensional space) which is a little challenging to graph. With more predictors, the regression model lives in even higher dimensions and it’s impossible to visualize. To check this condition, the best you can usually do is to check that the scatterplots of <span class="math inline">\(Y\)</span> against each <span class="math inline">\(X_{i}\)</span> individually are approximately linear.</li>
-<li>Nothing changes here.</li>
+<li>Once we fit the model, we can check the residuals. Rather than plotting the residuals against each <span class="math inline">\(X_{i}\)</span> separately, we can employ a trick that we’ll explain later in the chapter.</li>
 <li>Nothing changes here.</li>
 <li>This is the new condition. When two or more predictors variables are highly correlated with each other, this induces a condition called <em>multicollinearity</em>.</li>
 </ol>
@@ -233,7 +234,7 @@ If we set these expressions equal to the numbers from the sample covariance matr
 <p>If high school GPA and hours per week studying are correlated (and they likely are), they influence each other, and some of the influence has the danger of “corrupting” the estimates of the path coefficients. For example, if <span class="math inline">\(b_{2}\)</span> is positive, that would suggest that hours spend studying is associated with predicted increases in college GPA. But how do we know that’s really due to the studying? Maybe students who did well in high school are just “smarter”. Sure, they also put in more hours studying, but maybe that doesn’t matter. Maybe those students would do just as well in college even if they didn’t study a whole lot. If that were the case, the coefficient <span class="math inline">\(b_{2}\)</span> would be positive just because that set of students (who happen to study more, even though it doesn’t matter) also are the ones who have high college GPAs.</p>
 <p>This is why it’s important to <em>control</em> for other variables. All this means is that we need to temporarily fix the value of other variables to make the comparison fair. For example, we could look only at students with a 3.0 in high school. Among those students, there will be variability in the number of hours they study in college. If that variability is associated with variability in college GPA, we know that the hours spent studying is at least partly “responsible” for explaining that change. (There are lots of other factors too, but those will be swept up in the error variance.) The high school GPA can’t explain that because it was fixed at 3.0, so we’re comparing apples to apples. Students who got a 2.0 in high school may do more poorly overall, but the relative increase in GPA due to studying would be the same.</p>
 <p>If the parameter <span class="math inline">\(b_{2}\)</span> is estimated to be 0.13, that suggests that each additional hour of study time per week predicts an increase of 0.13 points in the college GPA, holding high school GPA constant. This means that the increase of 0.13 is only predicted among groups of students with the same high school GPA.</p>
-<p>Let’s say that <span class="math inline">\(b_{1}\)</span> is estimated to be 1.2. That means that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. But this is a multiple regression model, so this coefficient can only be interpreting holding <code>HOURS</code> constant. This means that this coefficient only holds among groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA.</p>
+<p>If the parameter <span class="math inline">\(b_{1}\)</span> is estimated to be 1.2, that suggests that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. This coefficient can only be interpreted while holding <code>HOURS</code> constant. This means that this estimate only holds among groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA to explain changes in college GPA.</p>
 </div>
 <div id="multiple-standardized" class="section level2" number="5.5">
 <h2>
@@ -299,7 +300,7 @@ Rearranging to solve for <span class="math inline">\(e\)</span>,
 e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12}\right)
 \]</span>
 It is <em>not</em> enlightening in any way to replace <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> here with the earlier fractions. We can leave <span class="math inline">\(e\)</span> like this.</p>
-<p>Since the variance of <span class="math inline">\(Y\)</span> is 1, the stuff inside the parentheses above represents the variance <em>explained by the model</em>. (That is subtracted from 1, then, to be left with <span class="math inline">\(e\)</span>, the error variance.) This is analogous to the <span class="math inline">\(R^{2}\)</span> term described in the <a href="simple.html#simple-error-correlation">last chapter</a>.</p>
+<p>Since the variance of <span class="math inline">\(Y\)</span> is 1, the stuff inside the parentheses above represents the variance <em>explained by the model</em>. (That is subtracted from 1, then, to be left with <span class="math inline">\(e\)</span>, the error variance.) This is analogous to the <span class="math inline">\(R^{2}\)</span> term described in the <a href="#simple-error-correlation">last chapter</a>.</p>
 <p>This makes some conceptual sense too. All the pieces of <span class="math inline">\(\left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12}\right)\)</span> correspond to various pieces of the model. The first two relate to the direct effects of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> and the third piece relates to an “indirect” effect shared between them.</p>
 </div>
 <div id="multiple-r" class="section level2" number="5.6">
@@ -308,7 +309,7 @@ It is <em>not</em> enlightening in any way to replace <span class="math inline">
 </h2>
 <p>Let’s fit a multiple regression model on some data about music. The data is a sample of 10,000 songs from the <a href="http://millionsongdataset.com/">Million Song Dataset</a>, a collection of metrics about the audio for a million contemporary popular music tracks.</p>
 <p>This data set was downloaded from the <a href="https://corgis-edu.github.io/corgis/csv/">CORGIS Dataset Project</a> and more information about the variables in this data set can be found <a href="https://corgis-edu.github.io/corgis/csv/music/">here</a>.</p>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">music</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/VectorPosse/sem_book/main/data/music.csv"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Rows: 10000 Columns: 35
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -318,6 +319,28 @@ It is <em>not</em> enlightening in any way to replace <span class="math inline">
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">music</span></code></pre></div>
+<pre><code>## # A tibble: 10,000 × 35
+##    artist.familiarity artist.hotttnes… artist.id artist.latitude artist.location
+##                 &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;               &lt;dbl&gt;           &lt;dbl&gt;
+##  1              0.582            0.402 ARD7TVE1…             0                 0
+##  2              0.631            0.417 ARMJAGH1…            35.1               0
+##  3              0.487            0.343 ARKRRTF1…             0                 0
+##  4              0.630            0.454 AR7G5I41…             0                 0
+##  5              0.651            0.402 ARXR32B1…             0                 0
+##  6              0.535            0.385 ARKFYS91…             0                 0
+##  7              0.556            0.262 ARD0S291…             0                 0
+##  8              0.801            0.606 AR10USD1…             0                 0
+##  9              0.427            0.332 AR8ZCNI1…             0                 0
+## 10              0.551            0.423 ARNTLGG1…             0                 0
+## # … with 9,990 more rows, and 30 more variables: artist.longitude &lt;dbl&gt;,
+## #   artist.name &lt;chr&gt;, artist.similar &lt;dbl&gt;, artist.terms &lt;chr&gt;,
+## #   artist.terms_freq &lt;dbl&gt;, release.id &lt;dbl&gt;, release.name &lt;dbl&gt;,
+## #   song.artist_mbtags &lt;dbl&gt;, song.artist_mbtags_count &lt;dbl&gt;,
+## #   song.bars_confidence &lt;dbl&gt;, song.bars_start &lt;dbl&gt;,
+## #   song.beats_confidence &lt;dbl&gt;, song.beats_start &lt;dbl&gt;, song.duration &lt;dbl&gt;,
+## #   song.end_of_fade_in &lt;dbl&gt;, song.hotttnesss &lt;dbl&gt;, song.id &lt;chr&gt;, …</code></pre>
 <p>The endogenous variable of interest to us will be the measure of the song’s popularity, called <code>song.hotttnesss</code> (on a scale from 0 to 1).<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Very important that there are three t’s and three s’s!&lt;/p&gt;"><sup>16</sup></a> There are many possible exogenous predictors, but let’s focus on three:</p>
 <ul>
 <li>
@@ -339,94 +362,202 @@ It is <em>not</em> enlightening in any way to replace <span class="math inline">
 </ul>
 </li>
 </ul>
+<p>Let’s plot <code>song.hotttnesss</code> against each of the three proposed predictors to test the linearity assumption, starting with <code>artist.hotttnesss</code>:</p>
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">music</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">song.hotttnesss</span>,
+                  x <span class="op">=</span> <span class="va">artist.hotttnesss</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-77-1.png" width="672"></div>
+<p>Uh, we’ve got some issues here to deal with. Since <code>song.hotttness</code> is supposed to be from 0 to 1, we can guess that the -1 values are likely coded to represent “missing” data. Even the values of 0 don’t seem valid given that there is a big gap between the row of zeros and any of the rest of the cluster of actual data. The <code>artist.hotttness</code> variable also seems to have some zeros that are disconnected from the rest of the data. These may be genuine outliers, but it’s more likely that these were artists for whom no data was collected.</p>
+<p>While we’re suspecting issues, let’s also check <code>song.loudness</code> and <code>song.tempo</code>.</p>
+<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">music</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">song.hotttnesss</span>,
+                  x <span class="op">=</span> <span class="va">song.loudness</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-78-1.png" width="672"></div>
+<p>The <code>song.loudness</code> distribution looks reasonable. It’s definitely skewed to the left, but there are no strict requirements about the predictor variables having any particular type of distribution.</p>
+<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">music</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">song.hotttnesss</span>,
+                  x <span class="op">=</span> <span class="va">song.tempo</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-79-1.png" width="672"></div>
+<div class="rndnote">
+<p>Is it possible for a song tempo to be 0 BPM?</p>
+</div>
+<p>To make it a little cleaner, the following code will <code>select</code> only the variables in which we’re interested. Then it will <code>filter</code> out the values we want to keep (discarding the ones that represent missing/invalid data). We’ll put this into a new tibble called <code>music_clean</code>.</p>
+<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">music_clean</span> <span class="op">&lt;-</span> <span class="va">music</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">song.hotttnesss</span>, <span class="va">artist.hotttnesss</span>,
+           <span class="va">song.loudness</span>, <span class="va">song.tempo</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">song.hotttnesss</span> <span class="op">&gt;</span> <span class="fl">0</span>,
+           <span class="va">artist.hotttnesss</span> <span class="op">&gt;</span> <span class="fl">0</span>,
+           <span class="va">song.tempo</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
+<span class="va">music_clean</span></code></pre></div>
+<pre><code>## # A tibble: 4,157 × 4
+##    song.hotttnesss artist.hotttnesss song.loudness song.tempo
+##              &lt;dbl&gt;             &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;
+##  1           0.602             0.402        -11.2        92.2
+##  2           0.605             0.402         -4.50      130. 
+##  3           0.266             0.332        -13.5        86.6
+##  4           0.266             0.352         -7.54      118. 
+##  5           0.405             0.448         -8.58      120. 
+##  6           0.335             0.331        -16.1       128. 
+##  7           0.684             0.513         -5.27      150. 
+##  8           0.314             0.378         -8.05      112. 
+##  9           0.667             0.542         -4.26      167. 
+## 10           0.495             0.306        -12.3       138. 
+## # … with 4,147 more rows</code></pre>
+<p>This has reduced the number of rows to 4,157, but that is still a huge sample size.</p>
+<p>Let’s check the scatterplots once more, now with the <code>music_clean</code> data.</p>
+<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">music_clean</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">song.hotttnesss</span>,
+                        x <span class="op">=</span> <span class="va">artist.hotttnesss</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-81-1.png" width="672"></div>
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">music_clean</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">song.hotttnesss</span>,
+                        x <span class="op">=</span> <span class="va">song.loudness</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-82-1.png" width="672"></div>
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">music_clean</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">song.hotttnesss</span>,
+                        x <span class="op">=</span> <span class="va">song.tempo</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-83-1.png" width="672"></div>
+<p>There doesn’t appear to be much of an association with loudness or tempo. But that doesn’t violate any assumptions. (A violation of the assumptions would be a decidedly non-linear association, not just a near-zero association.) Given these graphs, we will expect the model to tell us that song popularity is somewhat associated with artist popularity, but not much with loudness or tempo.</p>
 <div id="multiple-r-lm" class="section level3" number="5.6.1">
 <h3>
 <span class="header-section-number">5.6.1</span> Using <code>lm</code><a class="anchor" aria-label="anchor" href="#multiple-r-lm"><i class="fas fa-link"></i></a>
 </h3>
-<p>The <code>lm</code> model specification is a minor extension of what you learned for simple regression. Just use plus signs on the right side of the tilde ~ to add more predictors.</p>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">song.hotttnesss</span> <span class="op">~</span> <span class="va">artist.hotttnesss</span> <span class="op">+</span> <span class="va">song.loudness</span> <span class="op">+</span> 
-       <span class="va">song.tempo</span>,
-   data <span class="op">=</span> <span class="va">music</span><span class="op">)</span></code></pre></div>
+<p>The <code>lm</code> model specification is a minor extension of what you learned for simple regression. Just use plus signs on the right side of the tilde ~ to add more predictors. Be sure to use <code>music_clean</code> and not <code>music</code>!</p>
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SONG_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">song.hotttnesss</span> <span class="op">~</span> <span class="va">artist.hotttnesss</span> <span class="op">+</span>
+                  <span class="va">song.loudness</span> <span class="op">+</span>
+                  <span class="va">song.tempo</span>,
+              data <span class="op">=</span> <span class="va">music_clean</span><span class="op">)</span>
+<span class="va">SONG_lm</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = song.hotttnesss ~ artist.hotttnesss + song.loudness + 
-##     song.tempo, data = music)
+##     song.tempo, data = music_clean)
 ## 
 ## Coefficients:
 ##       (Intercept)  artist.hotttnesss      song.loudness         song.tempo  
-##        -5.708e-01          1.157e+00          1.187e-02          6.415e-05</code></pre>
+##         0.1636446          0.7003692          0.0036969          0.0002057</code></pre>
 <p>We didn’t go to the trouble of mean-centering the data this time, so the intercept is no longer 0. But we will not attempt to interpret the intercept anyway. The other three coefficients are <span class="math inline">\(b_{1}\)</span>, <span class="math inline">\(b_{2}\)</span> and <span class="math inline">\(b_{3}\)</span>, the path coefficients of the model. These are interpreted as follows:</p>
 <ul>
 <li>
 <span class="math inline">\(b_{1}\)</span>:
 <ul>
-<li>Song popularity is predicted to increase 1.157 points for every point increase in artist popularity.</li>
+<li>Song popularity is predicted to increase 0.7 points for every point increase in artist popularity.</li>
 </ul>
 </li>
 </ul>
 <p>While this is mathematically true, it’s kind of nonsensical to report using numbers of that magnitude. Both scales only go from 0 to 1, so an increase in 1 point would be measuring the difference between an artist with 0 popularity (the least popular artists in the data set) to an artist with 1 popularity (the most popular artists in the data set).</p>
 <p>A better way to report this would be to scale everything down by a factor of 10:</p>
 <ul>
-<li><p>Song popularity is predicted to increase 0.1157 points for every 0.1 increase in artist popularity.</p></li>
+<li><p>Song popularity is predicted to increase 0.07 points for every 0.1 increase in artist popularity.</p></li>
 <li>
 <p><span class="math inline">\(b_{2}\)</span>:</p>
 <ul>
-<li>Song popularity is predicted to increase 0.01187 points for every increase of 1 dB of loudness.</li>
+<li>Song popularity is predicted to increase 0.004 points for every increase of 1 dB of loudness.</li>
 </ul>
 </li>
 </ul>
 <p>An increase of 1 dB is not very much, so again, we can scale the result to make it more meaningful. This time we’ll multiply by a factor of 10:</p>
 <ul>
-<li><p>Song popularity is predicted to increase 0.1187 points for every increase of 10 dB of loudness.</p></li>
+<li><p>Song popularity is predicted to increase 0.04 points for every increase of 10 dB of loudness.</p></li>
 <li>
 <p><span class="math inline">\(b_{3}\)</span>:</p>
 <ul>
-<li>Song popularity is predicted to increase 0.00006415 points for every increase of 1 BPM in the tempo.</li>
+<li>Song popularity is predicted to increase 0.0002 points for every increase of 1 BPM in the tempo.</li>
 </ul>
 </li>
 </ul>
 <div class="rmdnote">
-<p>Restate the interpretation of <span class="math inline">\(b_{3}\)</span> on a scale that makes sense. If you’re not familiar with BPM, Google it to get a sense of what a reasonably jump in tempo might be.</p>
+<p>Restate the interpretation of <span class="math inline">\(b_{3}\)</span> on a scale that makes sense. If you’re not familiar with BPM, Google it to get a sense of what a reasonable jump in tempo might be.</p>
+</div>
+<p>Now that we have the model fit, we can use <code>broom</code> to capture the residuals.</p>
+<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SONG_aug</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html">augment</a></span><span class="op">(</span><span class="va">SONG_lm</span><span class="op">)</span>
+<span class="va">SONG_aug</span></code></pre></div>
+<pre><code>## # A tibble: 4,157 × 10
+##    song.hotttnesss artist.hotttnesss song.loudness song.tempo .fitted  .resid
+##              &lt;dbl&gt;             &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1           0.602             0.402        -11.2        92.2   0.423  0.179 
+##  2           0.605             0.402         -4.50      130.    0.455  0.149 
+##  3           0.266             0.332        -13.5        86.6   0.364 -0.0984
+##  4           0.266             0.352         -7.54      118.    0.406 -0.140 
+##  5           0.405             0.448         -8.58      120.    0.470 -0.0652
+##  6           0.335             0.331        -16.1       128.    0.362 -0.0273
+##  7           0.684             0.513         -5.27      150.    0.535  0.150 
+##  8           0.314             0.378         -8.05      112.    0.422 -0.108 
+##  9           0.667             0.542         -4.26      167.    0.562  0.105 
+## 10           0.495             0.306        -12.3       138.    0.361  0.134 
+## # … with 4,147 more rows, and 4 more variables: .hat &lt;dbl&gt;, .sigma &lt;dbl&gt;,
+## #   .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;</code></pre>
+<p>But how do we graph them now that there are three predictor variables? We could graph the residuals against all three predictors separately, but there’s a more efficient method.</p>
+<div class="rmdnote">
+<p>Calculate</p>
+<p><span class="math display">\[
+Cov(E, \hat{Y})
+\]</span>
+by substituting</p>
+<p><span class="math display">\[
+\hat{Y} = b_{1}X_{1} + b_{2}X_{2} + b_{3}X_{3}
+\]</span></p>
+<p>If we assume that <span class="math inline">\(E\)</span> is independent of all the predictors, what is the value of <span class="math inline">\(Cov(E, \hat{Y})\)</span>?</p>
+</div>
+<p>Of course, if <span class="math inline">\(Cov(E, \hat{Y}) = 0\)</span>, that does not necessarily imply that all the <span class="math inline">\(Cov(E, X_{i})\)</span> must be zero. And even if those are zero, that doesn’t imply independence. But if <span class="math inline">\(Cov(E, \hat{Y}) \neq 0\)</span>, then we know at least one of the <span class="math inline">\(Cov(E, X_{i})\)</span> also must be non-zero. <strong>Therefore, we can plot the residuals against the fitted values and this will serve as <em>disqualifying</em> evidence of a problem with the model.</strong></p>
+<p>One of the nice features of the <code>augment</code> output is that it also has a column called <code>.fitted</code> that stores the <span class="math inline">\(\hat{Y}\)</span> values.</p>
+<p>Here are the (standardized) residuals graphed against the fitted values:</p>
+<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">SONG_aug</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">.std.resid</span>, x <span class="op">=</span> <span class="va">.fitted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-86-1.png" width="672"></div>
+<p>The weirdness in the residuals is not ideal. It doesn’t prevent us from fitting the model, but we will state our results cautiously knowing that variance toward the left half of the graph is compressed relative to the right side of the graph. Therefore, the error variance is not “acting” in the model the same way across all combinations of the predictor variables.</p>
+<div class="rmdnote">
+<p>Go back and look at the original scatterplots of the data (from <code>music_clean</code> and see if you can figure out why the residuals are cut off funny like that in the lower left quadrant.)</p>
 </div>
 </div>
 <div id="multiple-r-lavaan" class="section level3" number="5.6.2">
 <h3>
 <span class="header-section-number">5.6.2</span> Using <code>lavaan</code><a class="anchor" aria-label="anchor" href="#multiple-r-lavaan"><i class="fas fa-link"></i></a>
 </h3>
-<p>Model specification in <code>lavaan</code> happens in a separate step.</p>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<p>Model specification in <code>lavaan</code> happens in a separate step with the model in quotes:</p>
+<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">SONG_model</span> <span class="op">&lt;-</span> <span class="st">"song.hotttnesss ~ artist.hotttnesss +
     song.loudness + 
     song.tempo"</span> </code></pre></div>
 <p>Then the model is fit with the <code>sem</code> function.</p>
-<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">SONG_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span><span class="va">SONG_model</span>, data <span class="op">=</span> <span class="va">music</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">SONG_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span><span class="va">SONG_model</span>, data <span class="op">=</span> <span class="va">music_clean</span><span class="op">)</span></code></pre></div>
 <p>Here are the unstandardized parameter estimates:</p>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/parameterEstimates.html">parameterEstimates</a></span><span class="op">(</span><span class="va">SONG_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>##                  lhs op               rhs      est    se      z pvalue ci.lower
-## 1    song.hotttnesss  ~ artist.hotttnesss    1.157 0.047 24.546  0.000    1.064
-## 2    song.hotttnesss  ~     song.loudness    0.012 0.001  9.333  0.000    0.009
-## 3    song.hotttnesss  ~        song.tempo    0.000 0.000  0.334  0.738    0.000
-## 4    song.hotttnesss ~~   song.hotttnesss    0.442 0.006 70.711  0.000    0.430
-## 5  artist.hotttnesss ~~ artist.hotttnesss    0.021 0.000     NA     NA    0.021
-## 6  artist.hotttnesss ~~     song.loudness    0.145 0.000     NA     NA    0.145
-## 7  artist.hotttnesss ~~        song.tempo    0.255 0.000     NA     NA    0.255
-## 8      song.loudness ~~     song.loudness   29.154 0.000     NA     NA   29.154
-## 9      song.loudness ~~        song.tempo   33.970 0.000     NA     NA   33.970
-## 10        song.tempo ~~        song.tempo 1239.250 0.000     NA     NA 1239.250
+## 1    song.hotttnesss  ~ artist.hotttnesss    0.700 0.021 33.427  0.000    0.659
+## 2    song.hotttnesss  ~     song.loudness    0.004 0.000  7.987  0.000    0.003
+## 3    song.hotttnesss  ~        song.tempo    0.000 0.000  3.096  0.002    0.000
+## 4    song.hotttnesss ~~   song.hotttnesss    0.021 0.000 45.591  0.000    0.020
+## 5  artist.hotttnesss ~~ artist.hotttnesss    0.012 0.000     NA     NA    0.012
+## 6  artist.hotttnesss ~~     song.loudness    0.112 0.000     NA     NA    0.112
+## 7  artist.hotttnesss ~~        song.tempo    0.091 0.000     NA     NA    0.091
+## 8      song.loudness ~~     song.loudness   25.426 0.000     NA     NA   25.426
+## 9      song.loudness ~~        song.tempo   27.118 0.000     NA     NA   27.118
+## 10        song.tempo ~~        song.tempo 1185.061 0.000     NA     NA 1185.061
 ##    ci.upper
-## 1     1.249
-## 2     0.014
+## 1     0.741
+## 2     0.005
 ## 3     0.000
-## 4     0.454
-## 5     0.021
-## 6     0.145
-## 7     0.255
-## 8    29.154
-## 9    33.970
-## 10 1239.250</code></pre>
+## 4     0.022
+## 5     0.012
+## 6     0.112
+## 7     0.091
+## 8    25.426
+## 9    27.118
+## 10 1185.061</code></pre>
 <p>Focus on the estimate column (<code>est</code>).</p>
 <div class="rmdnote">
 <p>Do you recognize the values from lines 1 through 3?</p>
@@ -434,41 +565,41 @@ It is <em>not</em> enlightening in any way to replace <span class="math inline">
 <p>What’s going on in lines 5 through 10?</p>
 </div>
 <p>Here are the standardized parameter estimates:</p>
-<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/standardizedSolution.html">standardizedSolution</a></span><span class="op">(</span><span class="va">SONG_fit</span><span class="op">)</span></code></pre></div>
-<pre><code>##                  lhs op               rhs est.std    se       z pvalue ci.lower
-## 1    song.hotttnesss  ~ artist.hotttnesss   0.240 0.009  25.612  0.000    0.222
-## 2    song.hotttnesss  ~     song.loudness   0.093 0.010   9.388  0.000    0.073
-## 3    song.hotttnesss  ~        song.tempo   0.003 0.010   0.334  0.738   -0.016
-## 4    song.hotttnesss ~~   song.hotttnesss   0.925 0.005 186.180  0.000    0.915
-## 5  artist.hotttnesss ~~ artist.hotttnesss   1.000 0.000      NA     NA    1.000
-## 6  artist.hotttnesss ~~     song.loudness   0.187 0.000      NA     NA    0.187
-## 7  artist.hotttnesss ~~        song.tempo   0.050 0.000      NA     NA    0.050
-## 8      song.loudness ~~     song.loudness   1.000 0.000      NA     NA    1.000
-## 9      song.loudness ~~        song.tempo   0.179 0.000      NA     NA    0.179
-## 10        song.tempo ~~        song.tempo   1.000 0.000      NA     NA    1.000
+<pre><code>##                  lhs op               rhs est.std    se      z pvalue ci.lower
+## 1    song.hotttnesss  ~ artist.hotttnesss   0.459 0.012 39.345  0.000    0.436
+## 2    song.hotttnesss  ~     song.loudness   0.111 0.014  8.051  0.000    0.084
+## 3    song.hotttnesss  ~        song.tempo   0.042 0.014  3.100  0.002    0.016
+## 4    song.hotttnesss ~~   song.hotttnesss   0.752 0.011 69.186  0.000    0.731
+## 5  artist.hotttnesss ~~ artist.hotttnesss   1.000 0.000     NA     NA    1.000
+## 6  artist.hotttnesss ~~     song.loudness   0.202 0.000     NA     NA    0.202
+## 7  artist.hotttnesss ~~        song.tempo   0.024 0.000     NA     NA    0.024
+## 8      song.loudness ~~     song.loudness   1.000 0.000     NA     NA    1.000
+## 9      song.loudness ~~        song.tempo   0.156 0.000     NA     NA    0.156
+## 10        song.tempo ~~        song.tempo   1.000 0.000     NA     NA    1.000
 ##    ci.upper
-## 1     0.259
-## 2     0.112
-## 3     0.022
-## 4     0.935
+## 1     0.482
+## 2     0.138
+## 3     0.069
+## 4     0.773
 ## 5     1.000
-## 6     0.187
-## 7     0.050
+## 6     0.202
+## 7     0.024
 ## 8     1.000
-## 9     0.179
+## 9     0.156
 ## 10    1.000</code></pre>
 <p>Focus on the estimates again (<code>est.std</code>).</p>
 <div class="rmdnote">
 <p>Why is it easier to compare the values in lines 1 though 3 in this output than it was in the unstandardized table? (Hint: think about units of measurement or lack thereof.)</p>
-<p>What does the value in line 4 tell you? (Hint: it’s awfully close to 1.)</p>
+<p>What does the value in line 4 tell you? (Hint: it’s closer to 1 than to 0.)</p>
 <p>Why are lines 5, 8, and 10 equal to 1?</p>
 <p>How do you interpret lines 6, 7, and 9?</p>
 </div>
 <p>This is the final model with all variables labeled and all unstandardized parameter estimates identified:</p>
-<div class="inline-figure"><img src="graphics/multiple_regression_music.png" width="598" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="graphics/multiple_regression_music.png" width="596" style="display: block; margin: auto;"></div>
 <p>This is the same thing, but with standardized parameter estimates:</p>
-<div class="inline-figure"><img src="graphics/multiple_regression_music_std.png" width="598" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="graphics/multiple_regression_music_std.png" width="596" style="display: block; margin: auto;"></div>
 
 </div>
 </div>
@@ -510,7 +641,7 @@ It is <em>not</em> enlightening in any way to replace <span class="math inline">
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-20.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-21.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

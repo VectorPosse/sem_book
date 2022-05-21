@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 4 Simple regression | Demystifying Structural Equation Modeling</title>
 <meta name="author" content="Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)">
-<meta name="description" content="Preliminaries We need to load the packages we will need for this chapter. The tidyverse package has all sorts of utilities for working with tibbles (data frames). This will also be our first...">
+<meta name="description" content="Preliminaries We need to load the packages we will need for this chapter. The tidyverse package has all sorts of utilities for working with tibbles (data frames). The broom package will be used to...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Chapter 4 Simple regression | Demystifying Structural Equation Modeling">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://vectorposse.github.io/sem_book/simple.html">
-<meta property="og:description" content="Preliminaries We need to load the packages we will need for this chapter. The tidyverse package has all sorts of utilities for working with tibbles (data frames). This will also be our first...">
+<meta property="og:description" content="Preliminaries We need to load the packages we will need for this chapter. The tidyverse package has all sorts of utilities for working with tibbles (data frames). The broom package will be used to...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 4 Simple regression | Demystifying Structural Equation Modeling">
-<meta name="twitter:description" content="Preliminaries We need to load the packages we will need for this chapter. The tidyverse package has all sorts of utilities for working with tibbles (data frames). This will also be our first...">
+<meta name="twitter:description" content="Preliminaries We need to load the packages we will need for this chapter. The tidyverse package has all sorts of utilities for working with tibbles (data frames). The broom package will be used to...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -74,9 +74,10 @@
 <div id="preliminaries" class="section level2 unnumbered">
 <h2>Preliminaries<a class="anchor" aria-label="anchor" href="#preliminaries"><i class="fas fa-link"></i></a>
 </h2>
-<p>We need to load the packages we will need for this chapter. The <code>tidyverse</code> package has all sorts of utilities for working with tibbles (data frames). This will also be our first introduction to the <code>lavaan</code> package that will be used throughout the rest of the book.</p>
+<p>We need to load the packages we will need for this chapter. The <code>tidyverse</code> package has all sorts of utilities for working with tibbles (data frames). The <code>broom</code> package will be used to calculate and store the residuals of the model. This will also be our first introduction to the <code>lavaan</code> package that will be used throughout the rest of the book.</p>
 <div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be">lavaan</a></span><span class="op">)</span></code></pre></div>
 <pre><code>## This is lavaan 0.6-11
 ## lavaan is FREE software! Please report any bugs.</code></pre>
@@ -226,7 +227,7 @@ Y = bX + 1 \cdot E
 \]</span></p>
 <p>How is that “1” represented in the diagram?</p>
 </div>
-<p>The letters <span class="math inline">\(v\)</span>, <span class="math inline">\(b\)</span>, and <span class="math inline">\(e\)</span> are called <em>free parameters</em> because they are free to vary depending on the data. The “1” is called a <em>fixed parameter</em>. It is attached to an arrow, so it’s technically a parameter of the model, but it is not a parameter that we need to calculate. It is “fixed” at the value 1 because the error term in the model is represented by <span class="math inline">\(+E\)</span> with a fixed coefficient of 1. In general, thoughout the book, if the word “parameter” is used without qualification, you can assume we are talking only about the free parameters, the ones we need to calculate.</p>
+<p>The letters <span class="math inline">\(v\)</span>, <span class="math inline">\(b\)</span>, and <span class="math inline">\(e\)</span> are called <em>free parameters</em> because they are free to vary depending on the data. The “1” is called a <em>fixed parameter</em>. It is attached to an arrow, so it’s technically a parameter of the model, but it is not a parameter that we need to calculate. It is “fixed” at the value 1 because the error term in the model is represented by <span class="math inline">\(+E\)</span> with a fixed coefficient of 1. In general, throughout the book, if the word “parameter” is used without qualification, you can assume we are talking only about the free parameters, the ones we need to calculate.</p>
 <p>The only thing in the diagram that hasn’t been explained yet is <span class="math inline">\(e\)</span>.</p>
 <div class="rmdnote">
 <p>Where does <span class="math inline">\(e\)</span> appear in the diagram? Given where it appears, what does it represent mathematically?</p>
@@ -266,8 +267,7 @@ Y = bX + 1 \cdot E
 <ol style="list-style-type: decimal">
 <li>What do we mean by a “good” sample? While a simple random sample is the gold standard, it’s usually not possible to obtain one in the real world. So we make our sampling process as random as possible and ensure that the resulting sample is as representative of the population we’re trying to study as possible.</li>
 <li>You can check linearity with a scatterplot. Just make sure the pattern of dots doesn’t have strong curvature to it.</li>
-<li>There should be no patterns in the residuals at all. They should be randomly scattered around the best-fit line and the average size of the residuals should not change radically from one side of the graph to the other.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This property of similarly-sized residuals is called &lt;em&gt;homoskesdasticity&lt;/em&gt;. The violation of that condition is called &lt;em&gt;heteroskedasticity&lt;/em&gt; which is one of Sean’s favorite words ever!&lt;/p&gt;"><sup>14</sup></a>
-</li>
+<li>There should be no patterns in the residuals at all. They should be randomly scattered around the best-fit line and the average size of the residuals should not change radically from one side of the graph to the other.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This property of similarly-sized residuals is called &lt;em&gt;homoskesdasticity&lt;/em&gt;. The violation of that condition is called &lt;em&gt;heteroskedasticity&lt;/em&gt; which is one of Sean’s favorite words ever!&lt;/p&gt;"><sup>14</sup></a> You can check this by plotting the residuals, but that can’t be done until after the model is fit. (The residuals don’t exist until we have a value of <span class="math inline">\(\hat{Y}\)</span> with which to compare <span class="math inline">\(Y\)</span>.)</li>
 <li>Check the scatterplot for outliers. If there are serious ones, assess them to make sure they are not data entry mistakes. If they correspond to valid data, you cannot just throw them away.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;In other words, don’t follow the all-too-common “rule of thumb” for outliers, which is just covering them up with your thumb and pretending they don’t exist.&lt;/p&gt;"><sup>15</sup></a> Often, the solution is to run the analysis both including and (temporarily) excluding the outliers to make sure their presence doesn’t radically alter the parameter estimates.</li>
 </ol>
 </div>
@@ -395,12 +395,47 @@ v         &amp;    bv         \\
 \]</span></p>
 <p>Don’t forget that the matrix on the left—the sample covariance matrix—consists of numbers that we calculate from data. The matrix on the right—the model-implied matrix—contains letters, which are the unknown parameters we’re trying to find.</p>
 </div>
-<div id="simple-error-correlation" class="section level2" number="4.7">
+<div id="simple-coefficients-correlation" class="section level2" number="4.7">
 <h2>
-<span class="header-section-number">4.7</span> Error variance in terms of correlation<a class="anchor" aria-label="anchor" href="#simple-error-correlation"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.7</span> Coefficients in terms of correlation<a class="anchor" aria-label="anchor" href="#simple-coefficients-correlation"><i class="fas fa-link"></i></a>
 </h2>
 <p>The formulas we derived are fine as far as they go. They allow you to take quantities calculated from data (variances and covariances of observed variables) and translate that into estimates of model parameters.</p>
-<p>The formula for the error variance <span class="math inline">\(e\)</span> is a little gross, though. With a little trickery, we can simplify that formula quite a bit.</p>
+<p>The formula for the slope parameter <span class="math inline">\(b\)</span> is pretty simple and has some intuitive content. It’s the covariance between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, but dividing by the variance of <span class="math inline">\(X\)</span> to make sure it has the right units.</p>
+<p><span class="math display">\[
+b = \frac{Cov(X, Y)}{Var(X)}
+\]</span></p>
+<p>Another way to look at this formula is to rearrange things a bit as follows:</p>
+<div class="rmdnote">
+<p>The formula for <span class="math inline">\(b\)</span> above is equivalent to</p>
+<p><span class="math display">\[
+b = \frac{Cov(X, Y) \sqrt{Var (Y)}}{Var(X)\sqrt{Var(Y)}}
+\]</span></p>
+<p>Why?</p>
+<p>Now write it like this:</p>
+<p><span class="math display">\[
+b = \frac{Cov(X, Y) \sqrt{Var (Y)}}{\sqrt{Var(X)}\sqrt{Var(X)}\sqrt{Var(Y)}}
+\]</span></p>
+<p>What happened here?</p>
+<p>Finally, write it like this:</p>
+<p><span class="math display">\[
+b = \left(\frac{Cov(X, Y)}{\sqrt{Var(X)} \sqrt{Var(Y)}}\right) \left(\frac{\sqrt{Var(Y)}}{\sqrt{Var(X)}}\right)
+\]</span></p>
+<p>Explain why this simplifies to</p>
+<p><span class="math display">\[
+b = Corr(X, Y)\left(\frac{SD(Y)}{SD(X)}\right)
+\]</span></p>
+</div>
+<p>This is often the formula taught in intro stats classes. In more concise notation:</p>
+<div class="rmdimportant">
+<p><span class="math display">\[
+b = r_{XY}\left(\frac{s_{Y}}{s_{X}}\right)
+\]</span></p>
+</div>
+<p>The intuition here is that <span class="math inline">\(b\)</span> is basically just the correlation between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, but it has to account for the scales and units of <span class="math inline">\(Y\)</span> and <span class="math inline">\(X\)</span>.</p>
+<div class="rmdnote">
+<p>Why does the standard deviation of <span class="math inline">\(Y\)</span> have to be in the numerator and the standard deviation of <span class="math inline">\(X\)</span> have to be in the denominator? Think about the units <span class="math inline">\(b\)</span> must have.</p>
+</div>
+<p>The formula for the error variance <span class="math inline">\(e\)</span> is a little more gross. With similar trickery, though, we can simplify that formula quite a bit.</p>
 <p>Here is the starting point:</p>
 <p><span class="math display">\[
 e = Var(Y) - \left( \frac{Cov(X, Y)}{Var(X)} \right)^2 Var(X)
@@ -410,16 +445,14 @@ e = Var(Y) - \left( \frac{Cov(X, Y)}{Var(X)} \right)^2 Var(X)
 <p><span class="math display">\[
 Var(Y) - \frac{Cov(X, Y)^{2}}{Var(X)}
 \]</span></p>
-</div>
-<p>We’re going to multiply the top and bottom of the fraction on the right by <span class="math inline">\(Var(Y)\)</span>:</p>
+<p>Explain why the next step is valid:</p>
 <p><span class="math display">\[
 Var(Y) - \frac{Cov(X, Y)^{2} Var(Y)}{Var(X) Var(Y)}
 \]</span></p>
-<p>Then we can factor out a common term of <span class="math inline">\(Var(Y)\)</span> from both pieces:</p>
+<p>What about this next one?</p>
 <p><span class="math display">\[
 Var(Y) \left( 1 - \frac{Cov(X, Y)^{2}}{Var(X) Var(Y)} \right)
 \]</span></p>
-<div class="rmdnote">
 <p>Why would we do such a thing? In other words, does the new fraction on the right look familiar in any way?</p>
 </div>
 <p>We hope you recognize that the fraction on the right is just the correlation coefficient squared. The whole equation can now be written as</p>
@@ -430,7 +463,13 @@ e = Var(Y) \left( 1 - r_{XY}^2 \right)
 </div>
 <p>There is a nice consequence of this last equation. The term in parentheses <span class="math inline">\(\left( 1 - r_{XY}^2 \right)\)</span> is a number between 0 and 1, right? Since we are multiplying this by the variance of <span class="math inline">\(Y\)</span>, we can think of the term in parentheses as a <em>proportion</em>. All the variance of <span class="math inline">\(Y\)</span> is explained in our model in one of two ways. The thick arrow coming in from the left uses <span class="math inline">\(X\)</span> to predict some of the variance of <span class="math inline">\(Y\)</span>. All the rest of the variance of <span class="math inline">\(Y\)</span> is left over in the error term <span class="math inline">\(e\)</span>. Therefore, <span class="math inline">\(\left( 1 - r_{XY}^2 \right)\)</span> is the proportion of the variance of <span class="math inline">\(Y\)</span> left over as error.</p>
 <p>And if that is true, it must also be the case that <span class="math inline">\(r_{XY}^2\)</span> is the proportion of the variance of <span class="math inline">\(Y\)</span> explained by <span class="math inline">\(X\)</span>. Calculating one minus a proportion gives the complementary proportion. For example, if <span class="math inline">\(\left( 1 - r_{XY}^2 \right) = 0.3\)</span>, then 30% of the variance of <span class="math inline">\(Y\)</span> is left over as error. But that implies that 70% of the variance of <span class="math inline">\(Y\)</span> is explained by <span class="math inline">\(X\)</span>. <span class="math inline">\(1 - 0.3 = 0.7\)</span>.</p>
-<p>Most authors will write <span class="math inline">\(R^{2}\)</span> instead of <span class="math inline">\(r^{2}\)</span> for some reason.</p>
+<p>Most authors will write <span class="math inline">\(R^{2}\)</span> instead of <span class="math inline">\(r^{2}\)</span> for some reason. Rearranging the top equation, replacing <span class="math inline">\(r_{XY}^{2}\)</span> with <span class="math inline">\(R^{2}\)</span>, and writing <span class="math inline">\(e\)</span> as <span class="math inline">\(Var(E)\)</span> looks like</p>
+<div class="rmdimportant">
+<p><span class="math display">\[
+R^{2} = 1 - \frac{Var(E)}{Var(Y)}
+\]</span></p>
+</div>
+<p>In other words, we can think of the error variance as a <em>proportion</em> of the total variance of <span class="math inline">\(Y\)</span>, and then <span class="math inline">\(R^2\)</span> is the complementary proportion. Therefore, <span class="math inline">\(R^{2}\)</span> is the proportion of the variance <em>explained by the model</em>.</p>
 </div>
 <div id="simple-standardized" class="section level2" number="4.8">
 <h2>
@@ -471,6 +510,7 @@ b = r_{XY}
 e = 1 - r_{XY}^{2}
 \]</span></p>
 </div>
+<p>The slope of the regression is just the correlation! And the error variance is just a proportion between 0 and 1 which is complementary to <span class="math inline">\(r_{xy}^{2}\)</span> (AKA, <span class="math inline">\(R^{2}\)</span>, or the variance explained by the model). Those two variances, <span class="math inline">\(e\)</span> and <span class="math inline">\(R^{2}\)</span> now add up to 1.</p>
 <div class="rmdnote">
 <p>We’ll use the <code>scale</code> command to create standardized variables for temperature and wind speed and put them in a new tibble.</p>
 <div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
@@ -505,7 +545,8 @@ e = 1 - r_{XY}^{2}
 </h3>
 <p>The straightforward way to run regression in R is to use the <code>lm</code> command. This stands for “linear model”. It uses a special symbol, the tilde ~, to express the relationship between the endogenous variable and the exogenous variable. The endogenous (response) variable always goes on the left, before the tilde. The exogenous (predictor) variable goes on the right, after the tilde. Finally, there is a <code>data</code> argument to tell <code>lm</code> where to find the variables to model.</p>
 <div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span>, data <span class="op">=</span> <span class="va">airquality_mc</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">YX_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span>, data <span class="op">=</span> <span class="va">airquality_mc</span><span class="op">)</span>
+<span class="va">YX_lm</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = Y ~ X, data = airquality_mc)
@@ -520,6 +561,41 @@ e = 1 - r_{XY}^{2}
 <div class="rmdnote">
 <p>Run the <code>lm</code> command, but this time using the standardized variables from the <code>airquality_std</code> tibble. The value of the slope should not surprise you. Explain why it is what it is.</p>
 </div>
+<p>Don’t forget: these parameters make no sense to interpret unless the regression assumptions are met. We looked at a scatterplot already and determined that is was approximately linear. But we haven’t checked the residuals.</p>
+<p>The residuals can be obtained most easily from the model by using the <code>augment</code> command from the <code>broom</code> package in the following way:</p>
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">YX_aug</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html">augment</a></span><span class="op">(</span><span class="va">YX_lm</span><span class="op">)</span>
+<span class="va">YX_aug</span></code></pre></div>
+<pre><code>## # A tibble: 153 × 8
+##         Y     X .fitted  .resid    .hat .sigma   .cooksd .std.resid
+##     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+##  1 -10.9  -2.56    3.15 -14.0   0.0100    8.39 0.0141       -1.67  
+##  2  -5.88 -1.96    2.41  -8.29  0.00857   8.44 0.00420      -0.986 
+##  3  -3.88  2.64   -3.25  -0.631 0.0102    8.47 0.0000292    -0.0751
+##  4 -15.9   1.54   -1.90 -14.0   0.00780   8.39 0.0109       -1.66  
+##  5 -21.9   4.34   -5.34 -16.5   0.0165    8.36 0.0328       -1.98  
+##  6 -11.9   4.94   -6.08  -5.80  0.0195    8.46 0.00478      -0.694 
+##  7 -12.9  -1.36    1.67 -14.6   0.00751   8.39 0.0113       -1.73  
+##  8 -18.9   3.84   -4.73 -14.2   0.0144    8.39 0.0208       -1.69  
+##  9 -16.9  10.1   -12.5   -4.40  0.0611    8.46 0.00942      -0.538 
+## 10  -8.88 -1.36    1.67 -10.6   0.00751   8.43 0.00596      -1.25  
+## # … with 143 more rows</code></pre>
+<p>There are many columns here and we’re not going to discuss most of them, but the residuals of the model are stored in the column called <code>.resid</code>. There are also standardized residuals stored in column <code>std.resid</code>. Both will look exactly the same except for the scale of the axes, so it doesn’t much matter which we use.</p>
+<p>The residuals are now stored in a new tibble called <code>YX_aug</code>, so be sure to use that in the following <code>ggplot</code> command and <em>not</em> the original data. We’ll put the residuals on the y-axis. Since we’re interested in checking that the residuals are independent of the <span class="math inline">\(X\)</span> variable, we will put that, unsurprisingly, on the x-axis. A reference line at <span class="math inline">\(y = 0\)</span> helps us see where the residuals are centered.</p>
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">YX_aug</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">.resid</span>, x <span class="op">=</span> <span class="va">X</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-66-1.png" width="672"></div>
+<p>or</p>
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">YX_aug</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">.std.resid</span>, x <span class="op">=</span> <span class="va">X</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-67-1.png" width="672"></div>
+<div class="rmdnote">
+<p>What do you see in the graphs above? Is this good or bad? What indicates in these graphs that the residuals are independent of <span class="math inline">\(X\)</span>?</p>
+</div>
 </div>
 <div id="simple-r-lavaan" class="section level3" number="4.9.2">
 <h3>
@@ -527,13 +603,13 @@ e = 1 - r_{XY}^{2}
 </h3>
 <p>We will also introduce you briefly to the <code>lavaan</code> package. While it’s totally overkill for simple regression, getting used to the syntax now will make it easier to continue to build up your confidence in using it when it will be the only tool we use.</p>
 <p>A <code>lavaan</code> model is built in a similar way to <code>lm</code> using the tilde ~ notation. One big difference is that the model needs to be specified inside quotation marks first and assigned to a name like this:</p>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">TEMP_WIND_model</span> <span class="op">&lt;-</span> <span class="st">"Y ~ X"</span> </code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">TEMP_WIND_model</span> <span class="op">&lt;-</span> <span class="st">"Y ~ X"</span></code></pre></div>
 <p>Then we pass that model text to the <code>sem</code> function from <code>lavaan</code>:</p>
-<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">TEMP_WIND_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span><span class="va">TEMP_WIND_model</span>, data <span class="op">=</span> <span class="va">airquality_mc</span><span class="op">)</span></code></pre></div>
 <p>The model is now stored as <code>TEMP_WIND_fit</code>. One way to learn about the model is to use the <code>parameterEstimates</code> function.</p>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/parameterEstimates.html">parameterEstimates</a></span><span class="op">(</span><span class="va">TEMP_WIND_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>##   lhs op rhs    est    se      z pvalue ci.lower ci.upper
 ## 1   Y  ~   X -1.230 0.193 -6.373      0   -1.609   -0.852
@@ -545,7 +621,7 @@ e = 1 - r_{XY}^{2}
 <p>In particular, pay close attention to the second line. If you are hasty, you may think this is the variance of <span class="math inline">\(Y\)</span>, but that is not correct.</p>
 </div>
 <p>We can also produce the standardized estimates.</p>
-<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/standardizedSolution.html">standardizedSolution</a></span><span class="op">(</span><span class="va">TEMP_WIND_fit</span><span class="op">)</span></code></pre></div>
 <pre><code>##   lhs op rhs est.std    se      z pvalue ci.lower ci.upper
 ## 1   Y  ~   X  -0.458 0.060 -7.577      0   -0.576   -0.340
@@ -555,6 +631,7 @@ e = 1 - r_{XY}^{2}
 <p>Again, explain these three numbers. (They are now listed in a column called <code>est.std</code> for “standardized estimates”.)</p>
 <p>Verify that the second line is actually the error variance. (Hint: remember <span class="math inline">\(1 - r_{XY}^{2}\)</span>.) How do we know it’s not the standardized variance of <span class="math inline">\(Y\)</span>? (In other words, what do you actually know to be the standardized variance of <span class="math inline">\(Y\)</span>?)</p>
 </div>
+<p>One downside of using <code>lavaan</code> is that it doesn’t store the residuals, so we have no way of checking that regression assumption. For more complex models in future chapters where <code>lavaan</code> (or some comparable package) is the only choice, the residual independence assumption will be just that: an assumption. We must have substantive reason to believe that’s true when we specify the model.</p>
 </div>
 </div>
 <div id="simple-intercepts" class="section level2" number="4.10">
@@ -581,7 +658,7 @@ e = 1 - r_{XY}^{2}
 <li><a class="nav-link" href="#simple-assumptions"><span class="header-section-number">4.4</span> Simple regression assumptions</a></li>
 <li><a class="nav-link" href="#simple-calculating"><span class="header-section-number">4.5</span> Calculating regression parameters</a></li>
 <li><a class="nav-link" href="#simple-mim"><span class="header-section-number">4.6</span> The model-implied matrix</a></li>
-<li><a class="nav-link" href="#simple-error-correlation"><span class="header-section-number">4.7</span> Error variance in terms of correlation</a></li>
+<li><a class="nav-link" href="#simple-coefficients-correlation"><span class="header-section-number">4.7</span> Coefficients in terms of correlation</a></li>
 <li><a class="nav-link" href="#simple-standardized"><span class="header-section-number">4.8</span> Regression with standardized variables</a></li>
 <li>
 <a class="nav-link" href="#simple-r"><span class="header-section-number">4.9</span> Simple regression in R</a><ul class="nav navbar-nav">
@@ -607,7 +684,7 @@ e = 1 - r_{XY}^{2}
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-20.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-21.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

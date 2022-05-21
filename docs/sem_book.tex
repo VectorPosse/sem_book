@@ -124,7 +124,7 @@
 
 \title{Demystifying Structural Equation Modeling}
 \author{Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)}
-\date{2022-05-20}
+\date{2022-05-21}
 
 \begin{document}
 \maketitle
@@ -718,6 +718,15 @@ Equivalently,
 
 \[
 Var(X) = SD(X)^2
+\]
+
+Often, if more concise notation is required, we write \(s_{X}\) for \(SD(X)\).
+
+\[
+s_{X} = \sqrt{Var(X)}
+\]
+\[
+Var(X) = s_{X}^2
 \]
 
 Due to its interpretability, an intro stats class will focus far more on the standard deviation than on the variance. The downside is that the mathematical rules aren't so nice for standard deviations. For example, what is
@@ -2019,11 +2028,12 @@ Turn up the sound! If the whole class plays at the same time, your classroom wil
 \section*{Preliminaries}\label{preliminaries}}
 \addcontentsline{toc}{section}{Preliminaries}
 
-We need to load the packages we will need for this chapter. The \texttt{tidyverse} package has all sorts of utilities for working with tibbles (data frames). This will also be our first introduction to the \texttt{lavaan} package that will be used throughout the rest of the book.
+We need to load the packages we will need for this chapter. The \texttt{tidyverse} package has all sorts of utilities for working with tibbles (data frames). The \texttt{broom} package will be used to calculate and store the residuals of the model. This will also be our first introduction to the \texttt{lavaan} package that will be used throughout the rest of the book.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(broom)}
 \FunctionTok{library}\NormalTok{(lavaan)}
 \end{Highlighting}
 \end{Shaded}
@@ -2235,7 +2245,7 @@ Y = bX + 1 \cdot E
 
 How is that ``1'' represented in the diagram?
 
-The letters \(v\), \(b\), and \(e\) are called \emph{free parameters} because they are free to vary depending on the data. The ``1'' is called a \emph{fixed parameter}. It is attached to an arrow, so it's technically a parameter of the model, but it is not a parameter that we need to calculate. It is ``fixed'' at the value 1 because the error term in the model is represented by \(+E\) with a fixed coefficient of 1. In general, thoughout the book, if the word ``parameter'' is used without qualification, you can assume we are talking only about the free parameters, the ones we need to calculate.
+The letters \(v\), \(b\), and \(e\) are called \emph{free parameters} because they are free to vary depending on the data. The ``1'' is called a \emph{fixed parameter}. It is attached to an arrow, so it's technically a parameter of the model, but it is not a parameter that we need to calculate. It is ``fixed'' at the value 1 because the error term in the model is represented by \(+E\) with a fixed coefficient of 1. In general, throughout the book, if the word ``parameter'' is used without qualification, you can assume we are talking only about the free parameters, the ones we need to calculate.
 
 The only thing in the diagram that hasn't been explained yet is \(e\).
 
@@ -2295,7 +2305,7 @@ Let's address these one at a time:
 \item
   You can check linearity with a scatterplot. Just make sure the pattern of dots doesn't have strong curvature to it.
 \item
-  There should be no patterns in the residuals at all. They should be randomly scattered around the best-fit line and the average size of the residuals should not change radically from one side of the graph to the other.\footnote{This property of similarly-sized residuals is called \emph{homoskesdasticity}. The violation of that condition is called \emph{heteroskedasticity} which is one of Sean's favorite words ever!}
+  There should be no patterns in the residuals at all. They should be randomly scattered around the best-fit line and the average size of the residuals should not change radically from one side of the graph to the other.\footnote{This property of similarly-sized residuals is called \emph{homoskesdasticity}. The violation of that condition is called \emph{heteroskedasticity} which is one of Sean's favorite words ever!} You can check this by plotting the residuals, but that can't be done until after the model is fit. (The residuals don't exist until we have a value of \(\hat{Y}\) with which to compare \(Y\).)
 \item
   Check the scatterplot for outliers. If there are serious ones, assess them to make sure they are not data entry mistakes. If they correspond to valid data, you cannot just throw them away.\footnote{In other words, don't follow the all-too-common ``rule of thumb'' for outliers, which is just covering them up with your thumb and pretending they don't exist.} Often, the solution is to run the analysis both including and (temporarily) excluding the outliers to make sure their presence doesn't radically alter the parameter estimates.
 \end{enumerate}
@@ -2458,12 +2468,58 @@ v         &    bv         \\
 
 Don't forget that the matrix on the left---the sample covariance matrix---consists of numbers that we calculate from data. The matrix on the right---the model-implied matrix---contains letters, which are the unknown parameters we're trying to find.
 
-\hypertarget{simple-error-correlation}{%
-\section{Error variance in terms of correlation}\label{simple-error-correlation}}
+\hypertarget{simple-coefficients-correlation}{%
+\section{Coefficients in terms of correlation}\label{simple-coefficients-correlation}}
 
 The formulas we derived are fine as far as they go. They allow you to take quantities calculated from data (variances and covariances of observed variables) and translate that into estimates of model parameters.
 
-The formula for the error variance \(e\) is a little gross, though. With a little trickery, we can simplify that formula quite a bit.
+The formula for the slope parameter \(b\) is pretty simple and has some intuitive content. It's the covariance between \(X\) and \(Y\), but dividing by the variance of \(X\) to make sure it has the right units.
+
+\[
+b = \frac{Cov(X, Y)}{Var(X)}
+\]
+
+Another way to look at this formula is to rearrange things a bit as follows:
+
+The formula for \(b\) above is equivalent to
+
+\[
+b = \frac{Cov(X, Y) \sqrt{Var (Y)}}{Var(X)\sqrt{Var(Y)}}
+\]
+
+Why?
+
+Now write it like this:
+
+\[
+b = \frac{Cov(X, Y) \sqrt{Var (Y)}}{\sqrt{Var(X)}\sqrt{Var(X)}\sqrt{Var(Y)}}
+\]
+
+What happened here?
+
+Finally, write it like this:
+
+\[
+b = \left(\frac{Cov(X, Y)}{\sqrt{Var(X)} \sqrt{Var(Y)}}\right) \left(\frac{\sqrt{Var(Y)}}{\sqrt{Var(X)}}\right)
+\]
+
+Explain why this simplifies to
+
+\[
+b = Corr(X, Y)\left(\frac{SD(Y)}{SD(X)}\right)
+\]
+
+This is often the formula taught in intro stats classes. In more concise notation:
+
+\[
+b = r_{XY}\left(\frac{s_{Y}}{s_{X}}\right)
+\]
+
+The intuition here is that \(b\) is basically just the correlation between \(X\) and \(Y\), but it has to account for the scales and units of \(Y\) and \(X\).
+
+Why does the standard deviation of \(Y\) have to be in the numerator and the standard deviation of \(X\) have to be in the denominator? Think about the units \(b\) must have.
+
+The formula for the error variance \(e\) is a little more gross. With similar trickery, though, we can simplify that formula quite a bit.
 
 Here is the starting point:
 
@@ -2477,13 +2533,13 @@ Explain why the right-hand side can be rewritten as
 Var(Y) - \frac{Cov(X, Y)^{2}}{Var(X)}
 \]
 
-We're going to multiply the top and bottom of the fraction on the right by \(Var(Y)\):
+Explain why the next step is valid:
 
 \[
 Var(Y) - \frac{Cov(X, Y)^{2} Var(Y)}{Var(X) Var(Y)}
 \]
 
-Then we can factor out a common term of \(Var(Y)\) from both pieces:
+What about this next one?
 
 \[
 Var(Y) \left( 1 - \frac{Cov(X, Y)^{2}}{Var(X) Var(Y)} \right)
@@ -2501,7 +2557,13 @@ There is a nice consequence of this last equation. The term in parentheses \(\le
 
 And if that is true, it must also be the case that \(r_{XY}^2\) is the proportion of the variance of \(Y\) explained by \(X\). Calculating one minus a proportion gives the complementary proportion. For example, if \(\left( 1 - r_{XY}^2 \right) = 0.3\), then 30\% of the variance of \(Y\) is left over as error. But that implies that 70\% of the variance of \(Y\) is explained by \(X\). \(1 - 0.3 = 0.7\).
 
-Most authors will write \(R^{2}\) instead of \(r^{2}\) for some reason.
+Most authors will write \(R^{2}\) instead of \(r^{2}\) for some reason. Rearranging the top equation, replacing \(r_{XY}^{2}\) with \(R^{2}\), and writing \(e\) as \(Var(E)\) looks like
+
+\[
+R^{2} = 1 - \frac{Var(E)}{Var(Y)}
+\]
+
+In other words, we can think of the error variance as a \emph{proportion} of the total variance of \(Y\), and then \(R^2\) is the complementary proportion. Therefore, \(R^{2}\) is the proportion of the variance \emph{explained by the model}.
 
 \hypertarget{simple-standardized}{%
 \section{Regression with standardized variables}\label{simple-standardized}}
@@ -2548,6 +2610,8 @@ b = r_{XY}
 e = 1 - r_{XY}^{2}
 \]
 
+The slope of the regression is just the correlation! And the error variance is just a proportion between 0 and 1 which is complementary to \(r_{xy}^{2}\) (AKA, \(R^{2}\), or the variance explained by the model). Those two variances, \(e\) and \(R^{2}\) now add up to 1.
+
 We'll use the \texttt{scale} command to create standardized variables for temperature and wind speed and put them in a new tibble.
 
 \begin{Shaded}
@@ -2588,7 +2652,8 @@ The straightforward way to run regression in R is to use the \texttt{lm} command
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{lm}\NormalTok{(Y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ X, }\AttributeTok{data =}\NormalTok{ airquality\_mc)}
+\NormalTok{YX\_lm }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(Y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ X, }\AttributeTok{data =}\NormalTok{ airquality\_mc)}
+\NormalTok{YX\_lm}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2608,6 +2673,62 @@ We haven't talked about the intercept yet, but according to this output, what is
 
 Run the \texttt{lm} command, but this time using the standardized variables from the \texttt{airquality\_std} tibble. The value of the slope should not surprise you. Explain why it is what it is.
 
+Don't forget: these parameters make no sense to interpret unless the regression assumptions are met. We looked at a scatterplot already and determined that is was approximately linear. But we haven't checked the residuals.
+
+The residuals can be obtained most easily from the model by using the \texttt{augment} command from the \texttt{broom} package in the following way:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{YX\_aug }\OtherTok{\textless{}{-}} \FunctionTok{augment}\NormalTok{(YX\_lm)}
+\NormalTok{YX\_aug}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 153 x 8
+##         Y     X .fitted  .resid    .hat .sigma   .cooksd .std.resid
+##     <dbl> <dbl>   <dbl>   <dbl>   <dbl>  <dbl>     <dbl>      <dbl>
+##  1 -10.9  -2.56    3.15 -14.0   0.0100    8.39 0.0141       -1.67  
+##  2  -5.88 -1.96    2.41  -8.29  0.00857   8.44 0.00420      -0.986 
+##  3  -3.88  2.64   -3.25  -0.631 0.0102    8.47 0.0000292    -0.0751
+##  4 -15.9   1.54   -1.90 -14.0   0.00780   8.39 0.0109       -1.66  
+##  5 -21.9   4.34   -5.34 -16.5   0.0165    8.36 0.0328       -1.98  
+##  6 -11.9   4.94   -6.08  -5.80  0.0195    8.46 0.00478      -0.694 
+##  7 -12.9  -1.36    1.67 -14.6   0.00751   8.39 0.0113       -1.73  
+##  8 -18.9   3.84   -4.73 -14.2   0.0144    8.39 0.0208       -1.69  
+##  9 -16.9  10.1   -12.5   -4.40  0.0611    8.46 0.00942      -0.538 
+## 10  -8.88 -1.36    1.67 -10.6   0.00751   8.43 0.00596      -1.25  
+## # ... with 143 more rows
+\end{verbatim}
+
+There are many columns here and we're not going to discuss most of them, but the residuals of the model are stored in the column called \texttt{.resid}. There are also standardized residuals stored in column \texttt{std.resid}. Both will look exactly the same except for the scale of the axes, so it doesn't much matter which we use.
+
+The residuals are now stored in a new tibble called \texttt{YX\_aug}, so be sure to use that in the following \texttt{ggplot} command and \emph{not} the original data. We'll put the residuals on the y-axis. Since we're interested in checking that the residuals are independent of the \(X\) variable, we will put that, unsurprisingly, on the x-axis. A reference line at \(y = 0\) helps us see where the residuals are centered.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(YX\_aug, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ .resid, }\AttributeTok{x =}\NormalTok{ X)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-66-1.pdf}
+
+or
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(YX\_aug, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ .std.resid, }\AttributeTok{x =}\NormalTok{ X)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-67-1.pdf}
+
+What do you see in the graphs above? Is this good or bad? What indicates in these graphs that the residuals are independent of \(X\)?
+
 \hypertarget{simple-r-lavaan}{%
 \subsection{\texorpdfstring{Using \texttt{lavaan}}{Using lavaan}}\label{simple-r-lavaan}}
 
@@ -2617,7 +2738,7 @@ A \texttt{lavaan} model is built in a similar way to \texttt{lm} using the tilde
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{TEMP\_WIND\_model }\OtherTok{\textless{}{-}} \StringTok{"Y \textasciitilde{} X"} 
+\NormalTok{TEMP\_WIND\_model }\OtherTok{\textless{}{-}} \StringTok{"Y \textasciitilde{} X"}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2669,6 +2790,8 @@ Again, explain these three numbers. (They are now listed in a column called \tex
 
 Verify that the second line is actually the error variance. (Hint: remember \(1 - r_{XY}^{2}\).) How do we know it's not the standardized variance of \(Y\)? (In other words, what do you actually know to be the standardized variance of \(Y\)?)
 
+One downside of using \texttt{lavaan} is that it doesn't store the residuals, so we have no way of checking that regression assumption. For more complex models in future chapters where \texttt{lavaan} (or some comparable package) is the only choice, the residual independence assumption will be just that: an assumption. We must have substantive reason to believe that's true when we specify the model.
+
 \hypertarget{simple-intercepts}{%
 \section{What about intercepts?}\label{simple-intercepts}}
 
@@ -2685,11 +2808,12 @@ If you are familiar with regression from another course, you may be wondering wh
 \section*{Preliminaries}\label{preliminaries-1}}
 \addcontentsline{toc}{section}{Preliminaries}
 
-We will load the \texttt{tidyverse} package and \texttt{lavaan}.
+We will load the \texttt{tidyverse} package to work with tibbles, the \texttt{broom} package to calculate residuals, and \texttt{lavaan}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(broom)}
 \FunctionTok{library}\NormalTok{(lavaan)}
 \end{Highlighting}
 \end{Shaded}
@@ -2765,7 +2889,7 @@ We discuss these briefly:
 \item
   With only \(Y\) against \(X\), the regression model is a line. With \(Y\) against \(X_{1}\) and \(X_{2}\), the regression model is a plane (a 2-dimensional plane sitting in 3-dimensional space) which is a little challenging to graph. With more predictors, the regression model lives in even higher dimensions and it's impossible to visualize. To check this condition, the best you can usually do is to check that the scatterplots of \(Y\) against each \(X_{i}\) individually are approximately linear.
 \item
-  Nothing changes here.
+  Once we fit the model, we can check the residuals. Rather than plotting the residuals against each \(X_{i}\) separately, we can employ a trick that we'll explain later in the chapter.
 \item
   Nothing changes here.
 \item
@@ -2901,7 +3025,7 @@ This is why it's important to \emph{control} for other variables. All this means
 
 If the parameter \(b_{2}\) is estimated to be 0.13, that suggests that each additional hour of study time per week predicts an increase of 0.13 points in the college GPA, holding high school GPA constant. This means that the increase of 0.13 is only predicted among groups of students with the same high school GPA.
 
-Let's say that \(b_{1}\) is estimated to be 1.2. That means that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. But this is a multiple regression model, so this coefficient can only be interpreting holding \texttt{HOURS} constant. This means that this coefficient only holds among groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA.
+If the parameter \(b_{1}\) is estimated to be 1.2, that suggests that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. This coefficient can only be interpreted while holding \texttt{HOURS} constant. This means that this estimate only holds among groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA to explain changes in college GPA.
 
 \hypertarget{multiple-standardized}{%
 \section{Regression with standardized variables}\label{multiple-standardized}}
@@ -3006,6 +3130,35 @@ This data set was downloaded from the \href{https://corgis-edu.github.io/corgis/
 ## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 \end{verbatim}
 
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{music}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 10,000 x 35
+##    artist.familiarity artist.hotttnes~ artist.id artist.latitude artist.location
+##                 <dbl>            <dbl> <chr>               <dbl>           <dbl>
+##  1              0.582            0.402 ARD7TVE1~             0                 0
+##  2              0.631            0.417 ARMJAGH1~            35.1               0
+##  3              0.487            0.343 ARKRRTF1~             0                 0
+##  4              0.630            0.454 AR7G5I41~             0                 0
+##  5              0.651            0.402 ARXR32B1~             0                 0
+##  6              0.535            0.385 ARKFYS91~             0                 0
+##  7              0.556            0.262 ARD0S291~             0                 0
+##  8              0.801            0.606 AR10USD1~             0                 0
+##  9              0.427            0.332 AR8ZCNI1~             0                 0
+## 10              0.551            0.423 ARNTLGG1~             0                 0
+## # ... with 9,990 more rows, and 30 more variables: artist.longitude <dbl>,
+## #   artist.name <chr>, artist.similar <dbl>, artist.terms <chr>,
+## #   artist.terms_freq <dbl>, release.id <dbl>, release.name <dbl>,
+## #   song.artist_mbtags <dbl>, song.artist_mbtags_count <dbl>,
+## #   song.bars_confidence <dbl>, song.bars_start <dbl>,
+## #   song.beats_confidence <dbl>, song.beats_start <dbl>, song.duration <dbl>,
+## #   song.end_of_fade_in <dbl>, song.hotttnesss <dbl>, song.id <chr>, ...
+\end{verbatim}
+
 The endogenous variable of interest to us will be the measure of the song's popularity, called \texttt{song.hotttnesss} (on a scale from 0 to 1).\footnote{Very important that there are three t's and three s's!} There are many possible exogenous predictors, but let's focus on three:
 
 \begin{itemize}
@@ -3036,16 +3189,125 @@ The endogenous variable of interest to us will be the measure of the song's popu
   \end{itemize}
 \end{itemize}
 
-\hypertarget{multiple-r-lm}{%
-\subsection{\texorpdfstring{Using \texttt{lm}}{Using lm}}\label{multiple-r-lm}}
-
-The \texttt{lm} model specification is a minor extension of what you learned for simple regression. Just use plus signs on the right side of the tilde \textasciitilde{} to add more predictors.
+Let's plot \texttt{song.hotttnesss} against each of the three proposed predictors to test the linearity assumption, starting with \texttt{artist.hotttnesss}:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{lm}\NormalTok{(song.hotttnesss }\SpecialCharTok{\textasciitilde{}}\NormalTok{ artist.hotttnesss }\SpecialCharTok{+}\NormalTok{ song.loudness }\SpecialCharTok{+} 
-\NormalTok{       song.tempo,}
-   \AttributeTok{data =}\NormalTok{ music)}
+\FunctionTok{ggplot}\NormalTok{(music, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ song.hotttnesss,}
+                  \AttributeTok{x =}\NormalTok{ artist.hotttnesss)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-77-1.pdf}
+
+Uh, we've got some issues here to deal with. Since \texttt{song.hotttness} is supposed to be from 0 to 1, we can guess that the -1 values are likely coded to represent ``missing'' data. Even the values of 0 don't seem valid given that there is a big gap between the row of zeros and any of the rest of the cluster of actual data. The \texttt{artist.hotttness} variable also seems to have some zeros that are disconnected from the rest of the data. These may be genuine outliers, but it's more likely that these were artists for whom no data was collected.
+
+While we're suspecting issues, let's also check \texttt{song.loudness} and \texttt{song.tempo}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(music, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ song.hotttnesss,}
+                  \AttributeTok{x =}\NormalTok{ song.loudness)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-78-1.pdf}
+
+The \texttt{song.loudness} distribution looks reasonable. It's definitely skewed to the left, but there are no strict requirements about the predictor variables having any particular type of distribution.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(music, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ song.hotttnesss,}
+                  \AttributeTok{x =}\NormalTok{ song.tempo)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-79-1.pdf}
+
+Is it possible for a song tempo to be 0 BPM?
+
+To make it a little cleaner, the following code will \texttt{select} only the variables in which we're interested. Then it will \texttt{filter} out the values we want to keep (discarding the ones that represent missing/invalid data). We'll put this into a new tibble called \texttt{music\_clean}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{music\_clean }\OtherTok{\textless{}{-}}\NormalTok{ music }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{select}\NormalTok{(song.hotttnesss, artist.hotttnesss,}
+\NormalTok{           song.loudness, song.tempo) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{filter}\NormalTok{(song.hotttnesss }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{,}
+\NormalTok{           artist.hotttnesss }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{,}
+\NormalTok{           song.tempo }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+\NormalTok{music\_clean}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4,157 x 4
+##    song.hotttnesss artist.hotttnesss song.loudness song.tempo
+##              <dbl>             <dbl>         <dbl>      <dbl>
+##  1           0.602             0.402        -11.2        92.2
+##  2           0.605             0.402         -4.50      130. 
+##  3           0.266             0.332        -13.5        86.6
+##  4           0.266             0.352         -7.54      118. 
+##  5           0.405             0.448         -8.58      120. 
+##  6           0.335             0.331        -16.1       128. 
+##  7           0.684             0.513         -5.27      150. 
+##  8           0.314             0.378         -8.05      112. 
+##  9           0.667             0.542         -4.26      167. 
+## 10           0.495             0.306        -12.3       138. 
+## # ... with 4,147 more rows
+\end{verbatim}
+
+This has reduced the number of rows to 4,157, but that is still a huge sample size.
+
+Let's check the scatterplots once more, now with the \texttt{music\_clean} data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(music\_clean, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ song.hotttnesss,}
+                        \AttributeTok{x =}\NormalTok{ artist.hotttnesss)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-81-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(music\_clean, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ song.hotttnesss,}
+                        \AttributeTok{x =}\NormalTok{ song.loudness)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-82-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(music\_clean, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ song.hotttnesss,}
+                        \AttributeTok{x =}\NormalTok{ song.tempo)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-83-1.pdf}
+
+There doesn't appear to be much of an association with loudness or tempo. But that doesn't violate any assumptions. (A violation of the assumptions would be a decidedly non-linear association, not just a near-zero association.) Given these graphs, we will expect the model to tell us that song popularity is somewhat associated with artist popularity, but not much with loudness or tempo.
+
+\hypertarget{multiple-r-lm}{%
+\subsection{\texorpdfstring{Using \texttt{lm}}{Using lm}}\label{multiple-r-lm}}
+
+The \texttt{lm} model specification is a minor extension of what you learned for simple regression. Just use plus signs on the right side of the tilde \textasciitilde{} to add more predictors. Be sure to use \texttt{music\_clean} and not \texttt{music}!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{SONG\_lm }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(song.hotttnesss }\SpecialCharTok{\textasciitilde{}}\NormalTok{ artist.hotttnesss }\SpecialCharTok{+}
+\NormalTok{                  song.loudness }\SpecialCharTok{+}
+\NormalTok{                  song.tempo,}
+              \AttributeTok{data =}\NormalTok{ music\_clean)}
+\NormalTok{SONG\_lm}
 \end{Highlighting}
 \end{Shaded}
 
@@ -3053,11 +3315,11 @@ The \texttt{lm} model specification is a minor extension of what you learned for
 ## 
 ## Call:
 ## lm(formula = song.hotttnesss ~ artist.hotttnesss + song.loudness + 
-##     song.tempo, data = music)
+##     song.tempo, data = music_clean)
 ## 
 ## Coefficients:
 ##       (Intercept)  artist.hotttnesss      song.loudness         song.tempo  
-##        -5.708e-01          1.157e+00          1.187e-02          6.415e-05
+##         0.1636446          0.7003692          0.0036969          0.0002057
 \end{verbatim}
 
 We didn't go to the trouble of mean-centering the data this time, so the intercept is no longer 0. But we will not attempt to interpret the intercept anyway. The other three coefficients are \(b_{1}\), \(b_{2}\) and \(b_{3}\), the path coefficients of the model. These are interpreted as follows:
@@ -3070,7 +3332,7 @@ We didn't go to the trouble of mean-centering the data this time, so the interce
   \begin{itemize}
   \tightlist
   \item
-    Song popularity is predicted to increase 1.157 points for every point increase in artist popularity.
+    Song popularity is predicted to increase 0.7 points for every point increase in artist popularity.
   \end{itemize}
 \end{itemize}
 
@@ -3080,14 +3342,14 @@ A better way to report this would be to scale everything down by a factor of 10:
 
 \begin{itemize}
 \item
-  Song popularity is predicted to increase 0.1157 points for every 0.1 increase in artist popularity.
+  Song popularity is predicted to increase 0.07 points for every 0.1 increase in artist popularity.
 \item
   \(b_{2}\):
 
   \begin{itemize}
   \tightlist
   \item
-    Song popularity is predicted to increase 0.01187 points for every increase of 1 dB of loudness.
+    Song popularity is predicted to increase 0.004 points for every increase of 1 dB of loudness.
   \end{itemize}
 \end{itemize}
 
@@ -3095,23 +3357,85 @@ An increase of 1 dB is not very much, so again, we can scale the result to make 
 
 \begin{itemize}
 \item
-  Song popularity is predicted to increase 0.1187 points for every increase of 10 dB of loudness.
+  Song popularity is predicted to increase 0.04 points for every increase of 10 dB of loudness.
 \item
   \(b_{3}\):
 
   \begin{itemize}
   \tightlist
   \item
-    Song popularity is predicted to increase 0.00006415 points for every increase of 1 BPM in the tempo.
+    Song popularity is predicted to increase 0.0002 points for every increase of 1 BPM in the tempo.
   \end{itemize}
 \end{itemize}
 
-Restate the interpretation of \(b_{3}\) on a scale that makes sense. If you're not familiar with BPM, Google it to get a sense of what a reasonably jump in tempo might be.
+Restate the interpretation of \(b_{3}\) on a scale that makes sense. If you're not familiar with BPM, Google it to get a sense of what a reasonable jump in tempo might be.
+
+Now that we have the model fit, we can use \texttt{broom} to capture the residuals.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{SONG\_aug }\OtherTok{\textless{}{-}} \FunctionTok{augment}\NormalTok{(SONG\_lm)}
+\NormalTok{SONG\_aug}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4,157 x 10
+##    song.hotttnesss artist.hotttnesss song.loudness song.tempo .fitted  .resid
+##              <dbl>             <dbl>         <dbl>      <dbl>   <dbl>   <dbl>
+##  1           0.602             0.402        -11.2        92.2   0.423  0.179 
+##  2           0.605             0.402         -4.50      130.    0.455  0.149 
+##  3           0.266             0.332        -13.5        86.6   0.364 -0.0984
+##  4           0.266             0.352         -7.54      118.    0.406 -0.140 
+##  5           0.405             0.448         -8.58      120.    0.470 -0.0652
+##  6           0.335             0.331        -16.1       128.    0.362 -0.0273
+##  7           0.684             0.513         -5.27      150.    0.535  0.150 
+##  8           0.314             0.378         -8.05      112.    0.422 -0.108 
+##  9           0.667             0.542         -4.26      167.    0.562  0.105 
+## 10           0.495             0.306        -12.3       138.    0.361  0.134 
+## # ... with 4,147 more rows, and 4 more variables: .hat <dbl>, .sigma <dbl>,
+## #   .cooksd <dbl>, .std.resid <dbl>
+\end{verbatim}
+
+But how do we graph them now that there are three predictor variables? We could graph the residuals against all three predictors separately, but there's a more efficient method.
+
+Calculate
+
+\[
+Cov(E, \hat{Y})
+\]
+by substituting
+
+\[
+\hat{Y} = b_{1}X_{1} + b_{2}X_{2} + b_{3}X_{3} 
+\]
+
+If we assume that \(E\) is independent of all the predictors, what is the value of \(Cov(E, \hat{Y})\)?
+
+Of course, if \(Cov(E, \hat{Y}) = 0\), that does not necessarily imply that all the \(Cov(E, X_{i})\) must be zero. And even if those are zero, that doesn't imply independence. But if \(Cov(E, \hat{Y}) \neq 0\), then we know at least one of the \(Cov(E, X_{i})\) also must be non-zero. \textbf{Therefore, we can plot the residuals against the fitted values and this will serve as \emph{disqualifying} evidence of a problem with the model.}
+
+One of the nice features of the \texttt{augment} output is that it also has a column called \texttt{.fitted} that stores the \(\hat{Y}\) values.
+
+Here are the (standardized) residuals graphed against the fitted values:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(SONG\_aug, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ .std.resid, }\AttributeTok{x =}\NormalTok{ .fitted)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-86-1.pdf}
+
+The weirdness in the residuals is not ideal. It doesn't prevent us from fitting the model, but we will state our results cautiously knowing that variance toward the left half of the graph is compressed relative to the right side of the graph. Therefore, the error variance is not ``acting'' in the model the same way across all combinations of the predictor variables.
+
+Go back and look at the original scatterplots of the data (from \texttt{music\_clean} and see if you can figure out why the residuals are cut off funny like that in the lower left quadrant.)
 
 \hypertarget{multiple-r-lavaan}{%
 \subsection{\texorpdfstring{Using \texttt{lavaan}}{Using lavaan}}\label{multiple-r-lavaan}}
 
-Model specification in \texttt{lavaan} happens in a separate step.
+Model specification in \texttt{lavaan} happens in a separate step with the model in quotes:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -3125,7 +3449,7 @@ Then the model is fit with the \texttt{sem} function.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{SONG\_fit }\OtherTok{\textless{}{-}} \FunctionTok{sem}\NormalTok{(SONG\_model, }\AttributeTok{data =}\NormalTok{ music)}
+\NormalTok{SONG\_fit }\OtherTok{\textless{}{-}} \FunctionTok{sem}\NormalTok{(SONG\_model, }\AttributeTok{data =}\NormalTok{ music\_clean)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -3139,27 +3463,27 @@ Here are the unstandardized parameter estimates:
 
 \begin{verbatim}
 ##                  lhs op               rhs      est    se      z pvalue ci.lower
-## 1    song.hotttnesss  ~ artist.hotttnesss    1.157 0.047 24.546  0.000    1.064
-## 2    song.hotttnesss  ~     song.loudness    0.012 0.001  9.333  0.000    0.009
-## 3    song.hotttnesss  ~        song.tempo    0.000 0.000  0.334  0.738    0.000
-## 4    song.hotttnesss ~~   song.hotttnesss    0.442 0.006 70.711  0.000    0.430
-## 5  artist.hotttnesss ~~ artist.hotttnesss    0.021 0.000     NA     NA    0.021
-## 6  artist.hotttnesss ~~     song.loudness    0.145 0.000     NA     NA    0.145
-## 7  artist.hotttnesss ~~        song.tempo    0.255 0.000     NA     NA    0.255
-## 8      song.loudness ~~     song.loudness   29.154 0.000     NA     NA   29.154
-## 9      song.loudness ~~        song.tempo   33.970 0.000     NA     NA   33.970
-## 10        song.tempo ~~        song.tempo 1239.250 0.000     NA     NA 1239.250
+## 1    song.hotttnesss  ~ artist.hotttnesss    0.700 0.021 33.427  0.000    0.659
+## 2    song.hotttnesss  ~     song.loudness    0.004 0.000  7.987  0.000    0.003
+## 3    song.hotttnesss  ~        song.tempo    0.000 0.000  3.096  0.002    0.000
+## 4    song.hotttnesss ~~   song.hotttnesss    0.021 0.000 45.591  0.000    0.020
+## 5  artist.hotttnesss ~~ artist.hotttnesss    0.012 0.000     NA     NA    0.012
+## 6  artist.hotttnesss ~~     song.loudness    0.112 0.000     NA     NA    0.112
+## 7  artist.hotttnesss ~~        song.tempo    0.091 0.000     NA     NA    0.091
+## 8      song.loudness ~~     song.loudness   25.426 0.000     NA     NA   25.426
+## 9      song.loudness ~~        song.tempo   27.118 0.000     NA     NA   27.118
+## 10        song.tempo ~~        song.tempo 1185.061 0.000     NA     NA 1185.061
 ##    ci.upper
-## 1     1.249
-## 2     0.014
+## 1     0.741
+## 2     0.005
 ## 3     0.000
-## 4     0.454
-## 5     0.021
-## 6     0.145
-## 7     0.255
-## 8    29.154
-## 9    33.970
-## 10 1239.250
+## 4     0.022
+## 5     0.012
+## 6     0.112
+## 7     0.091
+## 8    25.426
+## 9    27.118
+## 10 1185.061
 \end{verbatim}
 
 Focus on the estimate column (\texttt{est}).
@@ -3179,27 +3503,27 @@ Here are the standardized parameter estimates:
 \end{Shaded}
 
 \begin{verbatim}
-##                  lhs op               rhs est.std    se       z pvalue ci.lower
-## 1    song.hotttnesss  ~ artist.hotttnesss   0.240 0.009  25.612  0.000    0.222
-## 2    song.hotttnesss  ~     song.loudness   0.093 0.010   9.388  0.000    0.073
-## 3    song.hotttnesss  ~        song.tempo   0.003 0.010   0.334  0.738   -0.016
-## 4    song.hotttnesss ~~   song.hotttnesss   0.925 0.005 186.180  0.000    0.915
-## 5  artist.hotttnesss ~~ artist.hotttnesss   1.000 0.000      NA     NA    1.000
-## 6  artist.hotttnesss ~~     song.loudness   0.187 0.000      NA     NA    0.187
-## 7  artist.hotttnesss ~~        song.tempo   0.050 0.000      NA     NA    0.050
-## 8      song.loudness ~~     song.loudness   1.000 0.000      NA     NA    1.000
-## 9      song.loudness ~~        song.tempo   0.179 0.000      NA     NA    0.179
-## 10        song.tempo ~~        song.tempo   1.000 0.000      NA     NA    1.000
+##                  lhs op               rhs est.std    se      z pvalue ci.lower
+## 1    song.hotttnesss  ~ artist.hotttnesss   0.459 0.012 39.345  0.000    0.436
+## 2    song.hotttnesss  ~     song.loudness   0.111 0.014  8.051  0.000    0.084
+## 3    song.hotttnesss  ~        song.tempo   0.042 0.014  3.100  0.002    0.016
+## 4    song.hotttnesss ~~   song.hotttnesss   0.752 0.011 69.186  0.000    0.731
+## 5  artist.hotttnesss ~~ artist.hotttnesss   1.000 0.000     NA     NA    1.000
+## 6  artist.hotttnesss ~~     song.loudness   0.202 0.000     NA     NA    0.202
+## 7  artist.hotttnesss ~~        song.tempo   0.024 0.000     NA     NA    0.024
+## 8      song.loudness ~~     song.loudness   1.000 0.000     NA     NA    1.000
+## 9      song.loudness ~~        song.tempo   0.156 0.000     NA     NA    0.156
+## 10        song.tempo ~~        song.tempo   1.000 0.000     NA     NA    1.000
 ##    ci.upper
-## 1     0.259
-## 2     0.112
-## 3     0.022
-## 4     0.935
+## 1     0.482
+## 2     0.138
+## 3     0.069
+## 4     0.773
 ## 5     1.000
-## 6     0.187
-## 7     0.050
+## 6     0.202
+## 7     0.024
 ## 8     1.000
-## 9     0.179
+## 9     0.156
 ## 10    1.000
 \end{verbatim}
 
@@ -3207,7 +3531,7 @@ Focus on the estimates again (\texttt{est.std}).
 
 Why is it easier to compare the values in lines 1 though 3 in this output than it was in the unstandardized table? (Hint: think about units of measurement or lack thereof.)
 
-What does the value in line 4 tell you? (Hint: it's awfully close to 1.)
+What does the value in line 4 tell you? (Hint: it's closer to 1 than to 0.)
 
 Why are lines 5, 8, and 10 equal to 1?
 
