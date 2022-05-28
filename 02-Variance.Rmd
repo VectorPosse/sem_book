@@ -64,16 +64,16 @@ Some of the numbers in your new list should be negative, some should be zero, an
 
 If the original set of numbers is called $X$, then what you've just calculated is a new list $\left(X - \overline{X}\right)$. Let's start organizing this into a table:
 
-| $X$ | $\left(X - \overline{X}\right)$ |
-|----:|--------------------------------:|
-| 3   | -3                              |
-| 4   | -2                              |
-| 5   | -1                              |
-| 6   |  0                              |
-| 6   |  0                              |
-| 7   |  1                              |
-| 8   |  2                              |
-| 9   |  3                              |
+| $X$ | $\left(X - \overline{X}\right)$ | $\qquad$ | $\quad$ |
+|----:|--------------------------------:|----------|---------|
+| 3   | -3                              |          |         |
+| 4   | -2                              |          |         |
+| 5   | -1                              |          |         |
+| 6   |  0                              |          |         |
+| 6   |  0                              |          |         |
+| 7   |  1                              |          |         |
+| 8   |  2                              |          |         |
+| 9   |  3                              |          |         |
 
 The numbers in the second columns are "deviations" from the mean.
 
@@ -112,16 +112,16 @@ Square each of the numbers from the second column of the table above. This will 
 
 Putting the new numbers into our previous table:
 
-| $X$ | $\left(X - \overline{X}\right)$ | $\left(X - \overline{X}\right)^{2}$ |
-|--:|---:|--:|
-| 3 | -3 | 9 |
-| 4 | -2 | 4 |
-| 5 | -1 | 1 |
-| 6 |  0 | 0 |
-| 6 |  0 | 0 |
-| 7 |  1 | 1 |
-| 8 |  2 | 4 |
-| 9 |  3 | 9 |
+| $X$ | $\left(X - \overline{X}\right)$ | $\left(X - \overline{X}\right)^{2}$ | $\quad$ |
+|--:|---:|--:|------|
+| 3 | -3 | 9 |      |
+| 4 | -2 | 4 |      |
+| 5 | -1 | 1 |      |
+| 6 |  0 | 0 |      |
+| 6 |  0 | 0 |      |
+| 7 |  1 | 1 |      |
+| 8 |  2 | 4 |      |
+| 9 |  3 | 9 |      |
 
 ::: {.rmdnote}
 
@@ -153,18 +153,18 @@ As a one-liner, the formula may look a little intimidating, but when you break i
 
 Here is the full calculation in the table:
 
-| $X$ | $\left(X - \overline{X}\right)$ | $\left(X - \overline{X}\right)^{2}$ |
-|--:|---:|--:|
-| 3 | -3 | 9 |
-| 4 | -2 | 4 |
-| 5 | -1 | 1 |
-| 6 |  0 | 0 |
-| 6 |  0 | 0 |
-| 7 |  1 | 1 |
-| 8 |  2 | 4 |
-| 9 |  3 | 9 |
-|   |    | Sum: 28  |
-|   |    | Variance: 28/7 = $\boxed{4}$ |
+| $X$ | $\left(X - \overline{X}\right)$ | $\left(X - \overline{X}\right)^{2}$ | $\quad$ |
+|--:|---:|--:|------|
+| 3 | -3 | 9 |      |
+| 4 | -2 | 4 |      |
+| 5 | -1 | 1 |      |
+| 6 |  0 | 0 |      |
+| 6 |  0 | 0 |      |
+| 7 |  1 | 1 |      |
+| 8 |  2 | 4 |      |
+| 9 |  3 | 9 |      |
+|   |    | Sum: 28  |      |
+|   |    | Variance: 28/7 = $\boxed{4}$ |      |
 
 
 In our diagrams, the variance of a variable is indicated by a curved, double-headed arrow, labeled with the value of the variance, like this:
@@ -270,13 +270,17 @@ $$
 
 :::
 
-We're not going to get into a formal definition of *independence* here. For now, it suffices to think of the intuitive definition you may already have in your head of what it means for two things to be independent. The idea is that, to be independent, $X_{1}$ and $X_{2}$ should have nothing to do with each other. Knowing the values of one should not give you any information about values of the other. In the next chapter [LINK], we'll say more about this rule.
+We're not going to get into a formal definition of *independence* here. For now, it suffices to think of the intuitive definition you may already have in your head of what it means for two things to be independent. The idea is that, to be independent, $X_{1}$ and $X_{2}$ should have nothing to do with each other. Knowing a value of one variable should not give you any information about values of the other. In the [next chapter](#covariance), we'll say more about this rule.
 
 It's important to note that [**Rule 2**](#Rule2) is an abstract mathematical rule that holds *in theory*. When we have actual data, however, we know that statistics won't always match their theoretical values. For example, even if a true population mean is 42, samples drawn from that population will have sample means that are *close* to 42, but likely not exactly 42.^[The exact distribution of sample means around a true population value is something you probably learned about in an intro stats course. Sample means follow a Student t distribution.]
 
+Let's test this out. Below, we will define two new variables using random numbers.
+
+A quick note about random numbers first: when we ask a computer to give us random numbers, it's not going to give us *truly* random numbers. The algorithms are designed to give us numbers that have all the correct statistical properties of random numbers without actually being random. These are called *pseudo-random* numbers. We can use this fact to our benefit. The `set.seed` command below tells the computer to start generating numbers in a very specific way. Anyone else using R (the same *version* of R) who gives their machine the same "seed" will generate the same list of numbers. This makes our work "reproducible": you will be able to reproduce the results here in this book on your own machine.
+
 ::: {.rmdnote}
 
-Let's test this out. Below are two new variables that are defined using random numbers. The first one is normally distributed with mean 1 and standard deviation 2. (If you don't remember standard deviation from intro stats, we talk about it in the next section.)  The second one is normally distributed with mean 4 and standard deviation 3. [WHERE DOES SEED INFO GO?] These are independent because the definition of $X_{5}$ does not depend on any way on the definition of $X_{6}$ and vice versa.
+The variable `X5` below is normally distributed with mean 1 and standard deviation 2. (If you don't remember standard deviation from intro stats, we talk about it in the next section.)  The next variable `X6` is normally distributed with mean 4 and standard deviation 3. These are independent because the definition of `X5` does not depend on any way on the definition of `X6` and vice versa.
 
 The sample sizes (2000) are large enough that we should get pretty close to the theoretically correct results here.
 
@@ -294,7 +298,7 @@ head(X5)
 head(X6)
 ```
 
-Use R to calculate the variance of $X_{5}$ and $X_{6}$ separately. Then use R to add the two numbers you just obtained (the sum of the two variances). Finally, use R to calculate the variance of the sum of the two variables.
+Use R to calculate the variances of `X5` and `X6` separately. Then use R to add the two numbers you just obtained (the sum of the two variances). Finally, use R to calculate the variance of the sum of the two variables.
 
 :::
 
@@ -302,7 +306,7 @@ Here's an example to help think about this intuitively.
 
 Suppose someone comes along and offers to give you a random amount of money, some number between \$0 and \$100.^[To be more concrete, the values are uniformly distributed, meaning that any number between 0 and 100 is equally likely.] If the variance is a measure of spread, then it stands to reason that variance reflects something about how uncertain you are about how much money you will have after this transaction. On average, you expect about $50, but you know that the actual amount of money you will receive can vary greatly.
 
-Okay, now a second person comes along and offers you the same deal, a random dollar gift between \$0 and \$100.^[Apparently you live in a town with very generous strangers.] At the end of both transactions, how much money will you have? On average, maybe about \$100, but what about your uncertainty? Because the total amount is the result of two random gifts, you are even less sure how close to \$100 you might be. The range of possible values is now \$0 to \$200.^[To be clear, though, the probabilities are no longer uniform between 0 and 200. To get near 0, you would have to be unlucky twice, and to get near 200 you would have to get lucky twice.] Your uncertainty is greater overall.
+Okay, now a second person comes along and offers you the same deal, a random dollar gift between \$0 and \$100.^[Apparently you live in a town with very generous strangers.] At the end of both transactions, how much money will you have? On average, maybe about \$100, but what about your uncertainty? Because the total amount is the result of two random gifts, you are even less sure how close to \$100 you might be. The range of possible values is now \$0 to \$200.^[To be clear, though, the probabilities are no longer uniform between 0 and 200. To get near 0, you would have to be unlucky twice, and to get near 200 you would have to get lucky twice. But there are lots of possible outcomes that would result in you having around 100.] Your uncertainty is greater overall.
 
 Of course, all this explains is why the variance of the sum of two variables is larger than the variance of either variable individually. The fact that the variance of the sum of two independent variables is *exactly* the sum of the variances has to be shown mathematically. But hopefully, the intuition is clear.
 
@@ -318,6 +322,8 @@ $$
 ::: {.rmdnote}
 
 Can you apply [**Rule 2**](#Rule2) followed by [**Rule 1**](#Rule1) to see mathematically why $Var\left(X + C\right) = Var\left(X\right)$?
+
+This assumes that a constant is independent of any other variable? Intuitively speaking, why is this true?
 
 :::
 
@@ -356,7 +362,7 @@ Can this be true? Zero variance means "no spread" which means exact certainty of
 
 In fact, the amount of money you end up with ranges from -\$100 up to \$100. This is a larger range than in either transaction individually. Our uncertainty has grown because there are two random processes in play, just like in the scenario with two beneficent strangers. In fact, the width of the range of possibilities is the same in both scenarios: \$0 to \$200 and -\$100 to \$100 both span a range of $200.
 
-The next rule, unfortunately, does not have a great intuitive explanation. It will make a little more sense in the next chapter [LINK], and we'll revisit it then.
+The next rule, unfortunately, does not have a great intuitive explanation. It will make a little more sense in the [next chapter](#covariance), and we'll revisit it then.
 
 ::: {.rmdimportant}
 
@@ -598,6 +604,8 @@ Var(Z) &= Var\left(\frac{\left(X - \overline{X}\right)}{SD(X)}\right) \\
     &= Var\left(\frac{1}{S}\left(X - M\right)\right) \\
     &= \quad ???
 \end{align}
+
+You may feel a little uncomfortable applying [**Rule 3**](#Rule3) because you might worry if $X$ and $M$ are independent. Since $M$ is the mean of $X$, it seems like that is *very* dependent on $X$. This is where some of the intuition about independence breaks down and we have to rely on mathematical rules that we haven't really gotten into. *All* constants are independent of any other variable.
 
 :::
 

@@ -371,7 +371,7 @@ ggplot(music, aes(y = song.hotttnesss,
     geom_point()
 ```
 
-::: {.rndnote}
+::: {.rmdnote}
 
 Is it possible for a song tempo to be 0 BPM?
 

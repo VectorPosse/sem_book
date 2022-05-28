@@ -38,6 +38,7 @@ multiple-r
 multiple-r-lm
 multiple-r-lavaan
 mediation
+mediation-simple
 path
 latent
 cfa

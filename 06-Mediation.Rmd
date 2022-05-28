@@ -1,1 +1,20 @@
 # Mediation {#mediation}
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/mediation.png")
+```
+
+
+## Preliminaries {-}
+
+We will load the `tidyverse` package to work with tibbles and `lavaan`.
+
+```{r}
+library(tidyverse)
+library(broom)
+library(lavaan)
+```
+
+
+## The simple mediation model {#mediation-simple}
+

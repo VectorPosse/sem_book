@@ -112,39 +112,57 @@
 <thead><tr class="header">
 <th align="right"><span class="math inline">\(X\)</span></th>
 <th align="right"><span class="math inline">\(\left(X - \overline{X}\right)\)</span></th>
+<th><span class="math inline">\(\qquad\)</span></th>
+<th><span class="math inline">\(\quad\)</span></th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="right">3</td>
 <td align="right">-3</td>
+<td></td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
 <td align="right">-2</td>
+<td></td>
+<td></td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">-1</td>
+<td></td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
 <td align="right">0</td>
+<td></td>
+<td></td>
 </tr>
 <tr class="odd">
 <td align="right">6</td>
 <td align="right">0</td>
+<td></td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">7</td>
 <td align="right">1</td>
+<td></td>
+<td></td>
 </tr>
 <tr class="odd">
 <td align="right">8</td>
 <td align="right">2</td>
+<td></td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">9</td>
 <td align="right">3</td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table></div>
@@ -160,67 +178,77 @@
 <ul>
 <li>Taking absolute values</li>
 </ul>
-<p>We could just take the absolute value and make all the values positive. There are some statistical procures that do just that,<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This leads to the “mean absolute deviation” or MAD.&lt;/p&gt;"><sup>1</sup></a> but we’re going to take a slightly different approach…</p>
+<p>We could just take the absolute value and make all the values positive. There are some statistical procures that do just that,<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This leads to the “mean absolute deviation” or MAD.&lt;/p&gt;"><sup>2</sup></a> but we’re going to take a slightly different approach…</p>
 <ul>
 <li>Squaring</li>
 </ul>
 <p>If we square each value, they all become positive.</p>
-<p>Taking the absolute value is conceptually easier, but there are some historical and mathematical reasons why squaring is a little better.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;If you know calculus, you might think why the square function is much better behaved than the absolute value function.&lt;/p&gt;"><sup>2</sup></a></p>
+<p>Taking the absolute value is conceptually easier, but there are some historical and mathematical reasons why squaring is a little better.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;If you know calculus, you might think why the square function is much better behaved than the absolute value function.&lt;/p&gt;"><sup>3</sup></a></p>
 <div class="rmdnote">
 <p>Square each of the numbers from the second column of the table above. This will calculate a new list <span class="math inline">\(\left(X - \overline{X}\right)^{2}\)</span></p>
 </div>
 <p>Putting the new numbers into our previous table:</p>
 <div class="inline-table"><table class="table table-sm">
 <colgroup>
-<col width="30%">
-<col width="40%">
-<col width="30%">
+<col width="18%">
+<col width="25%">
+<col width="18%">
+<col width="37%">
 </colgroup>
 <thead><tr class="header">
 <th align="right"><span class="math inline">\(X\)</span></th>
 <th align="right"><span class="math inline">\(\left(X - \overline{X}\right)\)</span></th>
 <th align="right"><span class="math inline">\(\left(X - \overline{X}\right)^{2}\)</span></th>
+<th><span class="math inline">\(\quad\)</span></th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="right">3</td>
 <td align="right">-3</td>
 <td align="right">9</td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
 <td align="right">-2</td>
 <td align="right">4</td>
+<td></td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">-1</td>
 <td align="right">1</td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td></td>
 </tr>
 <tr class="odd">
 <td align="right">6</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">7</td>
 <td align="right">1</td>
 <td align="right">1</td>
+<td></td>
 </tr>
 <tr class="odd">
 <td align="right">8</td>
 <td align="right">2</td>
 <td align="right">4</td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">9</td>
 <td align="right">3</td>
 <td align="right">9</td>
+<td></td>
 </tr>
 </tbody>
 </table></div>
@@ -228,7 +256,7 @@
 <p>Now take the average (mean) of the numbers in the third column above.</p>
 </div>
 <p>The number you got (should be 3.5) is <em>almost</em> what we call the variance. There’s only one more annoying wrinkle.</p>
-<p>When you took the mean of the last column of numbers, you added them all up and divided by 8 since there are 8 numbers in the list. But for some fairly technical mathematical reasons, we actually don’t want to divide by 8. Instead, we divide by one less than that number; in other words, we divide by 7.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;For more information on that, search the internet for “sample variance unbiased”&lt;/p&gt;"><sup>3</sup></a></p>
+<p>When you took the mean of the last column of numbers, you added them all up and divided by 8 since there are 8 numbers in the list. But for some fairly technical mathematical reasons, we actually don’t want to divide by 8. Instead, we divide by one less than that number; in other words, we divide by 7.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;For more information on that, search the internet for “sample variance unbiased”&lt;/p&gt;"><sup>4</sup></a></p>
 <div class="rmdnote">
 <p>Re-do the math above, but divide by 7 instead of dividing by 8.</p>
 </div>
@@ -242,66 +270,78 @@ Var(X) = \frac{\sum{\left(X - \overline{X}\right)^{2}}}{n - 1}
 <p>Here is the full calculation in the table:</p>
 <div class="inline-table"><table class="table table-sm">
 <colgroup>
-<col width="30%">
-<col width="40%">
-<col width="30%">
+<col width="18%">
+<col width="25%">
+<col width="18%">
+<col width="37%">
 </colgroup>
 <thead><tr class="header">
 <th align="right"><span class="math inline">\(X\)</span></th>
 <th align="right"><span class="math inline">\(\left(X - \overline{X}\right)\)</span></th>
 <th align="right"><span class="math inline">\(\left(X - \overline{X}\right)^{2}\)</span></th>
+<th><span class="math inline">\(\quad\)</span></th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="right">3</td>
 <td align="right">-3</td>
 <td align="right">9</td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
 <td align="right">-2</td>
 <td align="right">4</td>
+<td></td>
 </tr>
 <tr class="odd">
 <td align="right">5</td>
 <td align="right">-1</td>
 <td align="right">1</td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">6</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td></td>
 </tr>
 <tr class="odd">
 <td align="right">6</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">7</td>
 <td align="right">1</td>
 <td align="right">1</td>
+<td></td>
 </tr>
 <tr class="odd">
 <td align="right">8</td>
 <td align="right">2</td>
 <td align="right">4</td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right">9</td>
 <td align="right">3</td>
 <td align="right">9</td>
+<td></td>
 </tr>
 <tr class="odd">
 <td align="right"></td>
 <td align="right"></td>
 <td align="right">Sum: 28</td>
+<td></td>
 </tr>
 <tr class="even">
 <td align="right"></td>
 <td align="right"></td>
 <td align="right">Variance: 28/7 = <span class="math inline">\(\boxed{4}\)</span>
 </td>
+<td></td>
 </tr>
 </tbody>
 </table></div>
@@ -380,10 +420,12 @@ Var\left(X_{1} + X_{2}\right) =
 Var\left(X_{1}\right) + Var\left(X_{2}\right)
 \]</span></p>
 </div>
-<p>We’re not going to get into a formal definition of <em>independence</em> here. For now, it suffices to think of the intuitive definition you may already have in your head of what it means for two things to be independent. The idea is that, to be independent, <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> should have nothing to do with each other. Knowing the values of one should not give you any information about values of the other. In the next chapter [LINK], we’ll say more about this rule.</p>
-<p>It’s important to note that <a href="#Rule2"><strong>Rule 2</strong></a> is an abstract mathematical rule that holds <em>in theory</em>. When we have actual data, however, we know that statistics won’t always match their theoretical values. For example, even if a true population mean is 42, samples drawn from that population will have sample means that are <em>close</em> to 42, but likely not exactly 42.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The exact distribution of sample means around a true population value is something you probably learned about in an intro stats course. Sample means follow a Student t distribution.&lt;/p&gt;"><sup>4</sup></a></p>
+<p>We’re not going to get into a formal definition of <em>independence</em> here. For now, it suffices to think of the intuitive definition you may already have in your head of what it means for two things to be independent. The idea is that, to be independent, <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> should have nothing to do with each other. Knowing a value of one variable should not give you any information about values of the other. In the <a href="covariance.html#covariance">next chapter</a>, we’ll say more about this rule.</p>
+<p>It’s important to note that <a href="#Rule2"><strong>Rule 2</strong></a> is an abstract mathematical rule that holds <em>in theory</em>. When we have actual data, however, we know that statistics won’t always match their theoretical values. For example, even if a true population mean is 42, samples drawn from that population will have sample means that are <em>close</em> to 42, but likely not exactly 42.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The exact distribution of sample means around a true population value is something you probably learned about in an intro stats course. Sample means follow a Student t distribution.&lt;/p&gt;"><sup>5</sup></a></p>
+<p>Let’s test this out. Below, we will define two new variables using random numbers.</p>
+<p>A quick note about random numbers first: when we ask a computer to give us random numbers, it’s not going to give us <em>truly</em> random numbers. The algorithms are designed to give us numbers that have all the correct statistical properties of random numbers without actually being random. These are called <em>pseudo-random</em> numbers. We can use this fact to our benefit. The <code>set.seed</code> command below tells the computer to start generating numbers in a very specific way. Anyone else using R (the same <em>version</em> of R) who gives their machine the same “seed” will generate the same list of numbers. This makes our work “reproducible”: you will be able to reproduce the results here in this book on your own machine.</p>
 <div class="rmdnote">
-<p>Let’s test this out. Below are two new variables that are defined using random numbers. The first one is normally distributed with mean 1 and standard deviation 2. (If you don’t remember standard deviation from intro stats, we talk about it in the next section.) The second one is normally distributed with mean 4 and standard deviation 3. [WHERE DOES SEED INFO GO?] These are independent because the definition of <span class="math inline">\(X_{5}\)</span> does not depend on any way on the definition of <span class="math inline">\(X_{6}\)</span> and vice versa.</p>
+<p>The variable <code>X5</code> below is normally distributed with mean 1 and standard deviation 2. (If you don’t remember standard deviation from intro stats, we talk about it in the next section.) The next variable <code>X6</code> is normally distributed with mean 4 and standard deviation 3. These are independent because the definition of <code>X5</code> does not depend on any way on the definition of <code>X6</code> and vice versa.</p>
 <p>The sample sizes (2000) are large enough that we should get pretty close to the theoretically correct results here.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">10101</span><span class="op">)</span>
@@ -395,11 +437,11 @@ Var\left(X_{1}\right) + Var\left(X_{2}\right)
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">X6</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2.297279 4.856377 6.661822 1.309892 2.270882 3.827944</code></pre>
-<p>Use R to calculate the variance of <span class="math inline">\(X_{5}\)</span> and <span class="math inline">\(X_{6}\)</span> separately. Then use R to add the two numbers you just obtained (the sum of the two variances). Finally, use R to calculate the variance of the sum of the two variables.</p>
+<p>Use R to calculate the variances of <code>X5</code> and <code>X6</code> separately. Then use R to add the two numbers you just obtained (the sum of the two variances). Finally, use R to calculate the variance of the sum of the two variables.</p>
 </div>
 <p>Here’s an example to help think about this intuitively.</p>
-<p>Suppose someone comes along and offers to give you a random amount of money, some number between $0 and $100.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;To be more concrete, the values are uniformly distributed, meaning that any number between 0 and 100 is equally likely.&lt;/p&gt;"><sup>5</sup></a> If the variance is a measure of spread, then it stands to reason that variance reflects something about how uncertain you are about how much money you will have after this transaction. On average, you expect about $50, but you know that the actual amount of money you will receive can vary greatly.</p>
-<p>Okay, now a second person comes along and offers you the same deal, a random dollar gift between $0 and $100.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Apparently you live in a town with very generous strangers.&lt;/p&gt;"><sup>6</sup></a> At the end of both transactions, how much money will you have? On average, maybe about $100, but what about your uncertainty? Because the total amount is the result of two random gifts, you are even less sure how close to $100 you might be. The range of possible values is now $0 to $200.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;To be clear, though, the probabilities are no longer uniform between 0 and 200. To get near 0, you would have to be unlucky twice, and to get near 200 you would have to get lucky twice.&lt;/p&gt;"><sup>7</sup></a> Your uncertainty is greater overall.</p>
+<p>Suppose someone comes along and offers to give you a random amount of money, some number between $0 and $100.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;To be more concrete, the values are uniformly distributed, meaning that any number between 0 and 100 is equally likely.&lt;/p&gt;"><sup>6</sup></a> If the variance is a measure of spread, then it stands to reason that variance reflects something about how uncertain you are about how much money you will have after this transaction. On average, you expect about $50, but you know that the actual amount of money you will receive can vary greatly.</p>
+<p>Okay, now a second person comes along and offers you the same deal, a random dollar gift between $0 and $100.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Apparently you live in a town with very generous strangers.&lt;/p&gt;"><sup>7</sup></a> At the end of both transactions, how much money will you have? On average, maybe about $100, but what about your uncertainty? Because the total amount is the result of two random gifts, you are even less sure how close to $100 you might be. The range of possible values is now $0 to $200.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;To be clear, though, the probabilities are no longer uniform between 0 and 200. To get near 0, you would have to be unlucky twice, and to get near 200 you would have to get lucky twice. But there are lots of possible outcomes that would result in you having around 100.&lt;/p&gt;"><sup>8</sup></a> Your uncertainty is greater overall.</p>
 <p>Of course, all this explains is why the variance of the sum of two variables is larger than the variance of either variable individually. The fact that the variance of the sum of two independent variables is <em>exactly</em> the sum of the variances has to be shown mathematically. But hopefully, the intuition is clear.</p>
 <p>The next rule is a consequence of the first two rules, so we will not give it a special number</p>
 <div class="rmdimportant">
@@ -409,6 +451,7 @@ Var\left(X + C\right) = Var\left(X\right)
 </div>
 <div class="rmdnote">
 <p>Can you apply <a href="#Rule2"><strong>Rule 2</strong></a> followed by <a href="#Rule1"><strong>Rule 1</strong></a> to see mathematically why <span class="math inline">\(Var\left(X + C\right) = Var\left(X\right)\)</span>?</p>
+<p>This assumes that a constant is independent of any other variable? Intuitively speaking, why is this true?</p>
 </div>
 <div class="rmdnote">
 <p>What is the intuition behind the statement <span class="math inline">\(Var\left(X + C\right) = Var\left(X\right)\)</span>? In other words, can you explain the rule to someone in terms of what it means about shifting the values of a data set up or down by a constant amount?</p>
@@ -424,16 +467,16 @@ Var\left(X_{1} - X_{2}\right) =
 Var\left(X_{1}\right) + Var\left(X_{2}\right)
 \]</span></p>
 </div>
-<p>It is very common for students to think that a minus sign on the left would translate into a minus sign on the right.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This results from many years of developing a Pavlovian response to anything that looks like the distributive law from algebra.&lt;/p&gt;"><sup>8</sup></a></p>
+<p>It is very common for students to think that a minus sign on the left would translate into a minus sign on the right.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This results from many years of developing a Pavlovian response to anything that looks like the distributive law from algebra.&lt;/p&gt;"><sup>9</sup></a></p>
 <p>What gives?</p>
-<p>Let’s return to our example of strangers giving you money.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Actually, that sounds a little creepy when put like that.&lt;/p&gt;"><sup>9</sup></a> The first person still offers you a random amount between $0 and $100. But, now, the second person is a robber, and forces you to give them a random dollar value between $0 and $100 (of their choosing, of course). How much money do you expect to have after these two events? On average, $0. (The first person gives you, on average, $50, and the second person takes away, on average, $50.) But how certain are you about that amount?</p>
+<p>Let’s return to our example of strangers giving you money.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Actually, that sounds a little creepy when put like that.&lt;/p&gt;"><sup>10</sup></a> The first person still offers you a random amount between $0 and $100. But, now, the second person is a robber, and forces you to give them a random dollar value between $0 and $100 (of their choosing, of course). How much money do you expect to have after these two events? On average, $0. (The first person gives you, on average, $50, and the second person takes away, on average, $50.) But how certain are you about that amount?</p>
 <p>Imagine a world in which the wrong rule prevailed. What if <span class="math inline">\(Var\left(X_{1} - X_{2}\right)\)</span> were truly the difference of the two variances. But <span class="math inline">\(Var\left(X_{1}\right)\)</span> and <span class="math inline">\(Var\left(X_{2}\right)\)</span> are the same in this scenario. (Although one person is giving money and one is taking, our uncertainty about the dollar amount is the same in both cases.) And this implies
 <span class="math display">\[
 Var\left(X_{1}\right) - Var\left(X_{2}\right) = 0
 \]</span>
 Can this be true? Zero variance means “no spread” which means exact certainty of the value. (Remember <a href="#Rule1"><strong>Rule 1</strong></a>?) Are you 100% confident that you will end both transactions with exactly $0? No way!</p>
 <p>In fact, the amount of money you end up with ranges from -$100 up to $100. This is a larger range than in either transaction individually. Our uncertainty has grown because there are two random processes in play, just like in the scenario with two beneficent strangers. In fact, the width of the range of possibilities is the same in both scenarios: $0 to $200 and -$100 to $100 both span a range of $200.</p>
-<p>The next rule, unfortunately, does not have a great intuitive explanation. It will make a little more sense in the next chapter [LINK], and we’ll revisit it then.</p>
+<p>The next rule, unfortunately, does not have a great intuitive explanation. It will make a little more sense in the <a href="covariance.html#covariance">next chapter</a>, and we’ll revisit it then.</p>
 <div class="rmdimportant">
 <ul>
 <li><a id="Rule4"><strong>Rule 4</strong></a></li>
@@ -519,7 +562,7 @@ But, eww, that’s gross.</p>
 <h2>
 <span class="header-section-number">2.6</span> Mean centering data<a class="anchor" aria-label="anchor" href="#variance-mean-centering"><i class="fas fa-link"></i></a>
 </h2>
-<p>Many of the statistical techniques taught in an intro stats course focus on learning about the means of variables. Structural equation modeling is a little different in that it is more focused on the explaining the variability of data—how changes in one or more variables predict changes in other variables.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;There are tools in SEM for working with means as well. WILL WE COVER THIS IN A FUTURE CHAPTER?&lt;/p&gt;"><sup>10</sup></a></p>
+<p>Many of the statistical techniques taught in an intro stats course focus on learning about the means of variables. Structural equation modeling is a little different in that it is more focused on the explaining the variability of data—how changes in one or more variables predict changes in other variables.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;There are tools in SEM for working with means as well. WILL WE COVER THIS IN A FUTURE CHAPTER?&lt;/p&gt;"><sup>11</sup></a></p>
 <p>A habit we’ll start forming now is to mean center all our variables. We do this by subtracting the mean of a variable from all its values.</p>
 <div class="rmdnote">
 <p>Let’s use <span class="math inline">\(X_{6}\)</span> as we defined it before, a normally distributed variable with mean 4 and standard deviation 3. How do we interpret the values of <span class="math inline">\(X_{6} - \overline{X_{6}}\)</span>? (Remember, this is just the second column in our variance tables earlier.)</p>
@@ -808,6 +851,7 @@ Var(Z) &amp;= Var\left(\frac{\left(X - \overline{X}\right)}{SD(X)}\right) \\
     &amp;= Var\left(\frac{1}{S}\left(X - M\right)\right) \\
     &amp;= \quad ???
 \end{align}\]</span></p>
+<p>You may feel a little uncomfortable applying <a href="#Rule3"><strong>Rule 3</strong></a> because you might worry if <span class="math inline">\(X\)</span> and <span class="math inline">\(M\)</span> are independent. Since <span class="math inline">\(M\)</span> is the mean of <span class="math inline">\(X\)</span>, it seems like that is <em>very</em> dependent on <span class="math inline">\(X\)</span>. This is where some of the intuition about independence breaks down and we have to rely on mathematical rules that we haven’t really gotten into. <em>All</em> constants are independent of any other variable.</p>
 </div>
 <p>You should get the answer 1. A standardized variable always has variance 1. This will be an important fact in future chapters.</p>
 
@@ -845,7 +889,7 @@ Var(Z) &amp;= Var\left(\frac{\left(X - \overline{X}\right)}{SD(X)}\right) \\
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-21.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-28.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

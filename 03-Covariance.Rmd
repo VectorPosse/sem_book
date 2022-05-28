@@ -23,15 +23,15 @@ As we did in the last chapter with variance, we'll build up the calculation of c
 
 Here are two variables (with $n = 7$) that have been mean centered:
 
-| $X_{1}$ | $X_{2}$ |
-|--------:|--------:|
-| -1      | -2      |
-| -2      |  2      |
-|  2      | -2      |
-| -3      | -1      |
-|  4      |  2      |
-| -1      | -2      |
-|  1      |  3      |
+| $X_{1}$ | $X_{2}$ | $\qquad$ | $\qquad$ |
+|--------:|--------:|----------|----------|
+| -1      | -2      |          |          |
+| -2      |  2      |          |          |
+|  2      | -2      |          |          |
+| -3      | -1      |          |          |
+|  4      |  2      |          |          |
+| -1      | -2      |          |          |
+|  1      |  3      |          |          |
 
 ::: {.rmdnote}
 
@@ -51,28 +51,28 @@ What if both $X_{1}$ and $X_{2}$ lie below their means? What do we know about th
 
 Here is the chart again, but with the products listed in a new column:
 
-| $X_{1}$ | $X_{2}$ | $X_{1}X_{2}$ |
-|--------:|--------:|-------------:|
-| -1      | -2      |  2           |
-| -2      |  2      | -4           |
-|  2      | -2      | -4           |
-| -3      | -1      |  3           |
-|  4      |  2      |  8           |
-| -1      | -2      |  2           |
-|  1      |  3      |  3           |
+| $X_{1}$ | $X_{2}$ | $X_{1}X_{2}$ | $\qquad$ |
+|--------:|--------:|-------------:|----------|
+| -1      | -2      |  2           |          |
+| -2      |  2      | -4           |          |
+|  2      | -2      | -4           |          |
+| -3      | -1      |  3           |          |
+|  4      |  2      |  8           |          |
+| -1      | -2      |  2           |          |
+|  1      |  3      |  3           |          |
 
 Now we add up the products across all seven data pairs:
 
-| $X_{1}$ | $X_{2}$ | $X_{1}X_{2}$ |
-|--------:|--------:|-------------:|
-| -1      | -2      |  2           |
-| -2      |  2      | -4           |
-|  2      | -2      | -4           |
-| -3      | -1      |  3           |
-|  4      |  2      |  8           |
-| -1      | -2      |  2           |
-|  1      |  3      |  3           |
-|         |         | Sum: 10      |
+| $X_{1}$ | $X_{2}$ | $X_{1}X_{2}$ | $\qquad$ |
+|--------:|--------:|-------------:|----------|
+| -1      | -2      |  2           |          |
+| -2      |  2      | -4           |          |
+|  2      | -2      | -4           |          |
+| -3      | -1      |  3           |          |
+|  4      |  2      |  8           |          |
+| -1      | -2      |  2           |          |
+|  1      |  3      |  3           |          |
+|         |         | Sum: 10      |          |
 
 
 So when $X_{1}$ and $X_{2}$ tend to have similar values (both positive or both negative), their product is usually positive. It's not true of every pair of values in the table above; some products are negative. But the majority are positive. Therefore, the sum of all such products will be positive.
@@ -81,17 +81,17 @@ We're almost there. Just like we wanted the average squared deviation to calcula
 
 Putting this all together:
 
-| $X_{1}$ | $X_{2}$ | $X_{1}X_{2}$ |
-|--------:|--------:|-------------:|
-| -1      | -2      |  2           |
-| -2      |  2      | -4           |
-|  2      | -2      | -4           |
-| -3      | -1      |  3           |
-|  4      |  2      |  8           |
-| -1      | -2      |  2           |
-|  1      |  3      |  3           |
-|         |         | Sum: 10      |
-|         |         | Covariance: 10/6 = $\boxed{1.67}$ |
+| $X_{1}$ | $X_{2}$ | $X_{1}X_{2}$ | $\quad$ |
+|--------:|--------:|-------------:|----------|
+| -1      | -2      |  2           |          |
+| -2      |  2      | -4           |          |
+|  2      | -2      | -4           |          |
+| -3      | -1      |  3           |          |
+|  4      |  2      |  8           |          |
+| -1      | -2      |  2           |          |
+|  1      |  3      |  3           |          |
+|         |         | Sum: 10      |          |
+|         |         | Covariance: 10/6 = $\boxed{1.67}$ |          |
 
 In our diagrams, the covariance of two variables is indicated by a curved, double-headed arrow pointing at both boxes and labeled with the value of the covariance, like this:
 
@@ -173,11 +173,12 @@ X4 <- c(6, 5, 4, 9, 11, 7)
 cov(X3, X4)
 ```
 
-And here's some real world data:
+And here's some real world data. In addition to temperature (which we've already seen), we can use wind speed and see if there is an association between them:
 
 ```{r}
 cov(airquality$Temp, airquality$Wind)
 ```
+
 
 ## Covariance rules {#covariance-rules}
 
@@ -439,7 +440,7 @@ Okay, now remember that $S_{1}$ is just a convenient substitute for $SD(X_{1})$ 
 
 This is cool! Correlation is simply the covariance of two variables after they've been standardized.
 
-This also reinforces the earlier comment about interpreting covariance after removing the extraneous influence of the spread of the individual variables. Standardizing variables makes the spread all all variables 1, so their covariance is now a pure representation of just the association between them.
+This also reinforces the earlier comment about interpreting covariance after removing the extraneous influence of the spread of the individual variables. Standardizing variables makes the spread of all variables 1, so their covariance is now a pure representation of just the association between them.
 
 You probably remember from intro stats that correlation takes on values between -1 and 1. That fact is not obvious from the formula we have. Why should the fraction
 $$
@@ -486,7 +487,7 @@ Here is a fact we will state without proof:
 
 ::: .{rmdimportant}
 
-Correlation is only interpretable as the strength of **linear** associations.
+Correlations are only interpretable as the strength of **linear** associations.
 
 :::
 
@@ -560,7 +561,7 @@ X7 <- 5 - 0.2 * X5
 X7
 ```
 
-Throw this new variable into the tibble we already have (for convenience). To explain the syntax below, the `%>%` symbol is called a "pipe" and it tells R to pass the `linear_data` tibble on to the next row to process it. And the processing itself is dictated by the `bind_cols` command which tells R to "bind a new column" to the tibble. The part that says `X7 = X7` may be a little confusing. It says to add the new column `X7`, but also still call it `X7`.
+We'll throw this new variable into the tibble we already have (for convenience). To explain the syntax below, the `%>%` symbol is called a "pipe" and it tells R to pass the `linear_data` tibble on to the next row to process it. And the processing itself is dictated by the `bind_cols` command which tells R to "bind a new column" to the tibble. The part that says `X7 = X7` may be a little confusing. It says to add the new column `X7`, but also still call it `X7`.
 
 ```{r}
 linear_data <- linear_data %>%
@@ -578,7 +579,7 @@ cor(X5, X7)
 
 Again, that is what we expected.
 
-What happens if we plot random data? The `runif` command just chooses random numbers uniformly between 0 and 1.^[Sean's brain always want to parse this command as "run if". Run if what? No, no, it's "r unif".]
+What happens if we plot random data? The `runif` command just chooses random numbers uniformly between 0 and 1.^[Sean's brain always want to parse this command as "run if". Run if what? No, no, it's "r unif".] We use `set.seed` to make our work reproducible. You will get the same set of random numbers on your machine if you use the same seed as we use here.
 
 ```{r}
 set.seed(1234)

@@ -341,7 +341,7 @@ It is <em>not</em> enlightening in any way to replace <span class="math inline">
 ## #   song.bars_confidence &lt;dbl&gt;, song.bars_start &lt;dbl&gt;,
 ## #   song.beats_confidence &lt;dbl&gt;, song.beats_start &lt;dbl&gt;, song.duration &lt;dbl&gt;,
 ## #   song.end_of_fade_in &lt;dbl&gt;, song.hotttnesss &lt;dbl&gt;, song.id &lt;chr&gt;, …</code></pre>
-<p>The endogenous variable of interest to us will be the measure of the song’s popularity, called <code>song.hotttnesss</code> (on a scale from 0 to 1).<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Very important that there are three t’s and three s’s!&lt;/p&gt;"><sup>16</sup></a> There are many possible exogenous predictors, but let’s focus on three:</p>
+<p>The endogenous variable of interest to us will be the measure of the song’s popularity, called <code>song.hotttnesss</code> (on a scale from 0 to 1).<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Very important that there are three t’s and three s’s!&lt;/p&gt;"><sup>17</sup></a> There are many possible exogenous predictors, but let’s focus on three:</p>
 <ul>
 <li>
 <code>artist.hotttnesss</code>
@@ -381,7 +381,7 @@ It is <em>not</em> enlightening in any way to replace <span class="math inline">
                   x <span class="op">=</span> <span class="va">song.tempo</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-79-1.png" width="672"></div>
-<div class="rndnote">
+<div class="rmdnote">
 <p>Is it possible for a song tempo to be 0 BPM?</p>
 </div>
 <p>To make it a little cleaner, the following code will <code>select</code> only the variables in which we’re interested. Then it will <code>filter</code> out the values we want to keep (discarding the ones that represent missing/invalid data). We’ll put this into a new tibble called <code>music_clean</code>.</p>
@@ -641,7 +641,7 @@ by substituting</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-21.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-28.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

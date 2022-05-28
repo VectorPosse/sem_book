@@ -85,13 +85,14 @@
 <div id="intro-philosophy" class="section level2 unnumbered">
 <h2>Our philosophy<a class="anchor" aria-label="anchor" href="#intro-philosophy"><i class="fas fa-link"></i></a>
 </h2>
-<p>As we mentioned before, our motivation for writing the book was driven by the difficulty we had finding readings for the students. Perhaps that begs the question, should one even try teaching a topic as “difficult” or “advanced” as structural equation modeling to the audience we had? To be sure, the traditional approaches already on the market seem to assume a lot more background than we had at our disposal. And the books that claim to assume less background…well, sometimes they require more than they let on.</p>
-<p>The prerequisite for our class is an intro stats class that covers pretty standard material for such a course: hypothesis testing and confidence intervals for one and two proportions, one and two means (and paired means), ANOVA, chi-squared, and simple linear regression. We also benefit in that our intro course introduces students to R. (For those lacking R background, the first four modules <a href="https://github.com/VectorPosse/Intro_Stats">here</a> [FIX THIS LINK ONCE THE DATA 220 BOOK IS ALSO FULLY ONLINE] should suffice as a basic introduction to R and R Markdown sufficient for success in this course.)</p>
+<p>As we mentioned before, our motivation for writing the book was driven by the difficulty we had finding readings for the students. Perhaps that begs the question, should one even try teaching a topic as “difficult” or “advanced” as structural equation modeling to the audience we had? To be sure, the traditional approaches already on the market seem to assume a lot more background than we had at our disposal. And the books that claim to assume less background…well, sometimes they require more than they let on.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;“Oh, you don’t know anything about matrix algebra or maximum likelihood fitting algorithms? No problem. Go read three or four pages in an appendix and then you’ll be ‘prepared’ to read this book.” 😕&lt;/p&gt;"><sup>1</sup></a></p>
+<p>The prerequisite for our class at Westminster College is an intro stats class that covers pretty standard material for such a course: hypothesis testing and confidence intervals for one and two proportions, one and two means (and paired means), ANOVA, chi-squared, and simple linear regression. In some technical sense, very little of that material is truly required to understand our book. Having said that, though, some prior exposure to statistical ideas is helpful for motivating a rationale for building the kinds of models we teach in our course.</p>
+<p>We also benefit in that our intro course introduces students to R. For those lacking R background, the first five chapters <a href="https://github.com/VectorPosse/Intro_Stats">here</a> [FIX THIS LINK ONCE THE DATA 220 BOOK IS ALSO FULLY ONLINE] should suffice as a basic introduction to R and R Markdown, graphing with <code>ggplot</code>, and some basic <code>tidyverse</code> stuff about tibbles and data manipulation. We try hard to give lots of fully worked-out code examples in this book that students should be able to copy, paste, and modify slightly to meet their own modeling needs. But know that we make no attempt to be language agnostic here; R is the one and only tool we use.</p>
 <p>To respect our students, we made some very deliberate choices about the way our book would be structured.</p>
 <ul>
 <li><em>Make the book free and open source.</em></li>
 </ul>
-<p>Students have enough trouble in their lives and shouldn’t be exposed to the extortionate practices of most textbook publishers. Not only is this book freely available online, it’s also published under a permissive open source license (the <a href="https://opensource.org/licenses/MIT">MIT license</a>) that allows folks to “use, copy, modify, merge, publish, distribute, sublicense, and/or sell” their own versions of the book as desired. Furthermore, any derivative of the book must also abide by the same open standards. So our book is both <em>libre</em> and <em>gratis</em> (or, in more common parlance, “free as in speech” and “free as in beer”).</p>
+<p>Students have enough trouble in their lives without being subjected to the extortionate practices of most textbook publishers. Not only is this book freely available online, it’s also published under a permissive open source license (the <a href="https://opensource.org/licenses/MIT">MIT license</a>) that allows folks to “use, copy, modify, merge, publish, distribute, sublicense, and/or sell” their own versions of the book as desired. Furthermore, any derivative of the book must also abide by the same open standards. So our book is both <em>libre</em> and <em>gratis</em> (or, in more common parlance, “free as in speech” and “free as in beer”).</p>
 <ul>
 <li><em>Start from scratch.</em></li>
 </ul>
@@ -106,19 +107,19 @@
 <ul>
 <li><em>Do the math and do it well.</em></li>
 </ul>
-<p>One common thread we see in a lot of SEM books is a tendency to sweep most of the math under the rug. The intention comes from a good place; mathematics can appear intimidating and, therefore, may seem to serve as a deterrent to learning. To be sure, there are some complex mathematical ideas in SEM that are inaccessible to our audience. At the same time—and, in fairness, this may be due to Sean’s bias as a mathematician—we truly believe that the mathematics, carefully explained, can illuminate student understanding. The more mathy sections may need additional instructor support for students without a strong math background. But all it takes is some relatively straightforward algebra to nail down some concepts that most books ignore. A good example of this is investing time in the rules for manipulating variances and covariances. This allows students to calculate the “model-implied matrix” that is only cryptically referenced in most textbooks. However, we do skip the math sometimes. For example, a lot of the math behind model fit indices is left unexplained. At the very least, we hope to be transparent about our choices to include or exclude certain mathematical details.</p>
+<p>One common thread we see in a lot of SEM books is a tendency to sweep most of the math under the rug. The intention comes from a good place; mathematics can appear intimidating and, therefore, may seem to serve as a deterrent to learning. To be sure, there are some complex mathematical ideas in SEM that are inaccessible to our audience. At the same time—and, in fairness, this may be due to Sean’s bias as a mathematician—we truly believe that the mathematics, carefully explained and continually reinforced, can illuminate student understanding. The more mathy sections may need additional instructor support for students without a strong math background. But all it takes is some relatively straightforward algebra to nail down some concepts that most books ignore. A good example of this is investing time in the rules for manipulating variances and covariances. This allows students to calculate the “model-implied matrix” that is only cryptically referenced in most textbooks. However, we do skip the math sometimes. For example, a lot of the math behind model fit indices is left unexplained. At the very least, we hope to be transparent about our choices to include or exclude certain mathematical details.</p>
 <ul>
 <li><em>Use “nice” data.</em></li>
 </ul>
-<p>Finding data is hard, so we rely a lot on data sets that other textbooks and R package authors make available (with due attribution, of course). To keep things simple for this course, we work almost exclusively with numerical (quantitative) data. [MODIFY THIS IF WE END UP WORKING WITH BINARY CATEGORICAL EXOGENOUS VARIABLES (CODED 0/1) AT SOME POINT.]</p>
+<p>Finding data is hard, so we rely a lot on data sets that other textbooks and R package authors make available (with due attribution, of course). To keep things simple for this course, we work almost exclusively with cross-sectional, numerical (quantitative) data. [MODIFY THIS IF WE END UP WORKING WITH BINARY CATEGORICAL EXOGENOUS VARIABLES (CODED 0/1) AT SOME POINT.]</p>
 <ul>
 <li><em>Be careful about diagrams.</em></li>
 </ul>
-<p>Learning about complex models induces a sizable cognitive load. Shortcuts in diagrams tend to confuse students. For example, if error terms are truly latent variables, they should be drawn as circles or ellipses and not hidden, even if an advanced practitioner “knows” they’re there. Variances and covariances among exogenous variables should always appear as well. We take the time to build up a consistent pictographic representation of every part of a model. (Each chapter is introduced with an archetypal diagram that illustrates that chapter’s content.) Then we stick to that representation throughout the book.</p>
+<p>Learning about complex models induces a sizable cognitive load. Shortcuts in diagrams tend to confuse students. For example, if error terms are truly latent variables, they should be drawn as circles and not hidden, even if an advanced practitioner “knows” they’re there. Variances and covariances among exogenous variables should always appear as well. We take the time to build up a consistent pictographic representation of every part of a model. (Each chapter is introduced with an archetypal diagram that illustrates that chapter’s content.) Then we stick to that representation throughout the book.</p>
 <ul>
 <li><em>Be careful about notation.</em></li>
 </ul>
-<p>While it may be the industry standard, LISREL notation is needlessly complex for undergraduate students. We take a consistent and simple approach to notation that represents all variables using UPPERCASE names and all path values using lowercase names. Abstract variables tend to be called something like X when exogenous and Y when endogenous. Real-world variables have contextually meaningful names. For those interested in reading the research literature, we have included an appendix describing LISREL notation.</p>
+<p>While it may be the industry standard, LISREL notation is needlessly complex for undergraduate students. We take a consistent and simple approach to notation that represents all variables using UPPERCASE names and all parameter values using lowercase names. Abstract variables tend to be called something like X when exogenous and Y when endogenous. Real-world variables have contextually meaningful names. For those interested in reading the research literature, we have included an appendix describing LISREL notation.</p>
 </div>
 <div id="intro-structure" class="section level2 unnumbered">
 <h2>Course structure<a class="anchor" aria-label="anchor" href="#intro-structure"><i class="fas fa-link"></i></a>
@@ -135,6 +136,7 @@
 
 </div>
 </div>
+
   <div class="chapter-nav">
 <div class="empty"></div>
 <div class="next"><a href="variables.html"><span class="header-section-number">1</span> Variables and measurement</a></div>
@@ -163,7 +165,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-21.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-28.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
