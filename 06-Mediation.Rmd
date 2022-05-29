@@ -86,7 +86,7 @@ Here are the Really Important Rules (RIR&trade;) for using exogenous and endogen
 
 :::
 
-These six rules have important justifications. Don't just memorize the rules blindly. Understand why they are imperative.
+These rules have important justifications. Don't just memorize the rules blindly. Understand why they are imperative.
 
 * Rule 1:
     * Exogenous variables vary, but the source of their variance is not in the model. (That's what makes them exogenous.) Therefore, we have to represent their variance "manually" in the model by indicating it with a double-headed arrow.
@@ -120,11 +120,11 @@ We need to establish some conventions for naming things.
 * We need to name our variables. When we model real-world data, we'll use contextually meaningful names, but for abstract models we draw, we need a consistent way of labeling them.
     * Exogenous variables will be called $X_{i}$ (using numbers as subscripts).
     * Endogenous variables will be called $Y_{i}$ (also using numbers as subscripts).
-    * Error terms will be called $E_{i}$ with its subscript matching the one on the endogenous variable to which it's attached.
+    * Error terms will be called $E_{i}$ with subscripts matching the ones on the endogenous variables $Y_{i}$ to which they're attached.
 
 * We need to label the parameters along the various paths of the model:
-    * Variances will be called $v_{i}$ and the subscript will match the exogenous variables $X_{i}$ to which they're attached.
-    * Error variances will be called $e_{i}$ and the subscript will match the error terms $E_{i}$ to which they're attached.
+    * Variances will be called $v_{i}$ with subscripts matching the exogenous variables $X_{i}$ to which they're attached.
+    * Error variances will be called $e_{i}$ with subscripts matching the error terms $E_{i}$ to which they're attached.
     * Covariances will be called $c_{ij}$ connecting exogenous variables $X_{i}$ and $X_{j}$. (Since covariance is symmetric, it could also be called $c_{ji}$.)
     * Unidirectional arrows from error terms to their corresponding endogenous variables will always be fixed parameters labeled with "1".
     * Thick unidirectional arrows between an exogenous variable $X_{i}$ and an endogenous variable $Y_{j}$ will be called $b_{ji}$. Note the order of the subscripts: we always start with the subscript of the target variable and end with the subscript of the predictor.
