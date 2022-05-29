@@ -100,20 +100,20 @@ These rules have important justifications. Don't just memorize the rules blindly
     * While the model is supposed to account for the variance of endogenous variables through incoming arrows, it will never be able to explain 100\% of that variance just using other variables in the model. There will always be residuals, so these residuals have to be represented "manually" in the model using error terms.
     * Exogenous variables are assumed to be measured without error. While that assumption is not always very realistic in the real world, we don't have much of a choice. By their very definition, the variance of exogenous variable isn't accounted for by anything else in the model, so error terms just don't make any sense for them.
 
+::: {.rmdnote}
 
-## Mediators {#mediation-mediators}
-
-Let's revisit the first model (of the four shown earlier):
+Here's the first model of the four shown earlier:
 
 ```{r, echo = FALSE, fig.align= "center"}
 knitr::include_graphics("graphics/mediator_right.png")
 ```
 
-::: {.rmdnote}
-
 Draw this model on your own piece of paper. Following the rules above, draw in all variances, covariances, or error terms that should be present in the diagram. (Don't worry about labeling anything with letters yet. Just draw the arrows and the circles.)
 
 :::
+
+
+## Naming conventions {#mediation-naming}
 
 We need to establish some conventions for naming things.
 
@@ -136,7 +136,10 @@ Why do we not need a naming convention for thick arrows between two exogenous va
 
 :::
 
-Let's now include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable $X_{1}$ and error terms for the two endogenous variables $Y_{1}$ and $Y_{2}$ along with labels for everything.
+
+## Mediators {#mediation-mediators}
+
+With all the rules in place for our diagrams, we can now revisit the model from above, but now, let's include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable $X_{1}$ and error terms for the two endogenous variables $Y_{1}$ and $Y_{2}$ along with labels for everything.
 
 ```{r, echo = FALSE, fig.align= "center"}
 knitr::include_graphics("graphics/mediator_vars.png")

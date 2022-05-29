@@ -136,7 +136,7 @@
 </li>
 </ul>
 </div>
-<p>These six rules have important justifications. Don’t just memorize the rules blindly. Understand why they are imperative.</p>
+<p>These rules have important justifications. Don’t just memorize the rules blindly. Understand why they are imperative.</p>
 <ul>
 <li>Rule 1:
 <ul>
@@ -157,58 +157,63 @@
 </ul>
 </li>
 </ul>
-</div>
-<div id="mediation-mediators" class="section level2" number="6.3">
-<h2>
-<span class="header-section-number">6.3</span> Mediators<a class="anchor" aria-label="anchor" href="#mediation-mediators"><i class="fas fa-link"></i></a>
-</h2>
-<p>Let’s revisit the first model (of the four shown earlier):</p>
-<div class="inline-figure"><img src="graphics/mediator_right.png" width="440" style="display: block; margin: auto;"></div>
 <div class="rmdnote">
+<p>Here’s the first model of the four shown earlier:</p>
+<div class="inline-figure"><img src="graphics/mediator_right.png" width="440" style="display: block; margin: auto;"></div>
 <p>Draw this model on your own piece of paper. Following the rules above, draw in all variances, covariances, or error terms that should be present in the diagram. (Don’t worry about labeling anything with letters yet. Just draw the arrows and the circles.)</p>
 </div>
+</div>
+<div id="mediation-naming" class="section level2" number="6.3">
+<h2>
+<span class="header-section-number">6.3</span> Naming conventions<a class="anchor" aria-label="anchor" href="#mediation-naming"><i class="fas fa-link"></i></a>
+</h2>
 <p>We need to establish some conventions for naming things.</p>
 <ul>
 <li>We need to name our variables. When we model real-world data, we’ll use contextually meaningful names, but for abstract models we draw, we need a consistent way of labeling them.
 <ul>
 <li>Exogenous variables will be called <span class="math inline">\(X_{i}\)</span> (using numbers as subscripts).</li>
 <li>Endogenous variables will be called <span class="math inline">\(Y_{i}\)</span> (also using numbers as subscripts).</li>
-<li>Error terms will be called <span class="math inline">\(E_{i}\)</span> with its subscript matching the one on the endogenous variable to which it’s attached.</li>
+<li>Error terms will be called <span class="math inline">\(E_{i}\)</span> with subscripts matching the ones on the endogenous variables <span class="math inline">\(Y_{i}\)</span> to which they’re attached.</li>
 </ul>
 </li>
 <li>We need to label the parameters along the various paths of the model:
 <ul>
-<li>Variances will be called <span class="math inline">\(v_{i}\)</span> and the subscript will match the exogenous variables <span class="math inline">\(X_{i}\)</span> to which they’re attached.</li>
-<li>Error variances will be called <span class="math inline">\(e_{i}\)</span> and the subscript will match the error terms <span class="math inline">\(E_{i}\)</span> to which they’re attached.</li>
+<li>Variances will be called <span class="math inline">\(v_{i}\)</span> with subscripts matching the exogenous variables <span class="math inline">\(X_{i}\)</span> to which they’re attached.</li>
+<li>Error variances will be called <span class="math inline">\(e_{i}\)</span> with subscripts matching the error terms <span class="math inline">\(E_{i}\)</span> to which they’re attached.</li>
 <li>Covariances will be called <span class="math inline">\(c_{ij}\)</span> connecting exogenous variables <span class="math inline">\(X_{i}\)</span> and <span class="math inline">\(X_{j}\)</span>. (Since covariance is symmetric, it could also be called <span class="math inline">\(c_{ji}\)</span>.)</li>
 <li>Unidirectional arrows from error terms to their corresponding endogenous variables will always be fixed parameters labeled with “1”.</li>
-<li>Thick unidirectional arrows between an exogenous variable <span class="math inline">\(X_{i}\)</span> and an endogenous variable <span class="math inline">\(Y_{j}\)</span> will be called <span class="math inline">\(b_{ji}\)</span>. Note the order of the subscripts: we always start with the subscript of the target variable and end with the subscript of the predictor.</li>
-<li>Thick unidirectional arrows between an endogenous variable <span class="math inline">\(Y_{i}\)</span> and another endogenous variable <span class="math inline">\(Y_{j}\)</span> will be called <span class="math inline">\(a_{ji}\)</span>.</li>
+<li>Thick, unidirectional arrows between an exogenous variable <span class="math inline">\(X_{i}\)</span> and an endogenous variable <span class="math inline">\(Y_{j}\)</span> will be called <span class="math inline">\(b_{ji}\)</span>. Note the order of the subscripts: we always start with the subscript of the target variable and end with the subscript of the predictor.</li>
+<li>Thick, unidirectional arrows between an endogenous variable <span class="math inline">\(Y_{i}\)</span> and another endogenous variable <span class="math inline">\(Y_{j}\)</span> will be called <span class="math inline">\(a_{ji}\)</span>.</li>
 </ul>
 </li>
 </ul>
 <div class="rmdnote">
 <p>Why do we not need a naming convention for thick arrows between two exogenous variables?</p>
 </div>
-<p>Let’s now include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable <span class="math inline">\(X_{1}\)</span> and error terms for the two endogenous variables <span class="math inline">\(Y_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span> along with labels for everything.</p>
+</div>
+<div id="mediation-mediators" class="section level2" number="6.4">
+<h2>
+<span class="header-section-number">6.4</span> Mediators<a class="anchor" aria-label="anchor" href="#mediation-mediators"><i class="fas fa-link"></i></a>
+</h2>
+<p>With all the rules in place for our diagrams, we can now revisit the model from above, but now, let’s include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable <span class="math inline">\(X_{1}\)</span> and error terms for the two endogenous variables <span class="math inline">\(Y_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span> along with labels for everything.</p>
 <div class="inline-figure"><img src="graphics/mediator_vars.png" width="440" style="display: block; margin: auto;"></div>
 <div class="rmdnote">
 <p>Why did we not include any covariances in the model above?</p>
 </div>
 </div>
-<div id="mediation-confounders" class="section level2" number="6.4">
+<div id="mediation-confounders" class="section level2" number="6.5">
 <h2>
-<span class="header-section-number">6.4</span> Confounders<a class="anchor" aria-label="anchor" href="#mediation-confounders"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.5</span> Confounders<a class="anchor" aria-label="anchor" href="#mediation-confounders"><i class="fas fa-link"></i></a>
 </h2>
 </div>
-<div id="mediation-colliders" class="section level2" number="6.5">
+<div id="mediation-colliders" class="section level2" number="6.6">
 <h2>
-<span class="header-section-number">6.5</span> Colliders<a class="anchor" aria-label="anchor" href="#mediation-colliders"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.6</span> Colliders<a class="anchor" aria-label="anchor" href="#mediation-colliders"><i class="fas fa-link"></i></a>
 </h2>
 </div>
-<div id="mediation-simple" class="section level2" number="6.6">
+<div id="mediation-simple" class="section level2" number="6.7">
 <h2>
-<span class="header-section-number">6.6</span> The simple mediation model<a class="anchor" aria-label="anchor" href="#mediation-simple"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.7</span> The simple mediation model<a class="anchor" aria-label="anchor" href="#mediation-simple"><i class="fas fa-link"></i></a>
 </h2>
 
 </div>
@@ -223,10 +228,11 @@
 <li><a class="nav-link" href="#preliminaries-2">Preliminaries</a></li>
 <li><a class="nav-link" href="#mediation-paths"><span class="header-section-number">6.1</span> Mediators, confounders, and colliders</a></li>
 <li><a class="nav-link" href="#mediation-exogenous-endogenous"><span class="header-section-number">6.2</span> Exogenous and endogenous variables</a></li>
-<li><a class="nav-link" href="#mediation-mediators"><span class="header-section-number">6.3</span> Mediators</a></li>
-<li><a class="nav-link" href="#mediation-confounders"><span class="header-section-number">6.4</span> Confounders</a></li>
-<li><a class="nav-link" href="#mediation-colliders"><span class="header-section-number">6.5</span> Colliders</a></li>
-<li><a class="nav-link" href="#mediation-simple"><span class="header-section-number">6.6</span> The simple mediation model</a></li>
+<li><a class="nav-link" href="#mediation-naming"><span class="header-section-number">6.3</span> Naming conventions</a></li>
+<li><a class="nav-link" href="#mediation-mediators"><span class="header-section-number">6.4</span> Mediators</a></li>
+<li><a class="nav-link" href="#mediation-confounders"><span class="header-section-number">6.5</span> Confounders</a></li>
+<li><a class="nav-link" href="#mediation-colliders"><span class="header-section-number">6.6</span> Colliders</a></li>
+<li><a class="nav-link" href="#mediation-simple"><span class="header-section-number">6.7</span> The simple mediation model</a></li>
 </ul>
 
       <div class="book-extra">

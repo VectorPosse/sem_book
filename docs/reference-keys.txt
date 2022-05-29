@@ -41,6 +41,7 @@ multiple-r-lavaan
 mediation
 mediation-paths
 mediation-exogenous-endogenous
+mediation-naming
 mediation-mediators
 mediation-confounders
 mediation-colliders
