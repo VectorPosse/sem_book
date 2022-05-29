@@ -88,13 +88,19 @@
 <div class="inline-figure"><img src="graphics/mediator_left.png" width="440" style="display: block; margin: auto;"></div>
 <div class="inline-figure"><img src="graphics/confounder.png" width="440" style="display: block; margin: auto;"></div>
 <div class="inline-figure"><img src="graphics/collider.png" width="440" style="display: block; margin: auto;"></div>
-<p>The second model is just a copy of the first model reversed, so we can disregard it. The other three models are genuinely distinct models with somewhat different consequences for the relationship among the three variables. The first part of this chapter will make these distinctions clear.</p>
+<p>The second model is just a copy of the first model reversed, so we can disregard it. The other three models are genuinely distinct models with somewhat different consequences for the relationship among the three variables:</p>
+<ul>
+<li>The first model represents a “mediator”.</li>
+<li>The third model represents a “confounder”.</li>
+<li>The fourth model represents a “collider”.</li>
+</ul>
+<p>The first part of this chapter will make these distinctions clear.</p>
 </div>
 <div id="mediation-exogenous-endogenous" class="section level2" number="6.2">
 <h2>
 <span class="header-section-number">6.2</span> Exogenous and endogenous variables<a class="anchor" aria-label="anchor" href="#mediation-exogenous-endogenous"><i class="fas fa-link"></i></a>
 </h2>
-<p>In the first model above, the middle variable is called a <em>mediator</em>. It’s clear that the variable on the left is exogenous and the variable on the right is endogenous. What is the middle variable, exogenous or endogenous?</p>
+<p>Look at the first model above. It’s clear that the variable on the left is exogenous and the variable on the right is endogenous. What is the middle variable, exogenous or endogenous?</p>
 <p>Here we give a more specific definition of these two terms:</p>
 <div class="rmdimportant">
 <p>An <em>exogenous</em> variable is one that has no unidirectional arrows (so not counting double-headed arrows) entering it in the model diagram. It has only unidirectional arrows leaving it.</p>
@@ -126,7 +132,9 @@
 <h2>
 <span class="header-section-number">6.3</span> Mediators<a class="anchor" aria-label="anchor" href="#mediation-mediators"><i class="fas fa-link"></i></a>
 </h2>
-<p>Let’s name our variables. Generally, we’ll follow the convention of naming exogenous variables using <span class="math inline">\(X\)</span> and endogenous variables using <span class="math inline">\(Y\)</span>. (When we model real-world data, we’ll use contextually meaningful names.)</p>
+<p>Let’s revisit the first model (of the four shown earlier):</p>
+<div class="inline-figure"><img src="graphics/mediator_right.png" width="440" style="display: block; margin: auto;"></div>
+<p>We need to name our variables. Generally, we’ll follow the convention of naming exogenous variables using <span class="math inline">\(X\)</span> and endogenous variables using <span class="math inline">\(Y\)</span>. (When we model real-world data, we’ll use contextually meaningful names.)</p>
 <p>We’ll need another convention to label the parameters along the paths of the model:</p>
 <ul>
 <li><p>Thick arrows between an exogenous variable <span class="math inline">\(X_{i}\)</span> and an endogenous variable <span class="math inline">\(Y_{j}\)</span> will be called <span class="math inline">\(b_{ji}\)</span>. Note the order of the subscripts. We always start with the subscript of the target variable and end with the subscript of the predictor.</p></li>
@@ -136,6 +144,7 @@
 <p>Why do we not need a naming convention for thick arrows between two exogenous variables?</p>
 </div>
 <p>Let’s also include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable <span class="math inline">\(X_{1}\)</span> and error terms for the two endogenous variables <span class="math inline">\(Y_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span>.</p>
+<p>Here is the finished product:</p>
 <div class="inline-figure"><img src="graphics/mediator_vars.png" width="440" style="display: block; margin: auto;"></div>
 <div class="rmdnote">
 <p>Why did we not include any covariances in the model above?</p>

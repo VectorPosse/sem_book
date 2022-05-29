@@ -35,12 +35,18 @@ knitr::include_graphics("graphics/confounder.png")
 knitr::include_graphics("graphics/collider.png")
 ```
 
-The second model is just a copy of the first model reversed, so we can disregard it. The other three models are genuinely distinct models with somewhat different consequences for the relationship among the three variables. The first part of this chapter will make these distinctions clear.
+The second model is just a copy of the first model reversed, so we can disregard it. The other three models are genuinely distinct models with somewhat different consequences for the relationship among the three variables:
+
+* The first model represents a "mediator".
+* The third model represents a "confounder".
+* The fourth model represents a "collider".
+
+The first part of this chapter will make these distinctions clear.
 
 
 ## Exogenous and endogenous variables {#mediation-exogenous-endogenous}
 
-In the first model above, the middle variable is called a *mediator*. It's clear that the variable on the left is exogenous and the variable on the right is endogenous. What is the middle variable, exogenous or endogenous?
+Look at the first model above. It's clear that the variable on the left is exogenous and the variable on the right is endogenous. What is the middle variable, exogenous or endogenous?
 
 Here we give a more specific definition of these two terms:
 
@@ -85,7 +91,13 @@ These three rules have important justifications. Don't just memorize the rules b
 
 ## Mediators {#mediation-mediators}
 
-Let's name our variables. Generally, we'll follow the convention of naming exogenous variables using $X$ and endogenous variables using $Y$. (When we model real-world data, we'll use contextually meaningful names.)
+Let's revisit the first model (of the four shown earlier):
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/mediator_right.png")
+```
+
+We need to name our variables. Generally, we'll follow the convention of naming exogenous variables using $X$ and endogenous variables using $Y$. (When we model real-world data, we'll use contextually meaningful names.)
 
 We'll need another convention to label the parameters along the paths of the model:
 
@@ -100,6 +112,8 @@ Why do we not need a naming convention for thick arrows between two exogenous va
 :::
 
 Let's also include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable $X_{1}$ and error terms for the two endogenous variables $Y_{1}$ and $Y_{2}$.
+
+Here is the finished product:
 
 ```{r, echo = FALSE, fig.align= "center"}
 knitr::include_graphics("graphics/mediator_vars.png")
