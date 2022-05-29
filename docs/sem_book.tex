@@ -2914,6 +2914,8 @@ Fortunately, the assumptions for multiple regression are basically the same as t
 \item
   The data should come from a ``good'' sample.
 \item
+  The exogenous variables should be measured without error.
+\item
   The relationship between \(X_{1}, \dots, X_{k}\), and \(Y\) should be approximately linear.
 \item
   The residuals should be independent of the \(X_{1}, \dots, X_{k}\) values.
@@ -2930,6 +2932,8 @@ We discuss these briefly:
 \tightlist
 \item
   Nothing has changed here. Good analysis starts with good data collection practices.
+\item
+  Nothing has changed here. It's a good idea to try to measure all our variables with as little error as possible, but in particular, measurement errors in the exogenous variables can bias our parameter estimates.
 \item
   With only \(Y\) against \(X\), the regression model is a line. With \(Y\) against \(X_{1}\) and \(X_{2}\), the regression model is a plane (a 2-dimensional plane sitting in 3-dimensional space) which is a little challenging to graph. With more predictors, the regression model lives in even higher dimensions and it's impossible to visualize. To check this condition, the best you can usually do is to check that the scatterplots of \(Y\) against each \(X_{i}\) individually are approximately linear.
 \item
@@ -2980,9 +2984,9 @@ First, let's remember what we're trying to do. From the data, we can calculate t
 
 \[
 \begin{bmatrix}
-Var(X_{1})  &   Cov(X_{1}, X_{2})   &   Cov(X_{1}, Y) \\
-\bullet     &   Var(X_{2})          &   Cov(X_{2}, Y) \\
-\bullet     &   \bullet             &   Var(Y)
+Var(X_{1})          &   \bullet         &   \bullet \\
+Cov(X_{2}, X_{1})   &   Var(X_{2})      &   \bullet \\
+Cov(Y, X_{1})       &   Cov(Y, X_{2})   &   Var(Y)
 \end{bmatrix}
 \]
 
@@ -3020,16 +3024,16 @@ Therefore,
 Var(Y) = b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
 \]
 
-\href{./covariance.html\#Rule8}{\textbf{Rule 8}} and \href{./covariance.html\#Rule9}{\textbf{Rule 9}} work the same way, but it's even easier to apply. Just split up the covariance into as many pieces as there are terms to split.
+\href{./covariance.html\#Rule8}{\textbf{Rule 8}} and \href{./covariance.html\#Rule9}{\textbf{Rule 9}} extend in a similar way to sums of three or more terms. But that's even easier: just split up the covariance into as many pieces as there are terms to split.
 
 Your turn.
 
-Calculate \(Cov(X_{1}, Y)\). You should get
+Calculate \(Cov(Y, X_{1})\). You should get
 
 \[
 b_{1} v_{1} + b_{2} c_{12}
 \]
-Calculate \(Cov(X_{2}, Y)\). You should get
+Calculate \(Cov(Y, X_{2})\). You should get
 
 \[
 b_{2} v_{2} + b_{1} c_{12}
@@ -3043,9 +3047,9 @@ Therefore, the model-implied matrix is
 
 \[
 \begin{bmatrix}
-v_{1}   &    c_{12}  &   b_{1} v_{1} + b_{2} c_{12} \\
-\bullet &    v_{2}   &   b_{2} v_{2} + b_{1} c_{12} \\
-\bullet &    \bullet &   b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
+v_{1}   &   \bullet &  \bullet  \\
+c_{12}  &   v_{2}   &  \bullet \\
+b_{1} v_{1} + b_{2} c_{12}  &  b_{2} v_{2} + b_{1} c_{12}  &   b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
 \end{bmatrix}
 \]
 If we set these expressions equal to the numbers from the sample covariance matrix, \emph{in theory} we could then solve for the unknown parameters in the model-implied matrix above. Three of them are basically already done since we can just read off \(v_{1}\), \(c_{12}\), and \(v_{2}\). But solving for \(b_{1}\), \(b_{2}\), and \(e\) is no joke! And even if we did, the resulting expressions are not particularly enlightening. This is where we are quite happy turning over the computational details to a computer.
@@ -3055,7 +3059,7 @@ If we set these expressions equal to the numbers from the sample covariance matr
 
 Without explicit mathematical expressions for these parameters, it's a bit challenging to explain their interpretation. For now, we'll take it on faith that the following is true:
 
-In a multiple regression model, each \(b_{i}\) represents the slope of the linear association between \(X_{i}\) and \(Y\) \emph{while holding the value of all other predictors constant}.
+In a multiple regression model, each \(b_{i}\) represents the slope of the linear association between \(Y\) and \(X_{i}\) \emph{while holding the value of all other predictors constant}.
 
 What does this mean?
 
@@ -3063,52 +3067,52 @@ Let's work with a concrete example. Suppose we think that college GPA can be pre
 
 \begin{center}\includegraphics{graphics/multiple_regression_example} \end{center}
 
-If high school GPA and hours per week studying are correlated (and they likely are), they influence each other, and some of the influence has the danger of ``corrupting'' the estimates of the path coefficients. For example, if \(b_{2}\) is positive, that would suggest that hours spend studying is associated with predicted increases in college GPA. But how do we know that's really due to the studying? Maybe students who did well in high school are just ``smarter''. Sure, they also put in more hours studying, but maybe that doesn't matter. Maybe those students would do just as well in college even if they didn't study a whole lot. If that were the case, the coefficient \(b_{2}\) would be positive just because that set of students (who happen to study more, even though it doesn't matter) also are the ones who have high college GPAs.
+If high school GPA and hours per week studying are correlated (and they likely are), they influence each other, and some of the influence has the danger of ``corrupting'' the estimates of the path coefficients. For example, if \(b_{2}\) is positive, that would suggest that hours spent studying is associated with predicted increases in college GPA. But how do we know that's really due to the studying? Maybe students who did well in high school are just ``smarter''.\footnote{For the record, we don't actually believe that is true.} Sure, they also put in more hours studying, but maybe that doesn't matter. Maybe those students would do just as well in college even if they didn't study a whole lot. If that were the case, the coefficient \(b_{2}\) would be positive just because that set of students (who happen to study more, even though it doesn't matter) also are the ones who have high college GPAs.
 
-This is why it's important to \emph{control} for other variables. All this means is that we need to temporarily fix the value of other variables to make the comparison fair. For example, we could look only at students with a 3.0 in high school. Among those students, there will be variability in the number of hours they study in college. If that variability is associated with variability in college GPA, we know that the hours spent studying is at least partly ``responsible'' for explaining that change. (There are lots of other factors too, but those will be swept up in the error variance.) The high school GPA can't explain that because it was fixed at 3.0, so we're comparing apples to apples. Students who got a 2.0 in high school may do more poorly overall, but the relative increase in GPA due to studying would be the same.
+This is why it's important to \emph{control} for other variables. All this means is that we need to temporarily fix the value of other variables to make the comparison fair. For example, we could look only at students with a 3.0 in high school. Among those students, there will be variability in the number of hours they study in college. If that variability is associated with variability in college GPA, we know that the hours spent studying is at least partly associated with that change. (There are lots of other factors too, but those will be swept up in the error variance.) The high school GPA can't predict that because it was fixed at 3.0, so we're comparing apples to apples. Students who got a 2.0 in high school may do more poorly overall, but the relative increase in GPA due to studying would be the same (at least if everything is linear, as is assumed).
 
-If the parameter \(b_{2}\) is estimated to be 0.13, that suggests that each additional hour of study time per week predicts an increase of 0.13 points in the college GPA, holding high school GPA constant. This means that the increase of 0.13 is only predicted among groups of students with the same high school GPA.
+If the parameter \(b_{2}\) is estimated to be 0.13, that suggests that each additional hour of study time per week predicts an increase of 0.13 points in the college GPA, holding high school GPA constant. This means that the increase of 0.13 is only predicted within groups of students with the same high school GPA.
 
-If the parameter \(b_{1}\) is estimated to be 1.2, that suggests that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. This coefficient can only be interpreted while holding \texttt{HOURS} constant. This means that this estimate only holds among groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA to explain changes in college GPA.
+If the parameter \(b_{1}\) is estimated to be 1.2, that suggests that college GPA is predicted to increase 1.2 points for every point increase in high school GPA. This coefficient can only be interpreted while holding hours per week studying constant. This means that this estimate only makes sense to interpret within groups of students who put in the same number of hours of studying. That takes out the hours of studying as an explanation and only accounts for changes in high school GPA to be associated with changes in college GPA.
 
 \hypertarget{multiple-standardized}{%
 \section{Regression with standardized variables}\label{multiple-standardized}}
 
 Things get a little easier (although not completely trivial) with standardized variables.
 
-First, a notational simplification. The correlations between our variables---according to our convention---would be called \(r_{X_{1}X_{2}}\), \(r_{X_{1}Y}\), and \(r_{X_{2}Y}\). These are a little hard to look at in complex expressions, so we will replace them with \(r_{12}\), \(r_{1Y}\), and \(r_{2Y}\).
+First, a notational simplification. The correlations between our variables---according to our convention---would be called \(r_{X_{2}X_{1}}\), \(r_{YX_{1}}\), and \(r_{YX_{2}}\). These are a little hard to look at in complex expressions, so we will replace them with \(r_{21}\), \(r_{Y1}\), and \(r_{Y2}\). (Don't be confused by \(r_{21}\) vs \(r_{12}\) or \(c_{21}\) vs \(c_{12}\). Since covariance and correlation are symmetric, the order of the subscripts does not matter.)
 
 Let's look at the sample covariance matrix and the model-implied matrix for standardized variables:
 
 \[
 \begin{bmatrix}
-1           &   r_{12}      &   r_{1Y} \\
-\bullet     &   1           &   r_{2Y} \\
-\bullet     &   \bullet     &   1
+1       &   \bullet &   \bullet    \\
+r_{21}  &   1       &   \bullet    \\
+r_{Y1}  &   r_{Y2}  &   1
 \end{bmatrix} = 
 \begin{bmatrix}
-v_{1}   &    c_{12}  &   b_{1} v_{1} + b_{2} c_{12} \\
-\bullet &    v_{2}   &   b_{2} v_{2} + b_{1} c_{12} \\
-\bullet &    \bullet &   b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
+v_{1}   &    \bullet  &   \bullet \\
+c_{12}  &    v_{2}   &    \bullet \\
+b_{1} v_{1} + b_{2} c_{12} &    b_{2} v_{2} + b_{1} c_{12} &   b_{1}^{2} v_{1} + b_{2}^{2} v_{2} + 2b_{1}b_{2} c_{12} + e
 \end{bmatrix}
 \]
-The entry in the upper-right corner yields
+The entry in the lower-left corner yields
 
 \[
-r_{1Y} = b_{1} v_{1} + b_{2} c_{12}
+r_{Y1} = b_{1} v_{1} + b_{2} c_{12}
 \]
 which simplifies to
 \[
-r_{1Y} = b_{1} + b_{2} r_{12}
+r_{Y1} = b_{1} + b_{2} r_{21}
 \]
-The next entry below that yields
+The next entry to the right of that yields
 
 \[
-r_{2Y} = b_{2} v_{2} + b_{1} c_{12}
+r_{Y2} = b_{2} v_{2} + b_{1} c_{12}
 \]
 which simplifies to
 \[
-r_{2Y} = b_{2} + b_{1} r_{12}
+r_{Y2} = b_{2} + b_{1} r_{21}
 \]
 
 These two equations can be solved for the two unknown parameters \(b_{1}\) and \(b_{2}\).
@@ -3116,20 +3120,20 @@ These two equations can be solved for the two unknown parameters \(b_{1}\) and \
 Are you feeling brave? Are your algebra skills sharp? Totally optional, but see if you can derive the final answers below:
 
 \[
-b_{1} = \frac{r_{1Y} - r_{2Y}r_{12}}{1 - r_{12}^{2}}
+b_{1} = \frac{r_{Y1} - r_{Y2}r_{21}}{1 - r_{21}^{2}}
 \]
 
 \[
-b_{2} = \frac{r_{2Y} - r_{1Y}r_{12}}{1 - r_{12}^{2}}
+b_{2} = \frac{r_{Y2} - r_{Y1}r_{21}}{1 - r_{21}^{2}}
 \]
 
-These are still pretty gross, but there is some intuitive content to them. Look at the numerator of the fraction for \(b_{1}\). Essentially, this is just \(r_{1Y}\) with some extra stuff. If this were simple regression, we would expect the slope \(b_{1}\) to simply be the correlation between \(X_{1}\) and \(Y\). But in multiple regression, we also have to \emph{control} for any contribution to the model coming from \(X_{2}\). How do we do that? By subtracting off that contribution, which turns out to be \(r_{2Y}r_{12}\). And why does the latter term appear the way it does? Because we only need to control for the effect of \(X_{2}\) if \(X_{2}\) is providing some of the same ``information'' to the regression model as \(X_{1}\). Therefore, we don't need to subtract \emph{all} of \(r_{2Y}\) to control for \(X_{2}\), just a fraction of \(r_{2Y}\). We just need the part of \(X_{2}\) that it has in common with \(X_{1}\). We don't want to ``double-count'' the contribution to the model that is common to both \(X_{1}\) and \(X_{2}\).
+These are still pretty gross, but there is some intuitive content to them. Look at the numerator of the fraction for \(b_{1}\). Essentially, this is just \(r_{Y1}\) with some extra stuff. If this were simple regression, we would expect the slope \(b_{1}\) to simply be the correlation between \(X_{1}\) and \(Y\). But in multiple regression, we also have to \emph{control} for any contribution to the model coming from \(X_{2}\). How do we do that? By subtracting off that contribution, which turns out to be \(r_{Y2}r_{21}\). And why does the latter term appear the way it does? Because we only need to control for the effect of \(X_{2}\) if \(X_{2}\) is providing some of the same ``information'' to the regression model as \(X_{1}\). Therefore, we don't need to subtract \emph{all} of \(r_{Y2}\) to control for \(X_{2}\), just a \emph{fraction} of \(r_{Y2}\). What fraction? \(r_{21}\)! We just need the part of \(X_{2}\) that it has in common with \(X_{1}\). We don't want to ``double-count'' the contribution to the model that is common to both \(X_{2}\) and \(X_{1}\).
 
-Here's another way to think about it. What if \(X_{1}\) and \(X_{2}\) are independent? Calculate \(b_{1}\) and \(b_{2}\) from the above formulas in this much easier case. (Don't overthink this. What is \(r_{12}\) in this case?)
+Here's another way to think about it. What if \(X_{1}\) and \(X_{2}\) are independent? Calculate \(b_{1}\) and \(b_{2}\) from the above formulas in this much easier case. (Don't overthink this. What is \(r_{21}\) in this case?)
 
-So if \(X_{1}\) and \(X_{2}\) are independent, they both offer a unique contribution to predicting \(Y\) in the model. And that contribution is just their correlation with \(Y\) (\(r_{1Y}\) and \(r_{2Y}\), respectively). There is no overlap. But if \(X_{1}\) and \(X_{2}\) are correlated, then some of their ``influence'' is counted twice. We have to subtract out that influence so that \(b_{1}\) and \(b_{2}\) are only measuring the ``pure'' contribution of \(X_{1}\) and \(X_{2}\), controlling for the other one.
+So if \(X_{1}\) and \(X_{2}\) are independent, they both offer a unique contribution to predicting \(Y\) in the model. And that contribution is just their correlation with \(Y\) (\(r_{Y1}\) and \(r_{Y2}\), respectively). There is no overlap. But if \(X_{1}\) and \(X_{2}\) are correlated, then some of their ``influence'' is counted twice. We have to subtract out that influence so that \(b_{1}\) and \(b_{2}\) are only measuring the ``pure'' contribution of \(X_{1}\) and \(X_{2}\), controlling for the other one.
 
-What about the \(1 - r_{12}^{2}\) in the denominator? There's less of a good intuitive explanation here. It's there because---mathematically speaking---it has to be there. It rescales the slope coefficients to make everything work out the way it has to.
+What about the \(1 - r_{21}^{2}\) in the denominator? There's less of a good intuitive explanation here. It's there because---mathematically speaking---it has to be there. It rescales the slope coefficients to make everything work out the way it has to.
 
 The final equation is the one for \(Var(Y)\) in the lower-right corner of the matrix. It says
 
@@ -3138,17 +3142,17 @@ The final equation is the one for \(Var(Y)\) in the lower-right corner of the ma
 \]
 which simplifies to
 \[
-1 = b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12} + e
+1 = b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{21} + e
 \]
 Rearranging to solve for \(e\),
 \[
-e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12}\right)
+e = 1 - \left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{21}\right)
 \]
 It is \emph{not} enlightening in any way to replace \(b_{1}\) and \(b_{2}\) here with the earlier fractions. We can leave \(e\) like this.
 
-Since the variance of \(Y\) is 1, the stuff inside the parentheses above represents the variance \emph{explained by the model}. (That is subtracted from 1, then, to be left with \(e\), the error variance.) This is analogous to the \(R^{2}\) term described in the \protect\hyperlink{simple-error-correlation}{last chapter}.
+Since the standardized variance of \(Y\) is 1, the stuff inside the parentheses above represents the variance \emph{accounted for by the model}. (That is subtracted from 1, then, to be left with \(e\), the error variance.) This is analogous to the \(R^{2}\) term described in the \protect\hyperlink{simple-coefficients-correlation}{last chapter}.
 
-This makes some conceptual sense too. All the pieces of \(\left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{12}\right)\) correspond to various pieces of the model. The first two relate to the direct effects of \(X_{1}\) and \(X_{2}\) and the third piece relates to an ``indirect'' effect shared between them.
+This makes some conceptual sense too. All the pieces of \(\left(b_{1}^{2} + b_{2}^{2} + 2b_{1}b_{2} r_{21}\right)\) correspond to various pieces of the model. The first two relate to the direct effects of \(X_{1}\) and \(X_{2}\) and the third piece relates to an ``indirect'' effect shared between them.
 
 \hypertarget{multiple-r}{%
 \section{Multiple regression in R}\label{multiple-r}}
@@ -3338,7 +3342,7 @@ Let's check the scatterplots once more, now with the \texttt{music\_clean} data.
 
 \includegraphics{sem_book_files/figure-latex/unnamed-chunk-83-1.pdf}
 
-There doesn't appear to be much of an association with loudness or tempo. But that doesn't violate any assumptions. (A violation of the assumptions would be a decidedly non-linear association, not just a near-zero association.) Given these graphs, we will expect the model to tell us that song popularity is somewhat associated with artist popularity, but not much with loudness or tempo.
+There doesn't appear to be much of an association with loudness or tempo. But that doesn't violate any assumptions. (A violation of the assumptions would be a decidedly non-linear association, not just a near-zero association.) Given these graphs, we will expect the model to tell us that song popularity is maybe somewhat associated with artist popularity, but not much with loudness or tempo.
 
 \hypertarget{multiple-r-lm}{%
 \subsection{\texorpdfstring{Using \texttt{lm}}{Using lm}}\label{multiple-r-lm}}
@@ -3380,7 +3384,7 @@ We didn't go to the trouble of mean-centering the data this time, so the interce
   \end{itemize}
 \end{itemize}
 
-While this is mathematically true, it's kind of nonsensical to report using numbers of that magnitude. Both scales only go from 0 to 1, so an increase in 1 point would be measuring the difference between an artist with 0 popularity (the least popular artists in the data set) to an artist with 1 popularity (the most popular artists in the data set).
+While this is mathematically true, it's kind of nonsensical to report using numbers of that magnitude. Both scales only go from 0 to 1, so an increase in 1 point would be measuring the difference between an artist with 0 popularity (the lowest possible value of popularity) to an artist with 1 popularity (the highest possible value of popularity).
 
 A better way to report this would be to scale everything down by a factor of 10:
 
@@ -3456,7 +3460,7 @@ by substituting
 
 If we assume that \(E\) is independent of all the predictors, what is the value of \(Cov(E, \hat{Y})\)?
 
-Of course, if \(Cov(E, \hat{Y}) = 0\), that does not necessarily imply that all the \(Cov(E, X_{i})\) must be zero. And even if those are zero, that doesn't imply independence. But if \(Cov(E, \hat{Y}) \neq 0\), then we know at least one of the \(Cov(E, X_{i})\) also must be non-zero. \textbf{Therefore, we can plot the residuals against the fitted values and this will serve as \emph{disqualifying} evidence of a problem with the model.}
+Of course, if \(Cov(E, \hat{Y}) = 0\), that does not necessarily imply that all the \(Cov(E, X_{i})\) must be zero. And even if those are zero, that doesn't imply independence. But if \(Cov(E, \hat{Y}) \neq 0\), then we know at least one of the \(Cov(E, X_{i})\) also must be non-zero. \textbf{Therefore, we can plot the residuals against the fitted values and this will serve as a \emph{disqualifying} condition. A problem in the plot of residuals against fitted values serves as evidence of a problem with the model.}
 
 One of the nice features of the \texttt{augment} output is that it also has a column called \texttt{.fitted} that stores the \(\hat{Y}\) values.
 
