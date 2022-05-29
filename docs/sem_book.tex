@@ -124,7 +124,7 @@
 
 \title{Demystifying Structural Equation Modeling}
 \author{Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)}
-\date{2022-05-21}
+\date{2022-05-28}
 
 \begin{document}
 \maketitle
@@ -163,9 +163,11 @@ Once the pandemic subsided enough for us to offer the course in person again, we
 \section*{Our philosophy}\label{intro-philosophy}}
 \addcontentsline{toc}{section}{Our philosophy}
 
-As we mentioned before, our motivation for writing the book was driven by the difficulty we had finding readings for the students. Perhaps that begs the question, should one even try teaching a topic as ``difficult'' or ``advanced'' as structural equation modeling to the audience we had? To be sure, the traditional approaches already on the market seem to assume a lot more background than we had at our disposal. And the books that claim to assume less background\ldots well, sometimes they require more than they let on.
+As we mentioned before, our motivation for writing the book was driven by the difficulty we had finding readings for the students. Perhaps that begs the question, should one even try teaching a topic as ``difficult'' or ``advanced'' as structural equation modeling to the audience we had? To be sure, the traditional approaches already on the market seem to assume a lot more background than we had at our disposal. And the books that claim to assume less background\ldots well, sometimes they require more than they let on.\footnote{``Oh, you don't know anything about matrix algebra or maximum likelihood fitting algorithms? No problem. Go read three or four pages in an appendix and then you'll be `prepared' to read this book.'' 😕}
 
-The prerequisite for our class is an intro stats class that covers pretty standard material for such a course: hypothesis testing and confidence intervals for one and two proportions, one and two means (and paired means), ANOVA, chi-squared, and simple linear regression. We also benefit in that our intro course introduces students to R. (For those lacking R background, the first four modules \href{https://github.com/VectorPosse/Intro_Stats}{here} {[}FIX THIS LINK ONCE THE DATA 220 BOOK IS ALSO FULLY ONLINE{]} should suffice as a basic introduction to R and R Markdown sufficient for success in this course.)
+The prerequisite for our class at Westminster College is an intro stats class that covers pretty standard material for such a course: hypothesis testing and confidence intervals for one and two proportions, one and two means (and paired means), ANOVA, chi-squared, and simple linear regression. In some technical sense, very little of that material is truly required to understand our book. Having said that, though, some prior exposure to statistical ideas is helpful for motivating a rationale for building the kinds of models we teach in our course.
+
+We also benefit in that our intro course introduces students to R. For those lacking R background, the first five chapters \href{https://github.com/VectorPosse/Intro_Stats}{here} {[}FIX THIS LINK ONCE THE DATA 220 BOOK IS ALSO FULLY ONLINE{]} should suffice as a basic introduction to R and R Markdown, graphing with \texttt{ggplot}, and some basic \texttt{tidyverse} stuff about tibbles and data manipulation. We try hard to give lots of fully worked-out code examples in this book that students should be able to copy, paste, and modify slightly to meet their own modeling needs. But know that we make no attempt to be language agnostic here; R is the one and only tool we use.
 
 To respect our students, we made some very deliberate choices about the way our book would be structured.
 
@@ -175,7 +177,7 @@ To respect our students, we made some very deliberate choices about the way our 
   \emph{Make the book free and open source.}
 \end{itemize}
 
-Students have enough trouble in their lives and shouldn't be exposed to the extortionate practices of most textbook publishers. Not only is this book freely available online, it's also published under a permissive open source license (the \href{https://opensource.org/licenses/MIT}{MIT license}) that allows folks to ``use, copy, modify, merge, publish, distribute, sublicense, and/or sell'' their own versions of the book as desired. Furthermore, any derivative of the book must also abide by the same open standards. So our book is both \emph{libre} and \emph{gratis} (or, in more common parlance, ``free as in speech'' and ``free as in beer'').
+Students have enough trouble in their lives without being subjected to the extortionate practices of most textbook publishers. Not only is this book freely available online, it's also published under a permissive open source license (the \href{https://opensource.org/licenses/MIT}{MIT license}) that allows folks to ``use, copy, modify, merge, publish, distribute, sublicense, and/or sell'' their own versions of the book as desired. Furthermore, any derivative of the book must also abide by the same open standards. So our book is both \emph{libre} and \emph{gratis} (or, in more common parlance, ``free as in speech'' and ``free as in beer'').
 
 \begin{itemize}
 \tightlist
@@ -201,7 +203,7 @@ Hey, kids! Stop and do this activity here!
   \emph{Do the math and do it well.}
 \end{itemize}
 
-One common thread we see in a lot of SEM books is a tendency to sweep most of the math under the rug. The intention comes from a good place; mathematics can appear intimidating and, therefore, may seem to serve as a deterrent to learning. To be sure, there are some complex mathematical ideas in SEM that are inaccessible to our audience. At the same time---and, in fairness, this may be due to Sean's bias as a mathematician---we truly believe that the mathematics, carefully explained, can illuminate student understanding. The more mathy sections may need additional instructor support for students without a strong math background. But all it takes is some relatively straightforward algebra to nail down some concepts that most books ignore. A good example of this is investing time in the rules for manipulating variances and covariances. This allows students to calculate the ``model-implied matrix'' that is only cryptically referenced in most textbooks. However, we do skip the math sometimes. For example, a lot of the math behind model fit indices is left unexplained. At the very least, we hope to be transparent about our choices to include or exclude certain mathematical details.
+One common thread we see in a lot of SEM books is a tendency to sweep most of the math under the rug. The intention comes from a good place; mathematics can appear intimidating and, therefore, may seem to serve as a deterrent to learning. To be sure, there are some complex mathematical ideas in SEM that are inaccessible to our audience. At the same time---and, in fairness, this may be due to Sean's bias as a mathematician---we truly believe that the mathematics, carefully explained and continually reinforced, can illuminate student understanding. The more mathy sections may need additional instructor support for students without a strong math background. But all it takes is some relatively straightforward algebra to nail down some concepts that most books ignore. A good example of this is investing time in the rules for manipulating variances and covariances. This allows students to calculate the ``model-implied matrix'' that is only cryptically referenced in most textbooks. However, we do skip the math sometimes. For example, a lot of the math behind model fit indices is left unexplained. At the very least, we hope to be transparent about our choices to include or exclude certain mathematical details.
 
 \begin{itemize}
 \tightlist
@@ -209,7 +211,7 @@ One common thread we see in a lot of SEM books is a tendency to sweep most of th
   \emph{Use ``nice'' data.}
 \end{itemize}
 
-Finding data is hard, so we rely a lot on data sets that other textbooks and R package authors make available (with due attribution, of course). To keep things simple for this course, we work almost exclusively with numerical (quantitative) data. {[}MODIFY THIS IF WE END UP WORKING WITH BINARY CATEGORICAL EXOGENOUS VARIABLES (CODED 0/1) AT SOME POINT.{]}
+Finding data is hard, so we rely a lot on data sets that other textbooks and R package authors make available (with due attribution, of course). To keep things simple for this course, we work almost exclusively with cross-sectional, numerical (quantitative) data. {[}MODIFY THIS IF WE END UP WORKING WITH BINARY CATEGORICAL EXOGENOUS VARIABLES (CODED 0/1) AT SOME POINT.{]}
 
 \begin{itemize}
 \tightlist
@@ -217,7 +219,7 @@ Finding data is hard, so we rely a lot on data sets that other textbooks and R p
   \emph{Be careful about diagrams.}
 \end{itemize}
 
-Learning about complex models induces a sizable cognitive load. Shortcuts in diagrams tend to confuse students. For example, if error terms are truly latent variables, they should be drawn as circles or ellipses and not hidden, even if an advanced practitioner ``knows'' they're there. Variances and covariances among exogenous variables should always appear as well. We take the time to build up a consistent pictographic representation of every part of a model. (Each chapter is introduced with an archetypal diagram that illustrates that chapter's content.) Then we stick to that representation throughout the book.
+Learning about complex models induces a sizable cognitive load. Shortcuts in diagrams tend to confuse students. For example, if error terms are truly latent variables, they should be drawn as circles and not hidden, even if an advanced practitioner ``knows'' they're there. Variances and covariances among exogenous variables should always appear as well. We take the time to build up a consistent pictographic representation of every part of a model. (Each chapter is introduced with an archetypal diagram that illustrates that chapter's content.) Then we stick to that representation throughout the book.
 
 \begin{itemize}
 \tightlist
@@ -225,7 +227,7 @@ Learning about complex models induces a sizable cognitive load. Shortcuts in dia
   \emph{Be careful about notation.}
 \end{itemize}
 
-While it may be the industry standard, LISREL notation is needlessly complex for undergraduate students. We take a consistent and simple approach to notation that represents all variables using UPPERCASE names and all path values using lowercase names. Abstract variables tend to be called something like X when exogenous and Y when endogenous. Real-world variables have contextually meaningful names. For those interested in reading the research literature, we have included an appendix describing LISREL notation.
+While it may be the industry standard, LISREL notation is needlessly complex for undergraduate students. We take a consistent and simple approach to notation that represents all variables using UPPERCASE names and all parameter values using lowercase names. Abstract variables tend to be called something like X when exogenous and Y when endogenous. Real-world variables have contextually meaningful names. For those interested in reading the research literature, we have included an appendix describing LISREL notation.
 
 \hypertarget{intro-structure}{%
 \section*{Course structure}\label{intro-structure}}
@@ -308,19 +310,19 @@ Some of the numbers in your new list should be negative, some should be zero, an
 
 If the original set of numbers is called \(X\), then what you've just calculated is a new list \(\left(X - \overline{X}\right)\). Let's start organizing this into a table:
 
-\begin{longtable}[]{@{}rr@{}}
+\begin{longtable}[]{@{}rrll@{}}
 \toprule
-\(X\) & \(\left(X - \overline{X}\right)\) \\
+\(X\) & \(\left(X - \overline{X}\right)\) & \(\qquad\) & \(\quad\) \\
 \midrule
 \endhead
-3 & -3 \\
-4 & -2 \\
-5 & -1 \\
-6 & 0 \\
-6 & 0 \\
-7 & 1 \\
-8 & 2 \\
-9 & 3 \\
+3 & -3 & & \\
+4 & -2 & & \\
+5 & -1 & & \\
+6 & 0 & & \\
+6 & 0 & & \\
+7 & 1 & & \\
+8 & 2 & & \\
+9 & 3 & & \\
 \bottomrule
 \end{longtable}
 
@@ -361,9 +363,10 @@ Square each of the numbers from the second column of the table above. This will 
 Putting the new numbers into our previous table:
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4000}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}@{}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1875}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1875}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3750}}@{}}
 \toprule
 \begin{minipage}[b]{\linewidth}\raggedleft
 \(X\)
@@ -371,17 +374,19 @@ Putting the new numbers into our previous table:
 \(\left(X - \overline{X}\right)\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\left(X - \overline{X}\right)^{2}\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\quad\)
 \end{minipage} \\
 \midrule
 \endhead
-3 & -3 & 9 \\
-4 & -2 & 4 \\
-5 & -1 & 1 \\
-6 & 0 & 0 \\
-6 & 0 & 0 \\
-7 & 1 & 1 \\
-8 & 2 & 4 \\
-9 & 3 & 9 \\
+3 & -3 & 9 & \\
+4 & -2 & 4 & \\
+5 & -1 & 1 & \\
+6 & 0 & 0 & \\
+6 & 0 & 0 & \\
+7 & 1 & 1 & \\
+8 & 2 & 4 & \\
+9 & 3 & 9 & \\
 \bottomrule
 \end{longtable}
 
@@ -404,9 +409,10 @@ As a one-liner, the formula may look a little intimidating, but when you break i
 Here is the full calculation in the table:
 
 \begin{longtable}[]{@{}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.4000}}
-  >{\raggedleft\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3000}}@{}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1875}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedleft\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1875}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3750}}@{}}
 \toprule
 \begin{minipage}[b]{\linewidth}\raggedleft
 \(X\)
@@ -414,19 +420,21 @@ Here is the full calculation in the table:
 \(\left(X - \overline{X}\right)\)
 \end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
 \(\left(X - \overline{X}\right)^{2}\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\quad\)
 \end{minipage} \\
 \midrule
 \endhead
-3 & -3 & 9 \\
-4 & -2 & 4 \\
-5 & -1 & 1 \\
-6 & 0 & 0 \\
-6 & 0 & 0 \\
-7 & 1 & 1 \\
-8 & 2 & 4 \\
-9 & 3 & 9 \\
-& & Sum: 28 \\
-& & Variance: 28/7 = \(\boxed{4}\) \\
+3 & -3 & 9 & \\
+4 & -2 & 4 & \\
+5 & -1 & 1 & \\
+6 & 0 & 0 & \\
+6 & 0 & 0 & \\
+7 & 1 & 1 & \\
+8 & 2 & 4 & \\
+9 & 3 & 9 & \\
+& & Sum: 28 & \\
+& & Variance: 28/7 = \(\boxed{4}\) & \\
 \bottomrule
 \end{longtable}
 
@@ -560,11 +568,15 @@ Var\left(X_{1} + X_{2}\right) =
 Var\left(X_{1}\right) + Var\left(X_{2}\right)
 \]
 
-We're not going to get into a formal definition of \emph{independence} here. For now, it suffices to think of the intuitive definition you may already have in your head of what it means for two things to be independent. The idea is that, to be independent, \(X_{1}\) and \(X_{2}\) should have nothing to do with each other. Knowing the values of one should not give you any information about values of the other. In the next chapter {[}LINK{]}, we'll say more about this rule.
+We're not going to get into a formal definition of \emph{independence} here. For now, it suffices to think of the intuitive definition you may already have in your head of what it means for two things to be independent. The idea is that, to be independent, \(X_{1}\) and \(X_{2}\) should have nothing to do with each other. Knowing a value of one variable should not give you any information about values of the other. In the \protect\hyperlink{covariance}{next chapter}, we'll say more about this rule.
 
 It's important to note that \protect\hyperlink{Rule2}{\textbf{Rule 2}} is an abstract mathematical rule that holds \emph{in theory}. When we have actual data, however, we know that statistics won't always match their theoretical values. For example, even if a true population mean is 42, samples drawn from that population will have sample means that are \emph{close} to 42, but likely not exactly 42.\footnote{The exact distribution of sample means around a true population value is something you probably learned about in an intro stats course. Sample means follow a Student t distribution.}
 
-Let's test this out. Below are two new variables that are defined using random numbers. The first one is normally distributed with mean 1 and standard deviation 2. (If you don't remember standard deviation from intro stats, we talk about it in the next section.) The second one is normally distributed with mean 4 and standard deviation 3. {[}WHERE DOES SEED INFO GO?{]} These are independent because the definition of \(X_{5}\) does not depend on any way on the definition of \(X_{6}\) and vice versa.
+Let's test this out. Below, we will define two new variables using random numbers.
+
+A quick note about random numbers first: when we ask a computer to give us random numbers, it's not going to give us \emph{truly} random numbers. The algorithms are designed to give us numbers that have all the correct statistical properties of random numbers without actually being random. These are called \emph{pseudo-random} numbers. We can use this fact to our benefit. The \texttt{set.seed} command below tells the computer to start generating numbers in a very specific way. Anyone else using R (the same \emph{version} of R) who gives their machine the same ``seed'' will generate the same list of numbers. This makes our work ``reproducible'': you will be able to reproduce the results here in this book on your own machine.
+
+The variable \texttt{X5} below is normally distributed with mean 1 and standard deviation 2. (If you don't remember standard deviation from intro stats, we talk about it in the next section.) The next variable \texttt{X6} is normally distributed with mean 4 and standard deviation 3. These are independent because the definition of \texttt{X5} does not depend on any way on the definition of \texttt{X6} and vice versa.
 
 The sample sizes (2000) are large enough that we should get pretty close to the theoretically correct results here.
 
@@ -596,13 +608,13 @@ The sample sizes (2000) are large enough that we should get pretty close to the 
 ## [1] 2.297279 4.856377 6.661822 1.309892 2.270882 3.827944
 \end{verbatim}
 
-Use R to calculate the variance of \(X_{5}\) and \(X_{6}\) separately. Then use R to add the two numbers you just obtained (the sum of the two variances). Finally, use R to calculate the variance of the sum of the two variables.
+Use R to calculate the variances of \texttt{X5} and \texttt{X6} separately. Then use R to add the two numbers you just obtained (the sum of the two variances). Finally, use R to calculate the variance of the sum of the two variables.
 
 Here's an example to help think about this intuitively.
 
 Suppose someone comes along and offers to give you a random amount of money, some number between \$0 and \$100.\footnote{To be more concrete, the values are uniformly distributed, meaning that any number between 0 and 100 is equally likely.} If the variance is a measure of spread, then it stands to reason that variance reflects something about how uncertain you are about how much money you will have after this transaction. On average, you expect about \$50, but you know that the actual amount of money you will receive can vary greatly.
 
-Okay, now a second person comes along and offers you the same deal, a random dollar gift between \$0 and \$100.\footnote{Apparently you live in a town with very generous strangers.} At the end of both transactions, how much money will you have? On average, maybe about \$100, but what about your uncertainty? Because the total amount is the result of two random gifts, you are even less sure how close to \$100 you might be. The range of possible values is now \$0 to \$200.\footnote{To be clear, though, the probabilities are no longer uniform between 0 and 200. To get near 0, you would have to be unlucky twice, and to get near 200 you would have to get lucky twice.} Your uncertainty is greater overall.
+Okay, now a second person comes along and offers you the same deal, a random dollar gift between \$0 and \$100.\footnote{Apparently you live in a town with very generous strangers.} At the end of both transactions, how much money will you have? On average, maybe about \$100, but what about your uncertainty? Because the total amount is the result of two random gifts, you are even less sure how close to \$100 you might be. The range of possible values is now \$0 to \$200.\footnote{To be clear, though, the probabilities are no longer uniform between 0 and 200. To get near 0, you would have to be unlucky twice, and to get near 200 you would have to get lucky twice. But there are lots of possible outcomes that would result in you having around 100.} Your uncertainty is greater overall.
 
 Of course, all this explains is why the variance of the sum of two variables is larger than the variance of either variable individually. The fact that the variance of the sum of two independent variables is \emph{exactly} the sum of the variances has to be shown mathematically. But hopefully, the intuition is clear.
 
@@ -613,6 +625,8 @@ Var\left(X + C\right) = Var\left(X\right)
 \]
 
 Can you apply \protect\hyperlink{Rule2}{\textbf{Rule 2}} followed by \protect\hyperlink{Rule1}{\textbf{Rule 1}} to see mathematically why \(Var\left(X + C\right) = Var\left(X\right)\)?
+
+This assumes that a constant is independent of any other variable? Intuitively speaking, why is this true?
 
 What is the intuition behind the statement \(Var\left(X + C\right) = Var\left(X\right)\)? In other words, can you explain the rule to someone in terms of what it means about shifting the values of a data set up or down by a constant amount?
 
@@ -645,7 +659,7 @@ Can this be true? Zero variance means ``no spread'' which means exact certainty 
 
 In fact, the amount of money you end up with ranges from -\$100 up to \$100. This is a larger range than in either transaction individually. Our uncertainty has grown because there are two random processes in play, just like in the scenario with two beneficent strangers. In fact, the width of the range of possibilities is the same in both scenarios: \$0 to \$200 and -\$100 to \$100 both span a range of \$200.
 
-The next rule, unfortunately, does not have a great intuitive explanation. It will make a little more sense in the next chapter {[}LINK{]}, and we'll revisit it then.
+The next rule, unfortunately, does not have a great intuitive explanation. It will make a little more sense in the \protect\hyperlink{covariance}{next chapter}, and we'll revisit it then.
 
 \begin{itemize}
 \tightlist
@@ -1141,6 +1155,8 @@ Var(Z) &= Var\left(\frac{\left(X - \overline{X}\right)}{SD(X)}\right) \\
     &= \quad ???
 \end{align}
 
+You may feel a little uncomfortable applying \protect\hyperlink{Rule3}{\textbf{Rule 3}} because you might worry if \(X\) and \(M\) are independent. Since \(M\) is the mean of \(X\), it seems like that is \emph{very} dependent on \(X\). This is where some of the intuition about independence breaks down and we have to rely on mathematical rules that we haven't really gotten into. \emph{All} constants are independent of any other variable.
+
 You should get the answer 1. A standardized variable always has variance 1. This will be an important fact in future chapters.
 
 \hypertarget{covariance}{%
@@ -1163,18 +1179,18 @@ As we did in the last chapter with variance, we'll build up the calculation of c
 
 Here are two variables (with \(n = 7\)) that have been mean centered:
 
-\begin{longtable}[]{@{}rr@{}}
+\begin{longtable}[]{@{}rrll@{}}
 \toprule
-\(X_{1}\) & \(X_{2}\) \\
+\(X_{1}\) & \(X_{2}\) & \(\qquad\) & \(\qquad\) \\
 \midrule
 \endhead
--1 & -2 \\
--2 & 2 \\
-2 & -2 \\
--3 & -1 \\
-4 & 2 \\
--1 & -2 \\
-1 & 3 \\
+-1 & -2 & & \\
+-2 & 2 & & \\
+2 & -2 & & \\
+-3 & -1 & & \\
+4 & 2 & & \\
+-1 & -2 & & \\
+1 & 3 & & \\
 \bottomrule
 \end{longtable}
 
@@ -1188,36 +1204,36 @@ What if both \(X_{1}\) and \(X_{2}\) lie below their means? What do we know abou
 
 Here is the chart again, but with the products listed in a new column:
 
-\begin{longtable}[]{@{}rrr@{}}
+\begin{longtable}[]{@{}rrrl@{}}
 \toprule
-\(X_{1}\) & \(X_{2}\) & \(X_{1}X_{2}\) \\
+\(X_{1}\) & \(X_{2}\) & \(X_{1}X_{2}\) & \(\qquad\) \\
 \midrule
 \endhead
--1 & -2 & 2 \\
--2 & 2 & -4 \\
-2 & -2 & -4 \\
--3 & -1 & 3 \\
-4 & 2 & 8 \\
--1 & -2 & 2 \\
-1 & 3 & 3 \\
+-1 & -2 & 2 & \\
+-2 & 2 & -4 & \\
+2 & -2 & -4 & \\
+-3 & -1 & 3 & \\
+4 & 2 & 8 & \\
+-1 & -2 & 2 & \\
+1 & 3 & 3 & \\
 \bottomrule
 \end{longtable}
 
 Now we add up the products across all seven data pairs:
 
-\begin{longtable}[]{@{}rrr@{}}
+\begin{longtable}[]{@{}rrrl@{}}
 \toprule
-\(X_{1}\) & \(X_{2}\) & \(X_{1}X_{2}\) \\
+\(X_{1}\) & \(X_{2}\) & \(X_{1}X_{2}\) & \(\qquad\) \\
 \midrule
 \endhead
--1 & -2 & 2 \\
--2 & 2 & -4 \\
-2 & -2 & -4 \\
--3 & -1 & 3 \\
-4 & 2 & 8 \\
--1 & -2 & 2 \\
-1 & 3 & 3 \\
-& & Sum: 10 \\
+-1 & -2 & 2 & \\
+-2 & 2 & -4 & \\
+2 & -2 & -4 & \\
+-3 & -1 & 3 & \\
+4 & 2 & 8 & \\
+-1 & -2 & 2 & \\
+1 & 3 & 3 & \\
+& & Sum: 10 & \\
 \bottomrule
 \end{longtable}
 
@@ -1227,20 +1243,20 @@ We're almost there. Just like we wanted the average squared deviation to calcula
 
 Putting this all together:
 
-\begin{longtable}[]{@{}rrr@{}}
+\begin{longtable}[]{@{}rrrl@{}}
 \toprule
-\(X_{1}\) & \(X_{2}\) & \(X_{1}X_{2}\) \\
+\(X_{1}\) & \(X_{2}\) & \(X_{1}X_{2}\) & \(\quad\) \\
 \midrule
 \endhead
--1 & -2 & 2 \\
--2 & 2 & -4 \\
-2 & -2 & -4 \\
--3 & -1 & 3 \\
-4 & 2 & 8 \\
--1 & -2 & 2 \\
-1 & 3 & 3 \\
-& & Sum: 10 \\
-& & Covariance: 10/6 = \(\boxed{1.67}\) \\
+-1 & -2 & 2 & \\
+-2 & 2 & -4 & \\
+2 & -2 & -4 & \\
+-3 & -1 & 3 & \\
+4 & 2 & 8 & \\
+-1 & -2 & 2 & \\
+1 & 3 & 3 & \\
+& & Sum: 10 & \\
+& & Covariance: 10/6 = \(\boxed{1.67}\) & \\
 \bottomrule
 \end{longtable}
 
@@ -1331,7 +1347,7 @@ Once we've done it by hand a few times to make sure we understand how the formul
 ## [1] -9.2
 \end{verbatim}
 
-And here's some real world data:
+And here's some real world data. In addition to temperature (which we've already seen), we can use wind speed and see if there is an association between them:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1572,7 +1588,7 @@ Okay, now remember that \(S_{1}\) is just a convenient substitute for \(SD(X_{1}
 
 This is cool! Correlation is simply the covariance of two variables after they've been standardized.
 
-This also reinforces the earlier comment about interpreting covariance after removing the extraneous influence of the spread of the individual variables. Standardizing variables makes the spread all all variables 1, so their covariance is now a pure representation of just the association between them.
+This also reinforces the earlier comment about interpreting covariance after removing the extraneous influence of the spread of the individual variables. Standardizing variables makes the spread of all variables 1, so their covariance is now a pure representation of just the association between them.
 
 You probably remember from intro stats that correlation takes on values between -1 and 1. That fact is not obvious from the formula we have. Why should the fraction
 \[
@@ -1613,7 +1629,7 @@ Very little should change in your answer, but there is one small change. Again, 
 
 Here is a fact we will state without proof:
 
-Correlation is only interpretable as the strength of \textbf{linear} associations.
+Correlations are only interpretable as the strength of \textbf{linear} associations.
 
 Why is this? Basically, it boils down to the fact that a ``perfect'' correlation of 1 or -1 is only achievable when data points lie on a perfectly straight line. Therefore, thinking of correlation as lying between 0 and 1 (or 0 and -1) is only sensible if you are judging how close points are to lying on a straight line. We'll see examples of this in the next section when we plot some data.
 
@@ -1751,7 +1767,7 @@ What about a perfectly straight line with a negative slope?
 ## [1] 4.8 4.6 4.4 4.2 4.0 3.8 3.6 3.4 3.2
 \end{verbatim}
 
-Throw this new variable into the tibble we already have (for convenience). To explain the syntax below, the \texttt{\%\textgreater{}\%} symbol is called a ``pipe'' and it tells R to pass the \texttt{linear\_data} tibble on to the next row to process it. And the processing itself is dictated by the \texttt{bind\_cols} command which tells R to ``bind a new column'' to the tibble. The part that says \texttt{X7\ =\ X7} may be a little confusing. It says to add the new column \texttt{X7}, but also still call it \texttt{X7}.
+We'll throw this new variable into the tibble we already have (for convenience). To explain the syntax below, the \texttt{\%\textgreater{}\%} symbol is called a ``pipe'' and it tells R to pass the \texttt{linear\_data} tibble on to the next row to process it. And the processing itself is dictated by the \texttt{bind\_cols} command which tells R to ``bind a new column'' to the tibble. The part that says \texttt{X7\ =\ X7} may be a little confusing. It says to add the new column \texttt{X7}, but also still call it \texttt{X7}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1797,7 +1813,7 @@ Throw this new variable into the tibble we already have (for convenience). To ex
 
 Again, that is what we expected.
 
-What happens if we plot random data? The \texttt{runif} command just chooses random numbers uniformly between 0 and 1.\footnote{Sean's brain always want to parse this command as ``run if''. Run if what? No, no, it's ``r unif''.}
+What happens if we plot random data? The \texttt{runif} command just chooses random numbers uniformly between 0 and 1.\footnote{Sean's brain always want to parse this command as ``run if''. Run if what? No, no, it's ``r unif''.} We use \texttt{set.seed} to make our work reproducible. You will get the same set of random numbers on your machine if you use the same seed as we use here.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2028,7 +2044,7 @@ Turn up the sound! If the whole class plays at the same time, your classroom wil
 \section*{Preliminaries}\label{preliminaries}}
 \addcontentsline{toc}{section}{Preliminaries}
 
-We need to load the packages we will need for this chapter. The \texttt{tidyverse} package has all sorts of utilities for working with tibbles (data frames). The \texttt{broom} package will be used to calculate and store the residuals of the model. This will also be our first introduction to the \texttt{lavaan} package that will be used throughout the rest of the book.
+We need to load the packages we will use for this chapter. The \texttt{tidyverse} package has all sorts of utilities for working with tibbles (data frames). The \texttt{broom} package will be used to calculate and store the residuals of the model. This will also be our first introduction to the \texttt{lavaan} package that will be used throughout the rest of the book.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -2042,6 +2058,11 @@ We need to load the packages we will need for this chapter. The \texttt{tidyvers
 ## This is lavaan 0.6-11
 ## lavaan is FREE software! Please report any bugs.
 \end{verbatim}
+
+\hypertarget{simple-advice}{%
+\section{Some friendly advice}\label{simple-advice}}
+
+Even if you have seen regression before reading this book, be sure to read and study the this chapter and the next chapter thoroughly. If nothing else, you need to be comfortable with the notation and terminology established here. But we will also take special care to motivate and justify all the calculations that are taken for granted in some treatments of regression. This framework will be important as we move into mediation and path analysis in the following chapters. If you are comfortable with the content of this chapter, there won't be much ``new'' to say about multiple regression, mediation, and path analysis more generally.
 
 \hypertarget{simple-prediction}{%
 \section{Prediction}\label{simple-prediction}}
@@ -2071,15 +2092,15 @@ What if I told you that the student who walked through the door had \emph{lower}
 
 When we have one variable we suspect may help us predict another variable, one way to study it is using a simple regression model.
 
-This is related to, but somewhat different from, covariance. Covariance is symmetric, so it expresses the idea that two variables are mutually related. But there is no ``directionality'' to that relationship. By way of contrast, a simple regression model asserts that one of the variables is ``explanatory'' and the other is ``response''. In other words, we start with the values or properties of the explanatory variable and try to deduce what we can about the values or properties of the response variable.
+This is related to, but somewhat different from, covariance. Covariance is symmetric, so it expresses the idea that two variables are mutually related. But there is no ``directionality'' to that relationship. By way of contrast, a simple regression model asserts that one of the variables is a ``predictor'' and the other is ``response''. In other words, we start with the values or properties of the predictor variable and try to deduce what we can about the values or properties of the response variable.
 
 Keep in mind that ``directionality'' is not the same as ``causality''. While it's possible that one variable causes another, there needs to be a data collection process (often a carefully controlled experiment) and a clear scientific rationale that justifies a causal relationship between variables before we can start thinking about inferring causality. For purposes of much of this book, directionality just means that we wish to establish a predictive relationship wherein we start with the properties of one variable and try to predict the properties of another variable. There is often a ``sensible'' order in which to do this based on the research questions asked or the hypotheses posed.
 
-There are many different terminological conventions in statistics, so be aware that ``explanatory'' variables are also called---often depending on the discipline and the context---predictors, features, covariates, controls, regressors, inputs, or independent variables. In fact, in the context of structural equation modeling, we will use the term ``exogenous'' to refer to variables that play this role. (That term has a much more precise definition that we'll discuss in future chapters.) And ``response'' variables might be called outcomes, outputs, targets, explained variables, or dependent variables, among others. In this book, we will often use the term ``endogenous'' (again, in a very specific way yet to be explained). If there is a data collection process and a clear scientific rationale that justifies a causal relationship between variables, then we might be able to refer to variables as either ``cause'' or ``effect''.
+There are many different terminological conventions in statistics, so be aware that ``predictor'' variables are also called---often depending on the discipline and the context---features, covariates, controls, regressors, inputs, explanatory variables, or independent variables. In fact, in the context of structural equation modeling, we will use the term ``exogenous'' to refer to variables that play this role. (That term has a much more precise definition that we'll discuss in future chapters.) And ``response'' variables might be called outcomes, outputs, targets, criteria, predicted variables, explained variables, or dependent variables, among others. In this book, we will often use the term ``endogenous'' (again, in a very specific way yet to be explained). If there is a data collection process and a clear scientific rationale that justifies a causal relationship between variables, then we might be able to refer to variables as either ``cause'' or ``effect''.
 
-Keep in mind that it's the scientific question we want to ask that determines the explanatory/response relationship. A different researcher with a different hypothesis might use the same two variables but with the roles reversed.
+Keep in mind that it's the scientific question we want to ask that determines the predictor/response relationship. A different researcher with a different hypothesis might use the same two variables but with the roles reversed.
 
-In the anxiety/smart-phone example above, which variable is explanatory and which is response, at least according to the way we stated the scenario?
+In the anxiety/smart-phone example above, which variable is predictor and which is response, at least according to the way we stated the scenario?
 
 \hypertarget{simple-model}{%
 \section{The simple regression model}\label{simple-model}}
@@ -2183,7 +2204,7 @@ According to the information above, we can estimate that the value of \(b\) is \
 \hat{Y} = -1.23X
 \]
 
-This is a multiplicative effect. Again, as long as \(X\) and \(Y\) are both mean-centered, knowing the value of \(X\) allows us to predict the value of \(Y\) by multiplying by \(b\).
+This is a proportional effect. Again, as long as \(X\) and \(Y\) are both mean-centered, knowing the value of \(X\) allows us to predict the value of \(Y\) by multiplying by \(b\).
 
 But those predictions will almost always be wrong. On any given day, given an increase of 1 mile per hour wind in wind speed, it will very rarely happen that the temperature will drop by \emph{exactly} 1.23 degrees. That's just a sort of ``average'' over time. On average, there's a slight temperature change associated with 1 mph change in wind speed, and the number -1.23 is the best estimate of that average change across our whole data set. We need to be \emph{especially} clear that an increase in wind speed does not necessary \emph{cause} a drop in temperature. I mean, that might be partially true, but we can't prove it from our observational data. There are all sorts of other reasons to explain both an increase in wind speed and a drop in temperature (like a cold front moving in).
 
@@ -2199,9 +2220,9 @@ Y = -1.23X + E
 
 Now we use \(Y\) instead of \(\hat{Y}\). Once we include the error, we can recover the exact value of \(Y\), so this is no longer just a prediction from the straight-line model. Remember this:
 
-If you write down a regression equation for an endogenous variable that includes all incoming arrows, \emph{including the residual error term}, use \(Y\).
+If you write down a regression equation for an endogenous variable that includes all incoming arrows, \emph{including the error term}, use \(Y\).
 
-If you write down a regression equation for an endogenous variable that includes all incoming arrows, \emph{excluding the residual error term}, use \(\hat{Y}\).
+If you write down a regression equation for an endogenous variable that includes all incoming arrows, \emph{excluding the error term}, use \(\hat{Y}\).
 
 Error is a funny word because it has a negative connotation. It sounds like we made a mistake. Well, the model does make mistakes. Every model prediction is technically wrong. But this is not the kind of mistake that results from doing our arithmetic wrong or anything like that. It's simply the ``natural'' error that results from the messiness of the real world and the impossibility of predicting anything with certainty. For this reason, we will often prefer the term ``residual''. It's what is ``left over'' after we have made a prediction. It's the extra change in temperature, for example, that is not accounted for by the model with wind speed alone.
 
@@ -2247,6 +2268,8 @@ How is that ``1'' represented in the diagram?
 
 The letters \(v\), \(b\), and \(e\) are called \emph{free parameters} because they are free to vary depending on the data. The ``1'' is called a \emph{fixed parameter}. It is attached to an arrow, so it's technically a parameter of the model, but it is not a parameter that we need to calculate. It is ``fixed'' at the value 1 because the error term in the model is represented by \(+E\) with a fixed coefficient of 1. In general, throughout the book, if the word ``parameter'' is used without qualification, you can assume we are talking only about the free parameters, the ones we need to calculate.
 
+Arrows that represent the coefficients of regression relationships will be drawn a little thicker than the other arrows in the diagram. This convention is, to our knowledge, unique to this book. It is not absolutely necessary, but it will be helpful later when there are more arrows floating about to distinguish between the regression relationship and other kinds of relationships (like error terms or covariances, for example).
+
 The only thing in the diagram that hasn't been explained yet is \(e\).
 
 Where does \(e\) appear in the diagram? Given where it appears, what does it represent mathematically?
@@ -2271,7 +2294,7 @@ While it's helpful to see \(X\) and \(Y\) as generic prototypes for any simple r
 
 Is the error variable \(E\) exogenous or endogenous?
 
-One final note about this diagram: you may have noticed that the \(Y\) variable (or \(\textit{TEMP}\)) does \emph{not} have a variance term attached. There is no double-headed arrow on that box. Why not? The point here is that we are trying to explain the reasons that \(Y\) varies using other elements of the model. In other words, \(Y\) has a variance, but that variance is partially explained by \(X\). And the rest of the variance not explained by \(X\) is explained by the error term \(E\). So all the variance is \(Y\) is accounted for through the contribution of \(X\) and \(E\) combined.
+One final note about this diagram: you may have noticed that the \(Y\) variable (or \(\textit{TEMP}\)) does \emph{not} have a variance term attached. There is no double-headed arrow on that box. Why not? The point here is that we are trying to understand the variance of \(Y\) using other elements of the model. In other words, \(Y\) has a variance, but that variance is partially predicted by \(X\). And the rest of the variance not predicted by \(X\) is swept up in the error term \(E\). So all the variance is \(Y\) is accounted for through the contribution of \(X\) and \(E\) combined.
 
 \hypertarget{simple-assumptions}{%
 \section{Simple regression assumptions}\label{simple-assumptions}}
@@ -2280,7 +2303,7 @@ All the calculations we need to do, and our ability to interpret the results, de
 
 If you look up regression assumptions, you might find a huge list of requirements. Some of these requirements relate to calculating statistics like P-values for regression parameters. For now, we are content simply to know that it makes sense to interpret the parameters in the model above.
 
-For that, we really only need four assumptions:
+For that, we really only need five assumptions:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -2288,7 +2311,9 @@ For that, we really only need four assumptions:
 \item
   The data should come from a ``good'' sample.
 \item
-  The relationship between \(X\) and \(Y\) should be approximately linear.
+  The values of the exogenous variable should be measured without error.
+\item
+  The relationship between \(Y\) and \(X\) should be approximately linear.
 \item
   The residuals should be independent of the \(X\) values.
 \item
@@ -2303,6 +2328,8 @@ Let's address these one at a time:
 \item
   What do we mean by a ``good'' sample? While a simple random sample is the gold standard, it's usually not possible to obtain one in the real world. So we make our sampling process as random as possible and ensure that the resulting sample is as representative of the population we're trying to study as possible.
 \item
+  We should always strive to measure things precisely. When measuring physical phenomena with precise scientific instruments, we can usually minimize so-called ``measurement error''. But some measurements are a lot messier. You might ask a person a series of survey questions today and then ask them the same questions tomorrow and get somewhat different answers. Or you might have to record data that consists of ``educated guess'' estimates about things that are difficult to pin down precisely. Whenever you have an exogenous variable that is unreliable, that can introduce bias into your model. (Curiously, measurement error in the endogenous variable doesn't matter quite as much. It may introduce more variability in your estimates, but it will not bias the values of the parameters of the regression model.)
+\item
   You can check linearity with a scatterplot. Just make sure the pattern of dots doesn't have strong curvature to it.
 \item
   There should be no patterns in the residuals at all. They should be randomly scattered around the best-fit line and the average size of the residuals should not change radically from one side of the graph to the other.\footnote{This property of similarly-sized residuals is called \emph{homoskesdasticity}. The violation of that condition is called \emph{heteroskedasticity} which is one of Sean's favorite words ever!} You can check this by plotting the residuals, but that can't be done until after the model is fit. (The residuals don't exist until we have a value of \(\hat{Y}\) with which to compare \(Y\).)
@@ -2313,7 +2340,7 @@ Let's address these one at a time:
 \hypertarget{simple-calculating}{%
 \section{Calculating regression parameters}\label{simple-calculating}}
 
-Now we'll show one way to calculate the regression parameters (the numbers) in the above diagram. This isn't the only way to do it. In fact, this is not the approach that is used in most intro stats classes. But this approach will be helpful to illustrate the way we will do these calculations in future chapters.
+Now we'll show one way to calculate the parameters (the numbers) in the above diagram. This isn't the only way to do it. In fact, this is not the approach that is used in most intro stats classes. But this approach will be helpful to illustrate the way we will do these calculations in future chapters.
 
 Let's go back to the diagram without the numbers:
 
@@ -2325,14 +2352,22 @@ The letter \(v\) is easy because it's just the variance of \(X\):
 Var(X) = v
 \]
 
-We can estimate it directly from the data. (You already did it in R above for the temperature and wind speed data.) Through completing the activities below, we will also calculate \(b\) and \(e\).
+We can estimate it directly from the data. (You already did it in R above for wind speed.) Through completing the activities below, we will also calculate \(b\) and \(e\).
 
 To get the other parameters, we have to set up a few equations.
 The first observation we need to make is that, as important as the arrows are in a diagram, it's just as important where the arrows are \emph{not}.
 
-Are there any arrows directly connecting \(X\) and \(E\)? What does that imply about the relationship between \(X\) and \(E\)? Which regression assumption is related to this question?
+Are there any arrows directly connecting \(X\) and \(E\)? What might that imply about the relationship between \(X\) and \(E\)? Which regression assumption is related to this question?
 
-Given all that, what is \(Cov(X, E)\)?
+So what would that imply about the value of \(Cov(E, X)\)?
+
+We have to be a little careful with the line of reasoning above. Even if there are no \emph{direct} paths from \(X\) to \(E\), are there any \emph{indirect} paths from \(X\) to \(E\)? Such an indirect path might be the source of some kind of association between \(X\) and \(E\).
+
+The only possible path goes through \(Y\) and looks like
+\[
+X \boldsymbol{\rightarrow} Y \leftarrow E
+\]
+For reasons that we won't explain here (but will be explained in Chapter \ref{path}), this type of path does \emph{not} imply any kind of association between \(X\) and \(E\). Therefore, the model \emph{does} imply that \(X\) and \(E\) are independent, and, therefore, \(Cov(E, X) = 0\).
 
 Next, because \(Y\) is the combination of \(X\) and \(E\), we've already seen that we can write
 
@@ -2357,10 +2392,10 @@ b^{2}v + e
 
 Don't forget that \(Var(X) = v\) and \(Var(E) = e\) in the diagram!
 
-We also need to use information about the covariance between \(X\) and \(Y\). Keep simplifying the calculation below:
+We also need to use information about the covariance between \(Y\) and \(X\). Keep simplifying the calculation below:
 
 \begin{align}
-Cov(X, Y)  &= Cov(X, bX + E) \\
+Cov(Y, X)  &= Cov(bX + E, X) \\
         &= \quad ???
 \end{align}
 
@@ -2370,9 +2405,9 @@ You should end up with
 bv
 \]
 
-Use R to calculate \(Var(X)\), \(Var(Y)\) and \(Cov(X, Y)\).
+Use R to calculate \(Var(Y)\) and \(Cov(Y, X)\) for the \texttt{airquality} data. (You've already computed \(Var(X)\). It was 12.4.)
 
-You should get 12.4, 89.6, and -15.3, respectively.
+You should get 89.6 and -15.3, respectively.
 
 Now we can set up all the equations we need to solve for the various letters we want. Here are the three equations we have established:
 
@@ -2391,7 +2426,7 @@ Now let's go through that again, but this time, in full generality:
 \begin{align}
 Var(X) &= v \\
 Var(Y) &= b^2v + e \\
-Cov(X, Y) &= bv
+Cov(Y, X) &= bv
 \end{align}
 
 Therefore,
@@ -2401,11 +2436,11 @@ v = Var(X)
 \]
 
 \[
-b = \frac{Cov(X, Y)}{Var(X)}
+b = \frac{Cov(Y, X)}{Var(X)}
 \]
 
 \[
-e = Var(Y) - \left( \frac{Cov(X, Y)}{Var(X)} \right)^2 Var(X)
+e = Var(Y) - \left( \frac{Cov(Y, X)}{Var(X)} \right)^2 Var(X)
 \]
 
 \hypertarget{simple-mim}{%
@@ -2426,7 +2461,7 @@ There are some immediate simplifications to make.
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Since \(Cov(Y, X) = Cov(X, Y)\), there is no point in writing it twice. We will just use a dot (\(\bullet\)) to replace \(Cov(Y, X)\).
+  Since \(Cov(X, Y) = Cov(Y, X)\), there is no point in writing it twice. We will just use a dot (\(\bullet\)) to replace \(Cov(X, Y)\).
 \item
   We can replace the upper-left and lower-right entries (the entries on the so-called ``diagonal'' of the matrix) with variances.
 \end{enumerate}
@@ -2435,10 +2470,21 @@ This is our final sample covariance matrix:
 
 \[
 \begin{bmatrix}
+Var(X)       &    \bullet \\
+Cov(Y, X)    &    Var(Y)    \\
+\end{bmatrix}
+\]
+
+Alternatively, we could also write this:
+
+\[
+\begin{bmatrix}
 Var(X)       &    Cov(X, Y) \\
 \bullet      &    Var(Y)    \\
 \end{bmatrix}
 \]
+
+The former is called the \emph{lower-triangular} form, and the latter is the \emph{upper-triangular} form. Both contain the same information, so it really doesn't matter which one we use.
 
 With the data we have, we can calculate numbers for all these quantities.
 
@@ -2446,23 +2492,23 @@ There is another important matrix called the \emph{model-implied matrix}. Given 
 
 \[
 \begin{bmatrix}
-v         &    bv         \\
-\bullet   &    b^{2}v + e \\
+v   &    \bullet    \\
+bv  &    b^{2}v + e \\
 \end{bmatrix}
 \]
 
 The letters \(b\), \(v\), and \(e\) are unknowns. Okay, \(v\) is not \emph{very} unknown. It's an unknown in the sense of being a parameter in the model, but you don't have to work very hard to find it. The point is that model parameters are estimated by equating the covariance matrix (calculated from the data) with model-implied matrix and trying to solve for all the unknown parameters.
 
-There is no new math to do in this section. The matrices are just convenient ways to organize the work we've already done. All parameter estimation in structural equation modeling is essentially setting these two matrices (the sample covariance matrix and the model-implied matrix) equal to each other and attempting to solve for the unknown parameters.
+There is no new math to do in this section. The matrices are just convenient ways to organize the work we've already done. All parameter estimation in structural equation modeling is essentially setting these two matrices (the sample covariance matrix and the model-implied matrix) equal to each other and solving:
 
 \[
 \begin{bmatrix}
-Var(X)       &    Cov(X, Y) \\
-\bullet      &    Var(Y)    \\
+Var(X)       &    \bullet   \\
+Cov(Y, X)    &    Var(Y)    \\
 \end{bmatrix} =
 \begin{bmatrix}
-v         &    bv         \\
-\bullet   &    b^{2}v + e \\
+v       &    \bullet      \\
+bv      &    b^{2}v + e        \\
 \end{bmatrix}
 \]
 
@@ -2473,10 +2519,10 @@ Don't forget that the matrix on the left---the sample covariance matrix---consis
 
 The formulas we derived are fine as far as they go. They allow you to take quantities calculated from data (variances and covariances of observed variables) and translate that into estimates of model parameters.
 
-The formula for the slope parameter \(b\) is pretty simple and has some intuitive content. It's the covariance between \(X\) and \(Y\), but dividing by the variance of \(X\) to make sure it has the right units.
+The formula for the slope parameter \(b\) is pretty simple and has some intuitive content. It's the covariance between \(Y\) and \(X\), but dividing by the variance of \(X\) to make sure it has the right units.
 
 \[
-b = \frac{Cov(X, Y)}{Var(X)}
+b = \frac{Cov(Y, X)}{Var(X)}
 \]
 
 Another way to look at this formula is to rearrange things a bit as follows:
@@ -2484,7 +2530,7 @@ Another way to look at this formula is to rearrange things a bit as follows:
 The formula for \(b\) above is equivalent to
 
 \[
-b = \frac{Cov(X, Y) \sqrt{Var (Y)}}{Var(X)\sqrt{Var(Y)}}
+b = \frac{Cov(Y, X) \sqrt{Var (Y)}}{Var(X)\sqrt{Var(Y)}}
 \]
 
 Why?
@@ -2492,7 +2538,7 @@ Why?
 Now write it like this:
 
 \[
-b = \frac{Cov(X, Y) \sqrt{Var (Y)}}{\sqrt{Var(X)}\sqrt{Var(X)}\sqrt{Var(Y)}}
+b = \frac{Cov(Y, X) \sqrt{Var (Y)}}{\sqrt{Var(X)}\sqrt{Var(X)}\sqrt{Var(Y)}}
 \]
 
 What happened here?
@@ -2500,22 +2546,22 @@ What happened here?
 Finally, write it like this:
 
 \[
-b = \left(\frac{Cov(X, Y)}{\sqrt{Var(X)} \sqrt{Var(Y)}}\right) \left(\frac{\sqrt{Var(Y)}}{\sqrt{Var(X)}}\right)
+b = \left(\frac{Cov(Y, X)}{\sqrt{Var(X)} \sqrt{Var(Y)}}\right) \left(\frac{\sqrt{Var(Y)}}{\sqrt{Var(X)}}\right)
 \]
 
 Explain why this simplifies to
 
 \[
-b = Corr(X, Y)\left(\frac{SD(Y)}{SD(X)}\right)
+b = Corr(Y, X)\left(\frac{SD(Y)}{SD(X)}\right)
 \]
 
 This is often the formula taught in intro stats classes. In more concise notation:
 
 \[
-b = r_{XY}\left(\frac{s_{Y}}{s_{X}}\right)
+b = r_{YX}\left(\frac{s_{Y}}{s_{X}}\right)
 \]
 
-The intuition here is that \(b\) is basically just the correlation between \(X\) and \(Y\), but it has to account for the scales and units of \(Y\) and \(X\).
+The intuition here is that \(b\) is basically just the correlation between \(Y\) and \(X\), but it has to account for the scales and units of \(Y\) and \(X\).
 
 Why does the standard deviation of \(Y\) have to be in the numerator and the standard deviation of \(X\) have to be in the denominator? Think about the units \(b\) must have.
 
@@ -2524,25 +2570,25 @@ The formula for the error variance \(e\) is a little more gross. With similar tr
 Here is the starting point:
 
 \[
-e = Var(Y) - \left( \frac{Cov(X, Y)}{Var(X)} \right)^2 Var(X)
+e = Var(Y) - \left( \frac{Cov(Y, X)}{Var(X)} \right)^2 Var(X)
 \]
 
 Explain why the right-hand side can be rewritten as
 
 \[
-Var(Y) - \frac{Cov(X, Y)^{2}}{Var(X)}
+Var(Y) - \frac{Cov(Y, X)^{2}}{Var(X)}
 \]
 
 Explain why the next step is valid:
 
 \[
-Var(Y) - \frac{Cov(X, Y)^{2} Var(Y)}{Var(X) Var(Y)}
+Var(Y) - \frac{Cov(Y, X)^{2} Var(Y)}{Var(X) Var(Y)}
 \]
 
 What about this next one?
 
 \[
-Var(Y) \left( 1 - \frac{Cov(X, Y)^{2}}{Var(X) Var(Y)} \right)
+Var(Y) \left( 1 - \frac{Cov(Y, X)^{2}}{Var(X) Var(Y)} \right)
 \]
 
 Why would we do such a thing? In other words, does the new fraction on the right look familiar in any way?
@@ -2550,20 +2596,20 @@ Why would we do such a thing? In other words, does the new fraction on the right
 We hope you recognize that the fraction on the right is just the correlation coefficient squared. The whole equation can now be written as
 
 \[
-e = Var(Y) \left( 1 - r_{XY}^2 \right)
+e = Var(Y) \left( 1 - r_{YX}^2 \right)
 \]
 
-There is a nice consequence of this last equation. The term in parentheses \(\left( 1 - r_{XY}^2 \right)\) is a number between 0 and 1, right? Since we are multiplying this by the variance of \(Y\), we can think of the term in parentheses as a \emph{proportion}. All the variance of \(Y\) is explained in our model in one of two ways. The thick arrow coming in from the left uses \(X\) to predict some of the variance of \(Y\). All the rest of the variance of \(Y\) is left over in the error term \(e\). Therefore, \(\left( 1 - r_{XY}^2 \right)\) is the proportion of the variance of \(Y\) left over as error.
+There is a nice consequence of this last equation. The term in parentheses \(\left( 1 - r_{YX}^2 \right)\) is a number between 0 and 1, right? Since we are multiplying this by the variance of \(Y\), we can think of the term in parentheses as a \emph{proportion}. All the variance of \(Y\) is explained in our model in one of two ways. The thick arrow coming in from the left uses \(X\) to predict some of the variance of \(Y\). All the rest of the variance of \(Y\) is left over in the error term \(e\). Therefore, \(\left( 1 - r_{YX}^2 \right)\) is the proportion of the variance of \(Y\) left over as error.
 
-And if that is true, it must also be the case that \(r_{XY}^2\) is the proportion of the variance of \(Y\) explained by \(X\). Calculating one minus a proportion gives the complementary proportion. For example, if \(\left( 1 - r_{XY}^2 \right) = 0.3\), then 30\% of the variance of \(Y\) is left over as error. But that implies that 70\% of the variance of \(Y\) is explained by \(X\). \(1 - 0.3 = 0.7\).
+And if that is true, it must also be the case that \(r_{YX}^2\) is the proportion of the variance of \(Y\) explained by \(X\). Calculating one minus a proportion gives the complementary proportion. For example, if \(\left( 1 - r_{YX}^2 \right) = 0.3\), then 30\% of the variance of \(Y\) is left over as error. But that implies that 70\% of the variance of \(Y\) is explained by \(X\). \(1 - 0.3 = 0.7\).
 
-Most authors will write \(R^{2}\) instead of \(r^{2}\) for some reason. Rearranging the top equation, replacing \(r_{XY}^{2}\) with \(R^{2}\), and writing \(e\) as \(Var(E)\) looks like
+Most authors will write \(R^{2}\) instead of \(r^{2}\) for some reason. Rearranging the equation above, replacing \(r_{YX}^{2}\) with \(R^{2}\), and writing \(e\) as \(Var(E)\) looks like
 
 \[
 R^{2} = 1 - \frac{Var(E)}{Var(Y)}
 \]
 
-In other words, we can think of the error variance as a \emph{proportion} of the total variance of \(Y\), and then \(R^2\) is the complementary proportion. Therefore, \(R^{2}\) is the proportion of the variance \emph{explained by the model}.
+In other words, we can think of the error variance as a \emph{proportion} of the total variance of \(Y\), and then \(R^2\) is the complementary proportion. Therefore, \(R^{2}\) is the proportion of the variance \emph{accounted for by the model}.
 
 \hypertarget{simple-standardized}{%
 \section{Regression with standardized variables}\label{simple-standardized}}
@@ -2572,27 +2618,27 @@ Recall that if we convert our variables to z-scores, variances are all 1 and cov
 
 \[
 \begin{bmatrix}
-1       &    r_{XY} \\
-\bullet &    1      \\
+1       &    \bullet \\
+r_{YX}  &    1       \\
 \end{bmatrix}
 \]
 
-The model-implied matrix does not change. Solving for the parameters as before is the same, then, except we can now replace \(Var(X)\) and \(Var(Y)\) with 1, and \(Cov(X, Y)\) with \(r_{XY}\).
+The model-implied matrix does not change. Solving for the parameters as before is the same, then, except we can now replace \(Var(X)\) and \(Var(Y)\) with 1, and \(Cov(Y, X)\) with \(r_{YX}\).
 
 \[
 \begin{bmatrix}
-1       &    r_{XY}  \\
-\bullet      &    1  \\
+1       &    \bullet  \\
+r_{YX}  &    1        \\
 \end{bmatrix} =
 \begin{bmatrix}
-v         &    bv         \\
-\bullet   &    b^{2}v + e \\
+v    &    \bullet         \\
+bv   &    b^{2}v + e \\
 \end{bmatrix}
 \]
 
 \begin{align}
 1 &= v \\
-r_{XY} &= bv \\
+r_{YX} &= bv \\
 1 &= b^2v + e
 \end{align}
 
@@ -2603,14 +2649,14 @@ v = 1
 \]
 
 \[
-b = r_{XY}
+b = r_{YX}
 \]
 
 \[
-e = 1 - r_{XY}^{2}
+e = 1 - r_{YX}^{2}
 \]
 
-The slope of the regression is just the correlation! And the error variance is just a proportion between 0 and 1 which is complementary to \(r_{xy}^{2}\) (AKA, \(R^{2}\), or the variance explained by the model). Those two variances, \(e\) and \(R^{2}\) now add up to 1.
+When the variables are standardized, the slope of the regression is just the correlation! And the error variance is just a proportion between 0 and 1 which is complementary to \(r_{YX}^{2}\) (aka, \(R^{2}\), or the variance explained by the model). Those two variances, \(e\) and \(R^{2}\) now add up to 1.
 
 We'll use the \texttt{scale} command to create standardized variables for temperature and wind speed and put them in a new tibble.
 
@@ -2701,7 +2747,7 @@ The residuals can be obtained most easily from the model by using the \texttt{au
 ## # ... with 143 more rows
 \end{verbatim}
 
-There are many columns here and we're not going to discuss most of them, but the residuals of the model are stored in the column called \texttt{.resid}. There are also standardized residuals stored in column \texttt{std.resid}. Both will look exactly the same except for the scale of the axes, so it doesn't much matter which we use.
+There are many columns here and we're not going to discuss most of them, but the residuals of the model are stored in the column called \texttt{.resid}. There are also standardized residuals stored in column \texttt{std.resid}. Both will look exactly the same in a plot except for the scale of the axes, so it doesn't much matter which we use.
 
 The residuals are now stored in a new tibble called \texttt{YX\_aug}, so be sure to use that in the following \texttt{ggplot} command and \emph{not} the original data. We'll put the residuals on the y-axis. Since we're interested in checking that the residuals are independent of the \(X\) variable, we will put that, unsurprisingly, on the x-axis. A reference line at \(y = 0\) helps us see where the residuals are centered.
 
@@ -2709,7 +2755,7 @@ The residuals are now stored in a new tibble called \texttt{YX\_aug}, so be sure
 \begin{Highlighting}[]
 \FunctionTok{ggplot}\NormalTok{(YX\_aug, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ .resid, }\AttributeTok{x =}\NormalTok{ X)) }\SpecialCharTok{+}
     \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
-    \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{)}
+    \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{color =} \StringTok{"blue"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2721,7 +2767,7 @@ or
 \begin{Highlighting}[]
 \FunctionTok{ggplot}\NormalTok{(YX\_aug, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ .std.resid, }\AttributeTok{x =}\NormalTok{ X)) }\SpecialCharTok{+}
     \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
-    \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{color =} \StringTok{"red"}\NormalTok{)}
+    \FunctionTok{geom\_hline}\NormalTok{(}\AttributeTok{yintercept =} \DecValTok{0}\NormalTok{, }\AttributeTok{color =} \StringTok{"blue"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2765,7 +2811,7 @@ The model is now stored as \texttt{TEMP\_WIND\_fit}. One way to learn about the 
 ## 3   X ~~   X 12.330 0.000     NA     NA   12.330   12.330
 \end{verbatim}
 
-There is a lot of output here, and we're not going to talk about most of it now. Focus on the ``est'' column.
+There is a lot of output here, and we're not going to talk about most of it now. Focus on the \texttt{est} column.
 
 You should recognize these three estimates. Explain what these numbers represent.
 
@@ -2788,7 +2834,7 @@ We can also produce the standardized estimates.
 
 Again, explain these three numbers. (They are now listed in a column called \texttt{est.std} for ``standardized estimates''.)
 
-Verify that the second line is actually the error variance. (Hint: remember \(1 - r_{XY}^{2}\).) How do we know it's not the standardized variance of \(Y\)? (In other words, what do you actually know to be the standardized variance of \(Y\)?)
+Verify that the second line is actually the error variance. (Hint: remember \(1 - r_{YX}^{2}\).) How do we know it's not the standardized variance of \(Y\)? (In other words, what do you actually know to be the standardized variance of \(Y\)?)
 
 One downside of using \texttt{lavaan} is that it doesn't store the residuals, so we have no way of checking that regression assumption. For more complex models in future chapters where \texttt{lavaan} (or some comparable package) is the only choice, the residual independence assumption will be just that: an assumption. We must have substantive reason to believe that's true when we specify the model.
 
@@ -2821,9 +2867,7 @@ We will load the \texttt{tidyverse} package to work with tibbles, the \texttt{br
 \hypertarget{multiple-model}{%
 \section{The multiple regression model}\label{multiple-model}}
 
-This chapter is an extension of all the ideas established in the \protect\hyperlink{simple}{last chapter}. Even if you have seen regression before reading this book, be sure to read and study the last chapter and this chapter thoroughly. If nothing else, you need to be comfortable with the notation and terminology established here. But we will also take special care to motivate and justify all the calculations that are taken for granted in some treatments of regression. This framework will be important as we move into mediation and path analysis in the next few chapters. If you are comfortable with the content of this chapter, there won't be much ``new'' to say about mediation and path analysis more generally.
-
-Multiple regression is like simple regression, but with more exogenous variables. There will still be only one endogenous variable. Although the archetype illustrated at the beginning of the chapter has three predictor variables, we will start with only two predictor variables to keep things simple. If you understand what happens with two variables, it's fairly straightforward to generalize that knowledge to three or more predictors. The logic is the same.
+This chapter is an extension of all the ideas established in the \protect\hyperlink{simple}{last chapter}. Multiple regression is like simple regression, but with more exogenous variables. There will still be only one endogenous variable. Although the archetype illustrated at the beginning of the chapter has three predictor variables, we will start with only two predictor variables to keep things simple. If you understand what happens with two variables, it's fairly straightforward to generalize that knowledge to three or more predictors. The logic is the same.
 
 Here is a multiple regression model with two predictors and with all paths given parameter labels:
 
@@ -3547,6 +3591,25 @@ This is the same thing, but with standardized parameter estimates:
 
 \hypertarget{mediation}{%
 \chapter{Mediation}\label{mediation}}
+
+\begin{center}\includegraphics{graphics/mediation} \end{center}
+
+\hypertarget{preliminaries-2}{%
+\section*{Preliminaries}\label{preliminaries-2}}
+\addcontentsline{toc}{section}{Preliminaries}
+
+We will load the \texttt{tidyverse} package to work with tibbles and \texttt{lavaan}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(broom)}
+\FunctionTok{library}\NormalTok{(lavaan)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{mediation-simple}{%
+\section{The simple mediation model}\label{mediation-simple}}
 
 \hypertarget{path}{%
 \chapter{Path analysis}\label{path}}

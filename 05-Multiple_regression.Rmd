@@ -18,9 +18,7 @@ library(lavaan)
 
 ## The multiple regression model {#multiple-model}
 
-This chapter is an extension of all the ideas established in the [last chapter](#simple). Even if you have seen regression before reading this book, be sure to read and study the last chapter and this chapter thoroughly. If nothing else, you need to be comfortable with the notation and terminology established here. But we will also take special care to motivate and justify all the calculations that are taken for granted in some treatments of regression. This framework will be important as we move into mediation and path analysis in the next few chapters. If you are comfortable with the content of this chapter, there won't be much "new" to say about mediation and path analysis more generally.
-
-Multiple regression is like simple regression, but with more exogenous variables. There will still be only one endogenous variable. Although the archetype illustrated at the beginning of the chapter has three predictor variables, we will start with only two predictor variables to keep things simple. If you understand what happens with two variables, it's fairly straightforward to generalize that knowledge to three or more predictors. The logic is the same.
+This chapter is an extension of all the ideas established in the [last chapter](#simple). Multiple regression is like simple regression, but with more exogenous variables. There will still be only one endogenous variable. Although the archetype illustrated at the beginning of the chapter has three predictor variables, we will start with only two predictor variables to keep things simple. If you understand what happens with two variables, it's fairly straightforward to generalize that knowledge to three or more predictors. The logic is the same.
 
 Here is a multiple regression model with two predictors and with all paths given parameter labels:
 

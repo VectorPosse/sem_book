@@ -16,6 +16,7 @@ covariance-correlation
 covariance-standardized
 covariance-visualizing
 simple
+simple-advice
 simple-prediction
 simple-terminology
 simple-model
