@@ -36,7 +36,6 @@ Var\left(X_{1} - X_{2}\right) =
 Var\left(X_{1}\right) + Var\left(X_{2}\right)
 $$
 
-
 -  [**Rule 4**](./variance.html#Rule4)
 
 If $a$ is any number, 
@@ -44,7 +43,11 @@ If $a$ is any number,
 $$
 Var\left(aX\right) = a^2 Var\left(X\right)
 $$
+Related to this rule is the corresponding one for standard deviations:
 
+$$
+SD\left(aX\right) = \left| a \right| SD\left(X\right)
+$$
 
 -  [**Rule 5**](./covariance.html#Rule5)
 
