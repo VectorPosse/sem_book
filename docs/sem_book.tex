@@ -757,6 +757,23 @@ SD\left(X_{1}\right)^{2} + SD\left(X_{2}\right)^{2}
 \]
 But, eww, that's gross.
 
+The constant multiple rule works out nice, though.
+
+For any number \(a\), what is \(SD(aX)\)? Finish the following calculation until you can simplify it and get back something involving just \(SD(X)\):
+
+\begin{align}
+SD(aX)  &= \sqrt{Var(aX)} \\
+        &= \quad ???
+\end{align}
+
+Be careful! What happens if \(a\) is a negative number? Standard deviations (like variances) should always be non-negative.
+
+A convenient way to express the fact that the coefficient will always come out positive is the following:
+
+\[
+SD(aX) = \left| a \right| SD(X)
+\]
+
 For SEM, we will focus almost exclusively on variance and switch to standard deviation for only two reasons:
 
 \begin{enumerate}
@@ -831,7 +848,9 @@ After we've mean centered the data, we can go one step further and divide by the
 Z = \frac{\left(X - \overline{X}\right)}{SD(X)}
 \]
 
-Why is this useful? One reason is that it remove the units of measurement to facilitate comparisons between variables. Suppose \(X\) represents height in inches. The numerator (\(X - \overline{X}\)) has units of inches. The standard deviation \(SD(X)\) also has units of inches. So when you divide, the units go away and the z-score is left without units, sometimes called a ``dimensionless quantity''.
+What happens if you try to standardize a variable that is constant? (Hint: think about the denominator of the fraction defining the z-score.)
+
+Why is it useful to standardize variables? One reason is that it remove the units of measurement to facilitate comparisons between variables. Suppose \(X\) represents height in inches. The numerator (\(X - \overline{X}\)) has units of inches. The standard deviation \(SD(X)\) also has units of inches. So when you divide, the units go away and the z-score is left without units, sometimes called a ``dimensionless quantity''.
 
 Suppose a female in the United States is 6 feet tall (72 inches). Suppose a female in China is 5'8 tall (68 inches). In absolute terms, the American woman is taller than the Chinese woman. But what if we're interested in knowing which woman is taller \emph{relative} to their respective population?
 

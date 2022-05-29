@@ -544,6 +544,19 @@ SD\left(X_{1}\right)^{2} + SD\left(X_{2}\right)^{2}
 }
 \]</span>
 But, eww, that’s gross.</p>
+<p>The constant multiple rule works out nice, though.</p>
+<div class="rmdnote">
+<p>For any number <span class="math inline">\(a\)</span>, what is <span class="math inline">\(SD(aX)\)</span>? Finish the following calculation until you can simplify it and get back something involving just <span class="math inline">\(SD(X)\)</span>:</p>
+<p><span class="math display">\[\begin{align}
+SD(aX)  &amp;= \sqrt{Var(aX)} \\
+        &amp;= \quad ???
+\end{align}\]</span></p>
+<p>Be careful! What happens if <span class="math inline">\(a\)</span> is a negative number? Standard deviations (like variances) should always be non-negative.</p>
+</div>
+<p>A convenient way to express the fact that the coefficient will always come out positive is the following:</p>
+<p><span class="math display">\[
+SD(aX) = \left| a \right| SD(X)
+\]</span></p>
 <p>For SEM, we will focus almost exclusively on variance and switch to standard deviation for only two reasons:</p>
 <ol style="list-style-type: decimal">
 <li>We need to communicate something about spread in meaningful units.</li>
@@ -585,7 +598,10 @@ But, eww, that’s gross.</p>
 <p><span class="math display">\[
 Z = \frac{\left(X - \overline{X}\right)}{SD(X)}
 \]</span></p>
-<p>Why is this useful? One reason is that it remove the units of measurement to facilitate comparisons between variables. Suppose <span class="math inline">\(X\)</span> represents height in inches. The numerator (<span class="math inline">\(X - \overline{X}\)</span>) has units of inches. The standard deviation <span class="math inline">\(SD(X)\)</span> also has units of inches. So when you divide, the units go away and the z-score is left without units, sometimes called a “dimensionless quantity”.</p>
+<div class="rmdnote">
+<p>What happens if you try to standardize a variable that is constant? (Hint: think about the denominator of the fraction defining the z-score.)</p>
+</div>
+<p>Why is it useful to standardize variables? One reason is that it remove the units of measurement to facilitate comparisons between variables. Suppose <span class="math inline">\(X\)</span> represents height in inches. The numerator (<span class="math inline">\(X - \overline{X}\)</span>) has units of inches. The standard deviation <span class="math inline">\(SD(X)\)</span> also has units of inches. So when you divide, the units go away and the z-score is left without units, sometimes called a “dimensionless quantity”.</p>
 <div class="rmdnote">
 <p>Suppose a female in the United States is 6 feet tall (72 inches). Suppose a female in China is 5’8 tall (68 inches). In absolute terms, the American woman is taller than the Chinese woman. But what if we’re interested in knowing which woman is taller <em>relative</em> to their respective population?</p>
 <p>The mean height for an American woman is 65” with a standard deviation of 3.5” The mean height for a Chinese woman is 62” with a standard deviation of 2.5”. (These numbers aren’t perfectly correct, but they’re probably close-ish.)</p>
