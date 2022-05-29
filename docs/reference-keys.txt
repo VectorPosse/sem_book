@@ -39,6 +39,11 @@ multiple-r
 multiple-r-lm
 multiple-r-lavaan
 mediation
+mediation-paths
+mediation-exogenous-endogenous
+mediation-mediators
+mediation-confounders
+mediation-colliders
 mediation-simple
 path
 latent

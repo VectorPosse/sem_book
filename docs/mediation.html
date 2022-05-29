@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 6 Mediation | Demystifying Structural Equation Modeling</title>
 <meta name="author" content="Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)">
-<meta name="description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(broom) library(lavaan)  6.1 The simple mediation model">
+<meta name="description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(lavaan)  6.1 Mediators, confounders, and colliders To start off, let’s look at all...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Chapter 6 Mediation | Demystifying Structural Equation Modeling">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://vectorposse.github.io/sem_book/mediation.html">
-<meta property="og:description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(broom) library(lavaan)  6.1 The simple mediation model">
+<meta property="og:description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(lavaan)  6.1 Mediators, confounders, and colliders To start off, let’s look at all...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 6 Mediation | Demystifying Structural Equation Modeling">
-<meta name="twitter:description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(broom) library(lavaan)  6.1 The simple mediation model">
+<meta name="twitter:description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(lavaan)  6.1 Mediators, confounders, and colliders To start off, let’s look at all...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -77,12 +77,83 @@
 <p>We will load the <code>tidyverse</code> package to work with tibbles and <code>lavaan</code>.</p>
 <div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be">lavaan</a></span><span class="op">)</span></code></pre></div>
 </div>
-<div id="mediation-simple" class="section level2" number="6.1">
+<div id="mediation-paths" class="section level2" number="6.1">
 <h2>
-<span class="header-section-number">6.1</span> The simple mediation model<a class="anchor" aria-label="anchor" href="#mediation-simple"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.1</span> Mediators, confounders, and colliders<a class="anchor" aria-label="anchor" href="#mediation-paths"><i class="fas fa-link"></i></a>
+</h2>
+<p>To start off, let’s look at all possible paths that connect three variables with two arrows. (For the moment, we’ll leave out variances, covariances, and error terms.)</p>
+<div class="inline-figure"><img src="graphics/mediator_right.png" width="440" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="graphics/mediator_left.png" width="440" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="graphics/confounder.png" width="440" style="display: block; margin: auto;"></div>
+<div class="inline-figure"><img src="graphics/collider.png" width="440" style="display: block; margin: auto;"></div>
+<p>The second model is just a copy of the first model reversed, so we can disregard it. The other three models are genuinely distinct models with somewhat different consequences for the relationship among the three variables. The first part of this chapter will make these distinctions clear.</p>
+</div>
+<div id="mediation-exogenous-endogenous" class="section level2" number="6.2">
+<h2>
+<span class="header-section-number">6.2</span> Exogenous and endogenous variables<a class="anchor" aria-label="anchor" href="#mediation-exogenous-endogenous"><i class="fas fa-link"></i></a>
+</h2>
+<p>In the first model above, the middle variable is called a <em>mediator</em>. It’s clear that the variable on the left is exogenous and the variable on the right is endogenous. What is the middle variable, exogenous or endogenous?</p>
+<p>Here we give a more specific definition of these two terms:</p>
+<div class="rmdimportant">
+<p>An <em>exogenous</em> variable is one that has no unidirectional arrows (so not counting double-headed arrows) entering it in the model diagram. It has only unidirectional arrows leaving it.</p>
+<p>An <em>endogenous</em> variable is one that has at least one unidirectional arrow entering it (again, not counting double-headed arrows). It may have other unidirectional arrows both entering and/or leaving.</p>
+</div>
+<ul>
+<li><p>The prefix <em>exo-</em> means “outside”. So whatever variability there is in an exogenous variable must come from “outside” the model. There are no unidirectional arrows coming in, so there is nothing in the model to account for its variance, or, for that matter, its covariance with other exogenous variables.</p></li>
+<li><p>The prefix <em>endo-</em> means “within”. The variability of endogenous variables is accounted for by other variables (including error terms) inside the model. The fact that there might be arrows leaving endogenous variables is irrelevant for this definition. It’s only about arrows coming in.</p></li>
+</ul>
+<div class="rmdnote">
+<p>According to the definition above, is a mediating variable exogenous or endogenous?</p>
+</div>
+<p>Here are the three Really Important Rules (RIR™) for using exogenous and endogenous variables in models:</p>
+<div class="rmdimportant">
+<ul>
+<li><p>Every exogenous variable in a model requires a double-headed arrow pointing to itself, representing its variance.</p></li>
+<li><p>Every pair of exogenous variables in a model requires a double-headed arrow joining them, representing their covariance.</p></li>
+<li><p>Every endogenous variable in a model requires an error term.</p></li>
+</ul>
+</div>
+<p>These three rules have important justifications. Don’t just memorize the rules blindly. Understand why they are imperative.</p>
+<ul>
+<li><p>Exogenous variables vary, but the source of their variance is not in the model. (That’s what makes them exogenous.) Therefore, we have to represent their variance “manually” in the model by indicating it with a double-headed arrow.</p></li>
+<li><p>Pairs of exogenous variables co-vary. The source of that covariance is not in the model, so we have to represent it “manually” by indicating it with a double-headed arrow.</p></li>
+<li><p>Endogenous variables vary, but the model is supposed to account for that variance. Some of that accounting happens through arrows coming in, but the model will never be able to explain 100% of the variance of an endogenous variable just using other variables in the model. There will always be residuals, so these residuals have to be represented “manually” in the model using error terms.</p></li>
+</ul>
+</div>
+<div id="mediation-mediators" class="section level2" number="6.3">
+<h2>
+<span class="header-section-number">6.3</span> Mediators<a class="anchor" aria-label="anchor" href="#mediation-mediators"><i class="fas fa-link"></i></a>
+</h2>
+<p>Let’s name our variables. Generally, we’ll follow the convention of naming exogenous variables using <span class="math inline">\(X\)</span> and endogenous variables using <span class="math inline">\(Y\)</span>. (When we model real-world data, we’ll use contextually meaningful names.)</p>
+<p>We’ll need another convention to label the parameters along the paths of the model:</p>
+<ul>
+<li><p>Thick arrows between an exogenous variable <span class="math inline">\(X_{i}\)</span> and an endogenous variable <span class="math inline">\(Y_{j}\)</span> will be called <span class="math inline">\(b_{ji}\)</span>. Note the order of the subscripts. We always start with the subscript of the target variable and end with the subscript of the predictor.</p></li>
+<li><p>Thick arrows between an endogenous variable <span class="math inline">\(Y_{i}\)</span> and another endogenous variable <span class="math inline">\(Y_{j}\)</span> will be called <span class="math inline">\(a_{ji}\)</span>.</p></li>
+</ul>
+<div class="rmdnote">
+<p>Why do we not need a naming convention for thick arrows between two exogenous variables?</p>
+</div>
+<p>Let’s also include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable <span class="math inline">\(X_{1}\)</span> and error terms for the two endogenous variables <span class="math inline">\(Y_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span>.</p>
+<div class="inline-figure"><img src="graphics/mediator_vars.png" width="440" style="display: block; margin: auto;"></div>
+<div class="rmdnote">
+<p>Why did we not include any covariances in the model above?</p>
+</div>
+</div>
+<div id="mediation-confounders" class="section level2" number="6.4">
+<h2>
+<span class="header-section-number">6.4</span> Confounders<a class="anchor" aria-label="anchor" href="#mediation-confounders"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="mediation-colliders" class="section level2" number="6.5">
+<h2>
+<span class="header-section-number">6.5</span> Colliders<a class="anchor" aria-label="anchor" href="#mediation-colliders"><i class="fas fa-link"></i></a>
+</h2>
+</div>
+<div id="mediation-simple" class="section level2" number="6.6">
+<h2>
+<span class="header-section-number">6.6</span> The simple mediation model<a class="anchor" aria-label="anchor" href="#mediation-simple"><i class="fas fa-link"></i></a>
 </h2>
 
 </div>
@@ -95,7 +166,12 @@
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#mediation"><span class="header-section-number">6</span> Mediation</a></li>
 <li><a class="nav-link" href="#preliminaries-2">Preliminaries</a></li>
-<li><a class="nav-link" href="#mediation-simple"><span class="header-section-number">6.1</span> The simple mediation model</a></li>
+<li><a class="nav-link" href="#mediation-paths"><span class="header-section-number">6.1</span> Mediators, confounders, and colliders</a></li>
+<li><a class="nav-link" href="#mediation-exogenous-endogenous"><span class="header-section-number">6.2</span> Exogenous and endogenous variables</a></li>
+<li><a class="nav-link" href="#mediation-mediators"><span class="header-section-number">6.3</span> Mediators</a></li>
+<li><a class="nav-link" href="#mediation-confounders"><span class="header-section-number">6.4</span> Confounders</a></li>
+<li><a class="nav-link" href="#mediation-colliders"><span class="header-section-number">6.5</span> Colliders</a></li>
+<li><a class="nav-link" href="#mediation-simple"><span class="header-section-number">6.6</span> The simple mediation model</a></li>
 </ul>
 
       <div class="book-extra">
