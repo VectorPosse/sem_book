@@ -46,7 +46,7 @@ The first part of this chapter will make these distinctions clear.
 
 ## Exogenous and endogenous variables {#mediation-exogenous-endogenous}
 
-Look at the first model above. It's clear that the variable on the left is exogenous and the variable on the right is endogenous. What is the middle variable, exogenous or endogenous?
+Look at the first model above. It's clear that the variable on the left is exogenous and the variable on the right is endogenous. The middle variable is called a *mediator*. Is it exogenous or endogenous?
 
 Here we give a more specific definition of these two terms:
 
@@ -64,29 +64,41 @@ An *endogenous* variable is one that has at least one unidirectional arrow enter
 
 ::: {.rmdnote}
 
-According to the definition above, is a mediating variable exogenous or endogenous?
+According to the definition above, is a mediator exogenous or endogenous?
 
 :::
 
-Here are the three Really Important Rules (RIR&trade;) for using exogenous and endogenous variables in models:
+Here are the Really Important Rules (RIR&trade;) for using exogenous and endogenous variables in models. They come in three pairs:
 
 ::: {.rmdimportant}
 
-* Every exogenous variable in a model requires a double-headed arrow pointing to itself, representing its variance.
+* Rule 1:
+    * Every exogenous variable in a model requires a double-headed arrow pointing to itself, representing its variance.
+    * No endogenous variable should have a double-headed arrow pointing to itself.
 
-* Every pair of exogenous variables in a model requires a double-headed arrow joining them, representing their covariance.
-
-* Every endogenous variable in a model requires an error term.
+* Rule 2:
+    * Every pair of exogenous variables in a model---except error terms---requires a double-headed arrow joining them, representing their covariance.
+    * No other pair of variables in a model (between exogenous and endogenous, or between endogenous) should have a double-headed arrow joining them.
+    
+* Rule 3:
+    * Every endogenous variable in a model requires an error term.
+    * No exogenous variable in a model should have an error term.
 
 :::
 
-These three rules have important justifications. Don't just memorize the rules blindly. Understand why they are imperative.
+These six rules have important justifications. Don't just memorize the rules blindly. Understand why they are imperative.
 
-* Exogenous variables vary, but the source of their variance is not in the model. (That's what makes them exogenous.) Therefore, we have to represent their variance "manually" in the model by indicating it with a double-headed arrow.
+* Rule 1:
+    * Exogenous variables vary, but the source of their variance is not in the model. (That's what makes them exogenous.) Therefore, we have to represent their variance "manually" in the model by indicating it with a double-headed arrow.
+    * On the other hand, the variance of endogenous variables is accounted for by other variables in the model already, so it doesn't need a separate parameter representing its variance.
 
-* Pairs of exogenous variables co-vary. The source of that covariance is not in the model, so we have to represent it "manually" by indicating it with a double-headed arrow.
+* Rule 2:
+    * Pairs of exogenous variables co-vary. The source of that covariance is not in the model, so we have to represent it "manually" by indicating it with a double-headed arrow. Error terms are the exception to this rule. While it's possible that error terms can co-vary, that usually isn't sensible for most models. A future chapter [LINK] will cover how and when error terms can be correlated, but it should never be the default assumption of the model.
+    * Covariances between other types of variables (exogenous to endogenous, or endogenous to endogenous) are consequences of the other arrows in the diagram that create direct and indirect paths among the variables, so their covariance is not separately drawn as a double-headed arrow.
 
-* Endogenous variables vary, but the model is supposed to account for that variance. Some of that accounting happens through arrows coming in, but the model will never be able to explain 100\% of the variance of an endogenous variable just using other variables in the model. There will always be residuals, so these residuals have to be represented "manually" in the model using error terms.
+* Rule 3:
+    * While the model is supposed to account for the variance of endogenous variables through incoming arrows, it will never be able to explain 100\% of that variance just using other variables in the model. There will always be residuals, so these residuals have to be represented "manually" in the model using error terms.
+    * Exogenous variables are assumed to be measured without error. While that assumption is not always very realistic in the real world, we don't have much of a choice. By their very definition, the variance of exogenous variable isn't accounted for by anything else in the model, so error terms just don't make any sense for them.
 
 
 ## Mediators {#mediation-mediators}
@@ -97,13 +109,26 @@ Let's revisit the first model (of the four shown earlier):
 knitr::include_graphics("graphics/mediator_right.png")
 ```
 
-We need to name our variables. Generally, we'll follow the convention of naming exogenous variables using $X$ and endogenous variables using $Y$. (When we model real-world data, we'll use contextually meaningful names.)
+::: {.rmdnote}
 
-We'll need another convention to label the parameters along the paths of the model:
+Draw this model on your own piece of paper. Following the rules above, draw in all variances, covariances, or error terms that should be present in the diagram. (Don't worry about labeling anything with letters yet. Just draw the arrows and the circles.)
 
-* Thick arrows between an exogenous variable $X_{i}$ and an endogenous variable $Y_{j}$ will be called $b_{ji}$. Note the order of the subscripts. We always start with the subscript of the target variable and end with the subscript of the predictor.
+:::
 
-* Thick arrows between an endogenous variable $Y_{i}$ and another endogenous variable $Y_{j}$ will be called $a_{ji}$.
+We need to establish some conventions for naming things.
+
+* We need to name our variables. When we model real-world data, we'll use contextually meaningful names, but for abstract models we draw, we need a consistent way of labeling them.
+    * Exogenous variables will be called $X_{i}$ (using numbers as subscripts).
+    * Endogenous variables will be called $Y_{i}$ (also using numbers as subscripts).
+    * Error terms will be called $E_{i}$ with its subscript matching the one on the endogenous variable to which it's attached.
+
+* We need to label the parameters along the various paths of the model:
+    * Variances will be called $v_{i}$ and the subscript will match the exogenous variables $X_{i}$ to which they're attached.
+    * Error variances will be called $e_{i}$ and the subscript will match the error terms $E_{i}$ to which they're attached.
+    * Covariances will be called $c_{ij}$ connecting exogenous variables $X_{i}$ and $X_{j}$. (Since covariance is symmetric, it could also be called $c_{ji}$.)
+    * Unidirectional arrows from error terms to their corresponding endogenous variables will always be fixed parameters labeled with "1".
+    * Thick unidirectional arrows between an exogenous variable $X_{i}$ and an endogenous variable $Y_{j}$ will be called $b_{ji}$. Note the order of the subscripts: we always start with the subscript of the target variable and end with the subscript of the predictor.
+    * Thick unidirectional arrows between an endogenous variable $Y_{i}$ and another endogenous variable $Y_{j}$ will be called $a_{ji}$.
 
 ::: {.rmdnote}
 
@@ -111,9 +136,7 @@ Why do we not need a naming convention for thick arrows between two exogenous va
 
 :::
 
-Let's also include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable $X_{1}$ and error terms for the two endogenous variables $Y_{1}$ and $Y_{2}$.
-
-Here is the finished product:
+Let's now include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable $X_{1}$ and error terms for the two endogenous variables $Y_{1}$ and $Y_{2}$ along with labels for everything.
 
 ```{r, echo = FALSE, fig.align= "center"}
 knitr::include_graphics("graphics/mediator_vars.png")
