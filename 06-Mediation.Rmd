@@ -127,8 +127,8 @@ We need to establish some conventions for naming things.
     * Error variances will be called $e_{i}$ with subscripts matching the error terms $E_{i}$ to which they're attached.
     * Covariances will be called $c_{ij}$ connecting exogenous variables $X_{i}$ and $X_{j}$. (Since covariance is symmetric, it could also be called $c_{ji}$.)
     * Unidirectional arrows from error terms to their corresponding endogenous variables will always be fixed parameters labeled with "1".
-    * Thick unidirectional arrows between an exogenous variable $X_{i}$ and an endogenous variable $Y_{j}$ will be called $b_{ji}$. Note the order of the subscripts: we always start with the subscript of the target variable and end with the subscript of the predictor.
-    * Thick unidirectional arrows between an endogenous variable $Y_{i}$ and another endogenous variable $Y_{j}$ will be called $a_{ji}$.
+    * Thick, unidirectional arrows between an exogenous variable $X_{i}$ and an endogenous variable $Y_{j}$ will be called $b_{ji}$. Note the order of the subscripts: we always start with the subscript of the target variable and end with the subscript of the predictor.
+    * Thick, unidirectional arrows between an endogenous variable $Y_{i}$ and another endogenous variable $Y_{j}$ will be called $a_{ji}$.
 
 ::: {.rmdnote}
 
