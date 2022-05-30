@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 6 Mediation | Demystifying Structural Equation Modeling</title>
 <meta name="author" content="Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)">
-<meta name="description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(lavaan)  6.1 Mediators, confounders, and colliders To start off, let’s look at all...">
+<meta name="description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(lavaan)  6.1 Arrows going everywhere! To start off, let’s look at all possible paths...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Chapter 6 Mediation | Demystifying Structural Equation Modeling">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://vectorposse.github.io/sem_book/mediation.html">
-<meta property="og:description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(lavaan)  6.1 Mediators, confounders, and colliders To start off, let’s look at all...">
+<meta property="og:description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(lavaan)  6.1 Arrows going everywhere! To start off, let’s look at all possible paths...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 6 Mediation | Demystifying Structural Equation Modeling">
-<meta name="twitter:description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(lavaan)  6.1 Mediators, confounders, and colliders To start off, let’s look at all...">
+<meta name="twitter:description" content="Preliminaries We will load the tidyverse package to work with tibbles and lavaan. library(tidyverse) library(lavaan)  6.1 Arrows going everywhere! To start off, let’s look at all possible paths...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -79,9 +79,9 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lavaan.ugent.be">lavaan</a></span><span class="op">)</span></code></pre></div>
 </div>
-<div id="mediation-paths" class="section level2" number="6.1">
+<div id="mediation-arrows" class="section level2" number="6.1">
 <h2>
-<span class="header-section-number">6.1</span> Mediators, confounders, and colliders<a class="anchor" aria-label="anchor" href="#mediation-paths"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.1</span> Arrows going everywhere!<a class="anchor" aria-label="anchor" href="#mediation-arrows"><i class="fas fa-link"></i></a>
 </h2>
 <p>To start off, let’s look at all possible paths that connect three variables with two arrows. (For the moment, we’ll leave out variances, covariances, and error terms.)</p>
 <div class="inline-figure"><img src="graphics/mediator_right.png" width="440" style="display: block; margin: auto;"></div>
@@ -113,22 +113,25 @@
 <div class="rmdnote">
 <p>According to the definition above, is a mediator exogenous or endogenous?</p>
 </div>
-<p>Here are the Really Important Rules (RIR™) for using exogenous and endogenous variables in models. They come in three pairs:</p>
+<p>Here are the Really Important Rules (RIR™) for working with exogenous and endogenous variables in models. They come in three pairs:</p>
 <div class="rmdimportant">
 <ul>
-<li>Rule 1:
+<li>
+<strong>Rule 1:</strong>
 <ul>
 <li>Every exogenous variable in a model requires a double-headed arrow pointing to itself, representing its variance.</li>
 <li>No endogenous variable should have a double-headed arrow pointing to itself.</li>
 </ul>
 </li>
-<li>Rule 2:
+<li>
+<strong>Rule 2:</strong>
 <ul>
 <li>Every pair of exogenous variables in a model—except error terms—requires a double-headed arrow joining them, representing their covariance.</li>
 <li>No other pair of variables in a model (between exogenous and endogenous, or between endogenous) should have a double-headed arrow joining them.</li>
 </ul>
 </li>
-<li>Rule 3:
+<li>
+<strong>Rule 3:</strong>
 <ul>
 <li>Every endogenous variable in a model requires an error term.</li>
 <li>No exogenous variable in a model should have an error term.</li>
@@ -138,19 +141,22 @@
 </div>
 <p>These rules have important justifications. Don’t just memorize the rules blindly. Understand why they are imperative.</p>
 <ul>
-<li>Rule 1:
+<li>
+<strong>Rule 1:</strong>
 <ul>
 <li>Exogenous variables vary, but the source of their variance is not in the model. (That’s what makes them exogenous.) Therefore, we have to represent their variance “manually” in the model by indicating it with a double-headed arrow.</li>
 <li>On the other hand, the variance of endogenous variables is accounted for by other variables in the model already, so it doesn’t need a separate parameter representing its variance.</li>
 </ul>
 </li>
-<li>Rule 2:
+<li>
+<strong>Rule 2:</strong>
 <ul>
 <li>Pairs of exogenous variables co-vary. The source of that covariance is not in the model, so we have to represent it “manually” by indicating it with a double-headed arrow. Error terms are the exception to this rule. While it’s possible that error terms can co-vary, that usually isn’t sensible for most models. A future chapter [LINK] will cover how and when error terms can be correlated, but it should never be the default assumption of the model.</li>
 <li>Covariances between other types of variables (exogenous to endogenous, or endogenous to endogenous) are consequences of the other arrows in the diagram that create direct and indirect paths among the variables, so their covariance is not separately drawn as a double-headed arrow.</li>
 </ul>
 </li>
-<li>Rule 3:
+<li>
+<strong>Rule 3:</strong>
 <ul>
 <li>While the model is supposed to account for the variance of endogenous variables through incoming arrows, it will never be able to explain 100% of that variance just using other variables in the model. There will always be residuals, so these residuals have to be represented “manually” in the model using error terms.</li>
 <li>Exogenous variables are assumed to be measured without error. While that assumption is not always very realistic in the real world, we don’t have much of a choice. By their very definition, the variance of exogenous variable isn’t accounted for by anything else in the model, so error terms just don’t make any sense for them.</li>
@@ -195,11 +201,109 @@
 <h2>
 <span class="header-section-number">6.4</span> Mediators<a class="anchor" aria-label="anchor" href="#mediation-mediators"><i class="fas fa-link"></i></a>
 </h2>
-<p>With all the rules in place for our diagrams, we can now revisit the model from above, but now, let’s include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable <span class="math inline">\(X_{1}\)</span> and error terms for the two endogenous variables <span class="math inline">\(Y_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span> along with labels for everything.</p>
+<p>With all the rules in place for our diagrams, we can now revisit the model from above, but now, let’s include all the extra bits of the model required by the aforementioned rules: a variance term for the exogenous variable <span class="math inline">\(X_{1}\)</span>, error terms for the two endogenous variables <span class="math inline">\(Y_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span>, and parameter labels for everything.</p>
 <div class="inline-figure"><img src="graphics/mediator_vars.png" width="440" style="display: block; margin: auto;"></div>
 <div class="rmdnote">
 <p>Why did we not include any covariances in the model above?</p>
 </div>
+<p>Since there are two endogenous variables present in this model, there are two regression equations we have to write down:</p>
+<p><span class="math display">\[\begin{align}
+Y_{1} &amp;= b_{11}X_{1} + E_{1}        \\
+Y_{2} &amp;= a_{21}Y_{1} + E_{2}
+\end{align}\]</span></p>
+<p>The sample covariance matrix will look like</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+Var(X_{1})          &amp;   \bullet             &amp;   \bullet \\
+Cov(Y_{1}, X_{1})   &amp;   Var(Y_{1})          &amp;   \bullet \\
+Cov(Y_{2}, X_{1})   &amp;   Cov(Y_{2}, Y_{1})   &amp;   Var(Y_{2})
+\end{bmatrix}
+\]</span></p>
+<div class="rmdnote">
+<p>When working through covariance calculations in the past chapters, we’ve seen lots of terms pop out of the form <span class="math inline">\(Cov(E, X)\)</span>. We’ve gotten used to canceling these terms because they are zero. (Why must they be zero?)</p>
+<p>In this model, some of the covariance calculations will result in terms of the form <span class="math inline">\(Cov(E, Y)\)</span>. These will not necessarily cancel, so we need to be more cautious.</p>
+<p>Calculate <span class="math inline">\(Cov(E_{1}, Y_{1})\)</span> for the model above by substituting the regression equation <span class="math inline">\(Y_{1} = b_{11}X_{1} + E_{1}\)</span>. You should get <span class="math inline">\(e_{1}\)</span> (and <em>not</em> zero).</p>
+<p>Without doing any calculations, why would we also expect <span class="math inline">\(Cov(E_{1}, Y_{2})\)</span> to be non-zero? (Hint: how are <span class="math inline">\(E_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span> connected in the diagram?)</p>
+<p>On the other hand, why would we expect <span class="math inline">\(Cov(E_{1}, E_{2})\)</span> to be zero in general? (Hint: look back to Really Important Rule 2 above.)</p>
+<p>Finally, we <em>will</em> expect <span class="math inline">\(Cov(E_{2}, Y_{1})\)</span> to be zero. Why? If you’re stuck, go ahead and do the calculation to confirm.</p>
+</div>
+<div class="rmdnote">
+<p>Calculate the full model-implied matrix. You should get the following:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+v_{1}   &amp;   \bullet &amp;  \bullet  \\
+b_{11}v_{1}  &amp;   b_{11}^{2}v_{1} + e_{1}   &amp;  \bullet \\
+a_{21}b_{11}v_{1}  &amp;  a_{21}b_{11}^{2}v_{1} + a_{21}e_{1}  &amp;   a_{21}^{2}b_{11}^{2}v_{1} + a_{21}^2e_{1} + e_{2}
+\end{bmatrix}
+\]</span></p>
+<p>If this is too tedious and time-consuming, just pick one or two of these entries to compute.</p>
+</div>
+<p>If we standardize our variables, the sample covariance matrix (which is now a correlation matrix) is</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1                   &amp;   \bullet             &amp;   \bullet \\
+Corr(Y_{1}, X_{1})  &amp;   1                   &amp;   \bullet \\
+Corr(Y_{2}, X_{1})  &amp;   Corr(Y_{2}, Y_{1})   &amp;   1
+\end{bmatrix}
+\]</span>
+We’ve switched to using <span class="math inline">\(Corr\)</span> instead of using the letter <span class="math inline">\(r\)</span> for this exercise. That’s because <span class="math inline">\(r_{Y_{1}X_{1}}\)</span>, <span class="math inline">\(r_{Y_{2}X_{1}}\)</span>, and <span class="math inline">\(r_{Y_{2}Y_{1}}\)</span> have subscripts inside of subscripts and are hard to read and process.</p>
+<div class="rmdnote">
+<p>Setting the correlation matrix equal to the model-implied matrix above, we get
+<span class="math display">\[
+v_{1} = 1
+\]</span>
+pretty much for free.</p>
+<p>Now solve for <span class="math inline">\(b_{11}\)</span> and <span class="math inline">\(e_{1}\)</span> next using the two terms in the second row of the matrix. You should get:</p>
+<p><span class="math display">\[\begin{align}
+b_{11}  &amp;= Corr(X_{1}, Y_{1})       \\
+e_{1}   &amp;= 1 - Corr(Y_{1}, X_{1})^{2}
+\end{align}\]</span></p>
+<p>Why is this not surprising? (Hint: if you ignore <span class="math inline">\(Y_{2}\)</span> altogether and only pay attention to relationships between <span class="math inline">\(X_{1}\)</span>, <span class="math inline">\(Y_{1}\)</span>, and <span class="math inline">\(E_{1}\)</span>, what kind of model is this?)</p>
+</div>
+<p>The parameter <span class="math inline">\(a_{21}\)</span> is interesting. The equation implied by the lower-left element of the matrix—corresponding to <span class="math inline">\(Corr(Y_{2}, X_{1})\)</span>—is</p>
+<p><span class="math display">\[\begin{align}
+Corr(Y_{2}, X_{1})  &amp;= a_{21}b_{11}v_{1}        \\
+                    &amp;= a_{21}Corr(Y_{1}, X_{1})
+\end{align}\]</span></p>
+<p>Solving for <span class="math inline">\(a_{21}\)</span>:</p>
+<p><span class="math display">\[
+a_{21} = \frac{Corr(Y_{2}, X_{1})}{Corr(Y_{1}, X_{1})}
+\]</span></p>
+<p>On the other hand, the equation implied by the center element on the bottom row of the matrix—corresponding to <span class="math inline">\(Corr(Y_{2}, Y_{1})\)</span>—is</p>
+<p><span class="math display">\[\begin{align}
+Corr(Y_{2}, Y_{1})
+    &amp;= a_{21}b_{11}^{2}v_{1} + a_{21}e_{1}  \\
+    &amp;= a_{21}Corr(Y_{1}, X_{1})^{2} +
+        a_{21}\left( 1 - Corr(Y_{1}, X_{1})^{2} \right) \\
+    &amp;= a_{21}Corr(Y_{1}, X_{1})^{2} +
+        a_{21} - a_{21}Corr(Y_{1}, X_{1})^{2}       \\
+    &amp;= a_{21}
+\end{align}\]</span></p>
+<p>So we get two different answers for <span class="math inline">\(a_{21}\)</span>!</p>
+<div class="rmdnote">
+<p>Use <span class="math inline">\(a_{21} = Corr(Y_{2}, Y_{1})\)</span> along with everything else you’ve learned to solve for <span class="math inline">\(e_{2}\)</span> using the equation in the lower-right corner of the matrix. (This is the only one we can use because it’s the only term involving <span class="math inline">\(e_{2}\)</span>!)</p>
+<p>It may look ugly, but you might be surprised at the simplicity of the answer that pops out. You should get
+<span class="math display">\[
+e_{2} = 1 - Corr(Y_{2}, Y_{1})^{2}
+\]</span></p>
+<p>Again, though, why is that not really all that surprising? (Hint: what if you ignore <span class="math inline">\(X_{1}\)</span> and treat the relationship between <span class="math inline">\(Y_{1}\)</span>, <span class="math inline">\(Y_{2}\)</span>, and <span class="math inline">\(E_{2}\)</span> as a simple regression?)</p>
+</div>
+<p>Since we got two different answers for <span class="math inline">\(a_{21}\)</span>, if this model is correct, they must be equal:</p>
+<p><span class="math display">\[
+a_{21} = Corr(Y_{2}, Y_{1}) = \frac{Corr(Y_{2}, X_{1})}{Corr(Y_{1}, X_{1})}
+\]</span></p>
+<p>which, if we rearrange the fraction, implies</p>
+<p><span class="math display">\[
+Corr(Y_{1}, X_{1}) Corr(Y_{2}, Y_{1}) = Corr(Y_{2}, X_{1})
+\]</span></p>
+<p>Another way to state this is that the correlation along the first path (<span class="math inline">\(b_{11}\)</span>) and the correlation along the second path (<span class="math inline">\(a_{21}\)</span>) multiply to give the correlation along both paths combined.</p>
+<p>But these three correlations are numbers that are measured using the data. Is there any guarantee that the product of two of the correlations will necessarily equal the third?</p>
+<p><strong>No!</strong></p>
+<p>In fact, this will almost never be true with real data.</p>
+<div class="rmdnote">
+<p>So if the model <em>implies</em> that there must be a mathematical relationship among the correlations, but the data does not support that implication, what does that say about the model?</p>
+</div>
+<p>We’ll return to this example in a moment. But first, let’s explore some of the other model configurations set up at the beginning of the chapter.</p>
 </div>
 <div id="mediation-confounders" class="section level2" number="6.5">
 <h2>
@@ -215,6 +319,11 @@
 <h2>
 <span class="header-section-number">6.7</span> The simple mediation model<a class="anchor" aria-label="anchor" href="#mediation-simple"><i class="fas fa-link"></i></a>
 </h2>
+</div>
+<div id="mediation-r" class="section level2" number="6.8">
+<h2>
+<span class="header-section-number">6.8</span> Simple mediation in R<a class="anchor" aria-label="anchor" href="#mediation-r"><i class="fas fa-link"></i></a>
+</h2>
 
 </div>
 </div>
@@ -226,13 +335,14 @@
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#mediation"><span class="header-section-number">6</span> Mediation</a></li>
 <li><a class="nav-link" href="#preliminaries-2">Preliminaries</a></li>
-<li><a class="nav-link" href="#mediation-paths"><span class="header-section-number">6.1</span> Mediators, confounders, and colliders</a></li>
+<li><a class="nav-link" href="#mediation-arrows"><span class="header-section-number">6.1</span> Arrows going everywhere!</a></li>
 <li><a class="nav-link" href="#mediation-exogenous-endogenous"><span class="header-section-number">6.2</span> Exogenous and endogenous variables</a></li>
 <li><a class="nav-link" href="#mediation-naming"><span class="header-section-number">6.3</span> Naming conventions</a></li>
 <li><a class="nav-link" href="#mediation-mediators"><span class="header-section-number">6.4</span> Mediators</a></li>
 <li><a class="nav-link" href="#mediation-confounders"><span class="header-section-number">6.5</span> Confounders</a></li>
 <li><a class="nav-link" href="#mediation-colliders"><span class="header-section-number">6.6</span> Colliders</a></li>
 <li><a class="nav-link" href="#mediation-simple"><span class="header-section-number">6.7</span> The simple mediation model</a></li>
+<li><a class="nav-link" href="#mediation-r"><span class="header-section-number">6.8</span> Simple mediation in R</a></li>
 </ul>
 
       <div class="book-extra">
@@ -250,7 +360,7 @@
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-29.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-30.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

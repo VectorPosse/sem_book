@@ -39,13 +39,14 @@ multiple-r
 multiple-r-lm
 multiple-r-lavaan
 mediation
-mediation-paths
+mediation-arrows
 mediation-exogenous-endogenous
 mediation-naming
 mediation-mediators
 mediation-confounders
 mediation-colliders
 mediation-simple
+mediation-r
 path
 latent
 cfa
