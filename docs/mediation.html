@@ -255,7 +255,7 @@ v_{1} = 1
 pretty much for free.</p>
 <p>Now solve for <span class="math inline">\(b_{11}\)</span> and <span class="math inline">\(e_{1}\)</span> next using the two terms in the second row of the matrix. You should get:</p>
 <p><span class="math display">\[\begin{align}
-b_{11}  &amp;= Corr(X_{1}, Y_{1})       \\
+b_{11}  &amp;= Corr(Y_{1}, X_{1})       \\
 e_{1}   &amp;= 1 - Corr(Y_{1}, X_{1})^{2}
 \end{align}\]</span></p>
 <p>Why is this not surprising? (Hint: if you ignore <span class="math inline">\(Y_{2}\)</span> altogether and only pay attention to relationships between <span class="math inline">\(X_{1}\)</span>, <span class="math inline">\(Y_{1}\)</span>, and <span class="math inline">\(E_{1}\)</span>, what kind of model is this?)</p>
@@ -309,6 +309,87 @@ Corr(Y_{1}, X_{1}) Corr(Y_{2}, Y_{1}) = Corr(Y_{2}, X_{1})
 <h2>
 <span class="header-section-number">6.5</span> Confounders<a class="anchor" aria-label="anchor" href="#mediation-confounders"><i class="fas fa-link"></i></a>
 </h2>
+<p>The variable in the middle of the diagram below is called a “confounder”:</p>
+<div class="inline-figure"><img src="graphics/confounder.png" width="440" style="display: block; margin: auto;"></div>
+<div class="rmdnote">
+<p>Draw this model on your own piece of paper.</p>
+<p>Identify if the variables are exogenous or endogenous.</p>
+<p>Following the Really Important Rules, draw in all variances, covariances, or error terms that should be present in the diagram.</p>
+<p>Finally, see if you can label all path with letters and subscripts according to the naming conventions described earlier.</p>
+</div>
+<p>Here is the final model:</p>
+<div class="inline-figure"><img src="graphics/confounder_vars.png" width="440" style="display: block; margin: auto;"></div>
+<p>The sample covariance matrix will look exactly the same as it did for the mediation model above.</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+Var(X_{1})          &amp;   \bullet             &amp;   \bullet \\
+Cov(Y_{1}, X_{1})   &amp;   Var(Y_{1})          &amp;   \bullet \\
+Cov(Y_{2}, X_{1})   &amp;   Cov(Y_{2}, Y_{1})   &amp;   Var(Y_{2})
+\end{bmatrix}
+\]</span>
+This is because there are still three observed variables and they have the same three names, even if they are connected with arrows in a different way.</p>
+<p>This also means the sample correlation matrix is the same:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1                   &amp;   \bullet             &amp;   \bullet \\
+Corr(Y_{1}, X_{1})  &amp;   1                   &amp;   \bullet \\
+Corr(Y_{2}, X_{1})  &amp;   Corr(Y_{2}, Y_{1})   &amp;   1
+\end{bmatrix}
+\]</span></p>
+<div class="rmdnote">
+<p>Calculate the full model-implied matrix. You should get the following:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+v_{1}   &amp;   \bullet &amp;  \bullet  \\
+b_{11}v_{1}  &amp;   b_{11}^{2}v_{1} + e_{1}    &amp;  \bullet \\
+b_{21}v_{1}  &amp;   b_{11}b_{21}v_{1}          &amp;  b_{21}^{2}v_{1} + e_{2}
+\end{bmatrix}
+\]</span></p>
+<p>Don’t slack off on this one! Unlike the mediation example, all these terms are very straightforward to compute.</p>
+</div>
+<div class="rmdnote">
+<p>Now calculate the standardized solution. In other words, solve for all the free parameters using the sample correlation matrix.</p>
+<p>You should get the following:</p>
+<p><span class="math display">\[\begin{align}
+v_{1}   &amp;= 1                        \\
+b_{11}  &amp;= Corr(Y_{1}, X_{1})         \\
+e_{1}   &amp;= 1 - Corr(Y_{1}, X_{1})^{2} \\
+e_{2}   &amp;= 1 - Corr(Y_{2}, X_{1})^{2}
+\end{align}\]</span></p>
+<p>Check that two of the equations give two different solutions for <span class="math inline">\(b_{21}\)</span>:</p>
+<p><span class="math display">\[\begin{align}
+b_{21}  &amp;= Corr(Y_{2}, X_{1})                             \\
+b_{21}  &amp;= \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
+\end{align}\]</span></p>
+</div>
+<p>The last calculation implies that</p>
+<p><span class="math display">\[
+Corr(Y_{1}, X_{1}) Corr(Y_{2}, X_{1}) = Corr(Y_{2}, Y_{1})
+\]</span></p>
+<p>Another way to state this is that the correlation along the first path (<span class="math inline">\(b_{11}\)</span>) and the correlation along the second path (<span class="math inline">\(b_{21}\)</span>) multiply to give the correlation along both paths combined.</p>
+<p>But these three correlations are numbers that are measured using the data. Is there any guarantee that the product of two of the correlations will necessarily equal the third?</p>
+<p><strong>No!</strong></p>
+<p>In fact, this will almost never be true with real data.</p>
+<div class="rmdnote">
+<p>So if the model <em>implies</em> that there must be a mathematical relationship among the correlations, but the data does not support that implication, what does that say about the model?</p>
+</div>
+<p>Does this all sound familiar? It’s even more déjà vu than you think. Here are the standardized parameter solutions from the mediator example:</p>
+<p><span class="math display">\[\begin{align}
+v_{1}   &amp;= 1                            \\
+e_{1}   &amp;= 1 - Corr(Y_{1}, X_{1})^{2}   \\
+e_{2}   &amp;= 1 - Corr(Y_{2}, Y_{1})^{2}      \\
+b_{11}  &amp;= Corr(Y_{1}, X_{1})           \\
+a_{21}  &amp;= Corr(Y_{2}, Y_{1}) = \frac{Corr(Y_{2}, X_{1})}{Corr(Y_{1}, X_{1})}
+\end{align}\]</span></p>
+<p>And here are the standardized parameter solutions from the confounder example:</p>
+<p><span class="math display">\[\begin{align}
+v_{1}   &amp;= 1                            \\
+e_{1}   &amp;= 1 - Corr(Y_{1}, X_{1})^{2}   \\
+e_{2}   &amp;= 1 - Corr(Y_{2}, X_{1})^{2}   \\
+b_{11}  &amp;= Corr(Y_{1}, X_{1})           \\
+b_{21}  &amp;= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
+\end{align}\]</span></p>
+<p>Other than just a change of notation—owing to the fact that the roles of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{1}\)</span> are reverse in the collider example—the solutions are <em>identical</em>.</p>
 </div>
 <div id="mediation-colliders" class="section level2" number="6.6">
 <h2>

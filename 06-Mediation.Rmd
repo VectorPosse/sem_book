@@ -222,7 +222,7 @@ pretty much for free.
 Now solve for $b_{11}$ and $e_{1}$ next using the two terms in the second row of the matrix. You should get:
 
 \begin{align}
-b_{11}  &= Corr(X_{1}, Y_{1})       \\
+b_{11}  &= Corr(Y_{1}, X_{1})       \\
 e_{1}   &= 1 - Corr(Y_{1}, X_{1})^{2}
 \end{align}
 
@@ -300,6 +300,134 @@ We'll return to this example in a moment. But first, let's explore some of the o
 
 
 ## Confounders {#mediation-confounders}
+
+The variable in the middle of the diagram below is called a "confounder": 
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/confounder.png")
+```
+
+::: {.rmdnote}
+
+Draw this model on your own piece of paper.
+
+Identify if the variables are exogenous or endogenous.
+
+Following the Really Important Rules, draw in all variances, covariances, or error terms that should be present in the diagram.
+
+Finally, see if you can label all path with letters and subscripts according to the naming conventions described earlier.
+
+:::
+
+Here is the final model:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/confounder_vars.png")
+```
+
+The sample covariance matrix will look exactly the same as it did for the mediation model above.
+
+$$
+\begin{bmatrix}
+Var(X_{1})          &   \bullet             &   \bullet \\
+Cov(Y_{1}, X_{1})   &   Var(Y_{1})          &   \bullet \\
+Cov(Y_{2}, X_{1})   &   Cov(Y_{2}, Y_{1})   &   Var(Y_{2})
+\end{bmatrix}
+$$
+This is because there are still three observed variables and they have the same three names, even if they are connected with arrows in a different way.
+
+This also means the sample correlation matrix is the same:
+
+$$
+\begin{bmatrix}
+1                   &   \bullet             &   \bullet \\
+Corr(Y_{1}, X_{1})  &   1                   &   \bullet \\
+Corr(Y_{2}, X_{1})  &   Corr(Y_{2}, Y_{1})   &   1
+\end{bmatrix}
+$$
+
+::: {.rmdnote}
+
+Calculate the full model-implied matrix. You should get the following:
+
+$$
+\begin{bmatrix}
+v_{1}   &   \bullet &  \bullet  \\
+b_{11}v_{1}  &   b_{11}^{2}v_{1} + e_{1}    &  \bullet \\
+b_{21}v_{1}  &   b_{11}b_{21}v_{1}          &  b_{21}^{2}v_{1} + e_{2}
+\end{bmatrix}
+$$
+
+Don't slack off on this one! Unlike the mediation example, all these terms are very straightforward to compute.
+
+:::
+
+::: {.rmdnote}
+
+Now calculate the standardized solution. In other words, solve for all the free parameters using the sample correlation matrix.
+
+You should get the following:
+
+\begin{align}
+v_{1}   &= 1                        \\
+b_{11}  &= Corr(Y_{1}, X_{1})         \\
+e_{1}   &= 1 - Corr(Y_{1}, X_{1})^{2} \\
+e_{2}   &= 1 - Corr(Y_{2}, X_{1})^{2}
+\end{align}
+
+Check that two of the equations give two different solutions for $b_{21}$:
+
+\begin{align}
+b_{21}  &= Corr(Y_{2}, X_{1})                             \\
+b_{21}  &= \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
+\end{align}
+
+:::
+
+The last calculation implies that
+
+$$
+Corr(Y_{1}, X_{1}) Corr(Y_{2}, X_{1}) = Corr(Y_{2}, Y_{1}) 
+$$
+
+Another way to state this is that the correlation along the first path ($b_{11}$) and the correlation along the second path ($b_{21}$) multiply to give the correlation along both paths combined.
+
+But these three correlations are numbers that are measured using the data. Is there any guarantee that the product of two of the correlations will necessarily equal the third?
+
+**No!**
+
+In fact, this will almost never be true with real data.
+
+::: {.rmdnote}
+
+So if the model *implies* that there must be a mathematical relationship among the correlations, but the data does not support that implication, what does that say about the model?
+
+:::
+
+Does this all sound familiar? It's even more déjà vu than you think. Here are the standardized parameter solutions from the mediator example:
+
+\begin{align}
+v_{1}   &= 1                            \\
+e_{1}   &= 1 - Corr(Y_{1}, X_{1})^{2}   \\
+e_{2}   &= 1 - Corr(Y_{2}, Y_{1})^{2}      \\
+b_{11}  &= Corr(Y_{1}, X_{1})           \\
+a_{21}  &= Corr(Y_{2}, Y_{1}) = \frac{Corr(Y_{2}, X_{1})}{Corr(Y_{1}, X_{1})}
+\end{align}
+
+And here are the standardized parameter solutions from the confounder example:
+
+\begin{align}
+v_{1}   &= 1                            \\
+e_{1}   &= 1 - Corr(Y_{1}, X_{1})^{2}   \\
+e_{2}   &= 1 - Corr(Y_{2}, X_{1})^{2}   \\
+b_{11}  &= Corr(Y_{1}, X_{1})           \\
+b_{21}  &= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
+\end{align}
+
+Other than just a change of notation---owing to the fact that the roles of $X_{1}$ and $Y_{1}$ are reverse in the collider example---the solutions are *identical*.
+
+
+
 
 
 ## Colliders {#mediation-colliders}
