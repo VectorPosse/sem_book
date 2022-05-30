@@ -331,7 +331,7 @@ The only possible path goes through $Y$ and looks like
 $$
 X \boldsymbol{\rightarrow} Y \leftarrow E
 $$
-For reasons that we won't explain here (but will be explained in Chapter \@ref(path)), this type of path does *not* imply any kind of association between $X$ and $E$. Therefore, the model *does* imply that $X$ and $E$ are independent, and, therefore, $Cov(E, X) = 0$.
+For reasons that we won't explain here (but will be explained in Chapter \@ref(mediation)), this type of path does *not* imply any kind of association between $X$ and $E$. Therefore, the model *does* imply that $X$ and $E$ are independent, and, therefore, $Cov(E, X) = 0$.
 
 Next, because $Y$ is the combination of $X$ and $E$, we've already seen that we can write
 

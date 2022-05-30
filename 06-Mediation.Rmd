@@ -350,7 +350,7 @@ For a moment, we're not going say what $X_{1}$ is.
 
 Does a positive correlation between power lines and cancer imply that living near power lines *causes* cancer?
 
-Does a positive correlation between power lines and cancer imply that cancer *causes* people to live near power lines? (Okay, that one is a little ridiculous, but we're making a point here?)
+Does a positive correlation between power lines and cancer imply that cancer *causes* people to live near power lines? (Okay, that one is a little ridiculous, but we're making a point here.)
 
 So if $Y_{1}$ doesn't cause $Y_{2}$ and $Y_{2}$ doesn't cause $Y_{1}$, why else might they be correlated?
 
@@ -366,7 +366,16 @@ Give a plausible explanation for how poverty might be correlated to *both* livin
 
 :::
 
-Now we turn our attention to the mathematics. The sample covariance matrix will look exactly the same as it did for the mediation model above.
+Now we turn our attention to the mathematics.
+
+The two regression equations are
+
+\begin{align}
+Y_{1} &= b_{11}X_{1} + E_{1}        \\
+Y_{2} &= b_{21}X_{1} + E_{2}
+\end{align}
+
+The sample covariance matrix will look exactly the same as it did for the mediation model above.
 
 $$
 \begin{bmatrix}
@@ -467,8 +476,37 @@ b_{21}  &= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
 
 Other than just a change of notation---owing to the fact that the roles of $X_{1}$ and $Y_{1}$ are reversed in the collider example---the solutions are *identical*.
 
+::: {.rmdnote}
 
+Think about the ramifications of the above discussion for living near power lines and cancer. Living near power lines is correlated to poverty, and poverty is correlated with cancer. But if the product of those two correlations doesn't equal the overall correlation between power lines and cancer, what does that say about the model? What other "path" might be missing in the model that would help account for the discrepancy?
 
+Now suppose that scientists are able to use a carefully controlled experiment (ethical considerations aside) to prove that there is no direct effect of power lines on cancer. Note that this is *not* the same thing as saying that the correlation between power lines and cancer is zero. How does the model explain this?
+
+:::
+
+::: {.rmdnote}
+
+Given that the mediator model and the confounder model are *statistically identical*, why would you use one model versus the other? Are there "philosophical" differences between mediators and confounders, even though the two models give the same results?
+
+:::
+
+One of the most important takeaways from this section is the realization that the arrows along an indirect path between two variables need not go in the same direction to imply a statistical relationship between those variables.
+
+For a mediator, the arrows do go the same way:
+
+$$
+X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\rightarrow} Y_{2}
+$$
+And it's no surprise to anyone that $X_{1}$ and $Y_{2}$ are associated. The association is "transmitted" from $X_{1}$ to $Y_{1}$ and then from $Y_{1}$ to $Y_{2}$ in an obvious way.
+
+But for a collider, the arrows don't go the same way:
+
+$$
+Y_{1} \boldsymbol{\leftarrow} X_{1} \boldsymbol{\rightarrow} Y_{2}
+$$
+And,yet, there is still an association between $Y_{1}$ and $Y_{2}$. Sometimes even "backwards" arrows can "transmit" an association through indirect pathways. This is often called a "backdoor path".
+
+But there are limits to that logic. The next example will illustrate.
 
 
 ## Colliders {#mediation-colliders}

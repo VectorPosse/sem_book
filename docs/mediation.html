@@ -342,7 +342,7 @@ Corr(Y_{1}, X_{1}) Corr(Y_{2}, Y_{1}) = Corr(Y_{2}, X_{1})
 <p>For a moment, we’re not going say what <span class="math inline">\(X_{1}\)</span> is.</p>
 <div class="rmdnote">
 <p>Does a positive correlation between power lines and cancer imply that living near power lines <em>causes</em> cancer?</p>
-<p>Does a positive correlation between power lines and cancer imply that cancer <em>causes</em> people to live near power lines? (Okay, that one is a little ridiculous, but we’re making a point here?)</p>
+<p>Does a positive correlation between power lines and cancer imply that cancer <em>causes</em> people to live near power lines? (Okay, that one is a little ridiculous, but we’re making a point here.)</p>
 <p>So if <span class="math inline">\(Y_{1}\)</span> doesn’t cause <span class="math inline">\(Y_{2}\)</span> and <span class="math inline">\(Y_{2}\)</span> doesn’t cause <span class="math inline">\(Y_{1}\)</span>, why else might they be correlated?</p>
 </div>
 <p>There may be several plausible answers to the last question above, but here is one possibility:</p>
@@ -353,7 +353,13 @@ Corr(Y_{1}, X_{1}) Corr(Y_{2}, Y_{1}) = Corr(Y_{2}, X_{1})
 <div class="rmdnote">
 <p>Give a plausible explanation for how poverty might be correlated to <em>both</em> living near power lines and cancer.</p>
 </div>
-<p>Now we turn our attention to the mathematics. The sample covariance matrix will look exactly the same as it did for the mediation model above.</p>
+<p>Now we turn our attention to the mathematics.</p>
+<p>The two regression equations are</p>
+<p><span class="math display">\[\begin{align}
+Y_{1} &amp;= b_{11}X_{1} + E_{1}        \\
+Y_{2} &amp;= b_{21}X_{1} + E_{2}
+\end{align}\]</span></p>
+<p>The sample covariance matrix will look exactly the same as it did for the mediation model above.</p>
 <p><span class="math display">\[
 \begin{bmatrix}
 Var(X_{1})          &amp;   \bullet             &amp;   \bullet \\
@@ -424,6 +430,25 @@ b_{11}  &amp;= Corr(Y_{1}, X_{1})           \\
 b_{21}  &amp;= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
 \end{align}\]</span></p>
 <p>Other than just a change of notation—owing to the fact that the roles of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{1}\)</span> are reversed in the collider example—the solutions are <em>identical</em>.</p>
+<div class="rmdnote">
+<p>Think about the ramifications of the above discussion for living near power lines and cancer. Living near power lines is correlated to poverty, and poverty is correlated with cancer. But if the product of those two correlations doesn’t equal the overall correlation between power lines and cancer, what does that say about the model? What other “path” might be missing in the model that would help account for the discrepancy?</p>
+<p>Now suppose that scientists are able to use a carefully controlled experiment (ethical considerations aside) to prove that there is no direct effect of power lines on cancer. Note that this is <em>not</em> the same thing as saying that the correlation between power lines and cancer is zero. How does the model explain this?</p>
+</div>
+<div class="rmdnote">
+<p>Given that the mediator model and the confounder model are <em>statistically identical</em>, why would you use one model versus the other? Are there “philosophical” differences between mediators and confounders, even though the two models give the same results?</p>
+</div>
+<p>One of the most important takeaways from this section is the realization that the arrows along an indirect path between two variables need not go in the same direction to imply a statistical relationship between those variables.</p>
+<p>For a mediator, the arrows do go the same way:</p>
+<p><span class="math display">\[
+X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\rightarrow} Y_{2}
+\]</span>
+And it’s no surprise to anyone that <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span> are associated. The association is “transmitted” from <span class="math inline">\(X_{1}\)</span> to <span class="math inline">\(Y_{1}\)</span> and then from <span class="math inline">\(Y_{1}\)</span> to <span class="math inline">\(Y_{2}\)</span> in an obvious way.</p>
+<p>But for a collider, the arrows don’t go the same way:</p>
+<p><span class="math display">\[
+Y_{1} \boldsymbol{\leftarrow} X_{1} \boldsymbol{\rightarrow} Y_{2}
+\]</span>
+And,yet, there is still an association between <span class="math inline">\(Y_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span>. Sometimes even “backwards” arrows can “transmit” an association through indirect pathways. This is often called a “backdoor path”.</p>
+<p>But there are limits to that logic. The next example will illustrate.</p>
 </div>
 <div id="mediation-colliders" class="section level2" number="6.6">
 <h2>
