@@ -151,6 +151,14 @@ Why did we not include any covariances in the model above?
 
 :::
 
+As a concrete example to illustrate this phenomenon, imagine that the variables measure the following:
+
+* $X_{1}$ is smoking.
+* $Y_{1}$ is tar deposits in the lungs.
+* $Y_{2}$ is lung cancer.
+
+The idea is that smoking is associated with lung cancer. But what smoking *really* does is cause specific chemical processes in the lungs (including the deposition of tar) and that---among other factors---is what contributes to lung cancer. Tar serves as a "mediator" for the process that connects smoking to lung cancer.
+
 Since there are two endogenous variables present in this model, there are two regression equations we have to write down:
 
 \begin{align}
@@ -296,7 +304,13 @@ So if the model *implies* that there must be a mathematical relationship among t
 
 :::
 
-We'll return to this example in a moment. But first, let's explore some of the other model configurations set up at the beginning of the chapter.
+::: {.rmdnote}
+
+Think about the ramifications of the above discussion for smoking and lung cancer. Smoking is correlated to tar deposits, and tar deposits are correlated with lung cancer. But if the product of those two correlations doesn't equal the overall correlation between smoking and lung cancer, what does that say about the model? What other "path" might be missing in the model that would help account for the discrepancy?
+
+:::
+
+We'll return to this example in a moment. But first, let's explore the other model configurations set up at the beginning of the chapter.
 
 
 ## Confounders {#mediation-confounders}
@@ -325,7 +339,34 @@ Here is the final model:
 knitr::include_graphics("graphics/confounder_vars.png")
 ```
 
-The sample covariance matrix will look exactly the same as it did for the mediation model above.
+As a concrete example to illustrate this phenomenon, imagine that the variables measure the following:
+
+* $Y_{1}$ is the presence of power lines near homes.
+* $Y_{2}$ is the incidence of cancer.
+
+For a moment, we're not going say what $X_{1}$ is.
+
+::: {.rmdnote}
+
+Does a positive correlation between power lines and cancer imply that living near power lines *causes* cancer?
+
+Does a positive correlation between power lines and cancer imply that cancer *causes* people to live near power lines? (Okay, that one is a little ridiculous, but we're making a point here?)
+
+So if $Y_{1}$ doesn't cause $Y_{2}$ and $Y_{2}$ doesn't cause $Y_{1}$, why else might they be correlated?
+
+:::
+
+There may be several plausible answers to the last question above, but here is one possibility:
+
+* $X_{1}$ is poverty.
+
+::: {.rmdnote}
+
+Give a plausible explanation for how poverty might be correlated to *both* living near power lines and cancer.
+
+:::
+
+Now we turn our attention to the mathematics. The sample covariance matrix will look exactly the same as it did for the mediation model above.
 
 $$
 \begin{bmatrix}
@@ -369,7 +410,7 @@ Now calculate the standardized solution. In other words, solve for all the free 
 You should get the following:
 
 \begin{align}
-v_{1}   &= 1                        \\
+v_{1}   &= 1                          \\
 b_{11}  &= Corr(Y_{1}, X_{1})         \\
 e_{1}   &= 1 - Corr(Y_{1}, X_{1})^{2} \\
 e_{2}   &= 1 - Corr(Y_{2}, X_{1})^{2}
@@ -424,7 +465,7 @@ b_{11}  &= Corr(Y_{1}, X_{1})           \\
 b_{21}  &= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
 \end{align}
 
-Other than just a change of notation---owing to the fact that the roles of $X_{1}$ and $Y_{1}$ are reverse in the collider example---the solutions are *identical*.
+Other than just a change of notation---owing to the fact that the roles of $X_{1}$ and $Y_{1}$ are reversed in the collider example---the solutions are *identical*.
 
 
 

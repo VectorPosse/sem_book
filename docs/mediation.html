@@ -206,6 +206,16 @@
 <div class="rmdnote">
 <p>Why did we not include any covariances in the model above?</p>
 </div>
+<p>As a concrete example to illustrate this phenomenon, imagine that the variables measure the following:</p>
+<ul>
+<li>
+<span class="math inline">\(X_{1}\)</span> is smoking.</li>
+<li>
+<span class="math inline">\(Y_{1}\)</span> is tar deposits in the lungs.</li>
+<li>
+<span class="math inline">\(Y_{2}\)</span> is lung cancer.</li>
+</ul>
+<p>The idea is that smoking is associated with lung cancer. But what smoking <em>really</em> does is cause specific chemical processes in the lungs (including the deposition of tar) and that—among other factors—is what contributes to lung cancer. Tar serves as a “mediator” for the process that connects smoking to lung cancer.</p>
 <p>Since there are two endogenous variables present in this model, there are two regression equations we have to write down:</p>
 <p><span class="math display">\[\begin{align}
 Y_{1} &amp;= b_{11}X_{1} + E_{1}        \\
@@ -303,7 +313,10 @@ Corr(Y_{1}, X_{1}) Corr(Y_{2}, Y_{1}) = Corr(Y_{2}, X_{1})
 <div class="rmdnote">
 <p>So if the model <em>implies</em> that there must be a mathematical relationship among the correlations, but the data does not support that implication, what does that say about the model?</p>
 </div>
-<p>We’ll return to this example in a moment. But first, let’s explore some of the other model configurations set up at the beginning of the chapter.</p>
+<div class="rmdnote">
+<p>Think about the ramifications of the above discussion for smoking and lung cancer. Smoking is correlated to tar deposits, and tar deposits are correlated with lung cancer. But if the product of those two correlations doesn’t equal the overall correlation between smoking and lung cancer, what does that say about the model? What other “path” might be missing in the model that would help account for the discrepancy?</p>
+</div>
+<p>We’ll return to this example in a moment. But first, let’s explore the other model configurations set up at the beginning of the chapter.</p>
 </div>
 <div id="mediation-confounders" class="section level2" number="6.5">
 <h2>
@@ -319,7 +332,28 @@ Corr(Y_{1}, X_{1}) Corr(Y_{2}, Y_{1}) = Corr(Y_{2}, X_{1})
 </div>
 <p>Here is the final model:</p>
 <div class="inline-figure"><img src="graphics/confounder_vars.png" width="440" style="display: block; margin: auto;"></div>
-<p>The sample covariance matrix will look exactly the same as it did for the mediation model above.</p>
+<p>As a concrete example to illustrate this phenomenon, imagine that the variables measure the following:</p>
+<ul>
+<li>
+<span class="math inline">\(Y_{1}\)</span> is the presence of power lines near homes.</li>
+<li>
+<span class="math inline">\(Y_{2}\)</span> is the incidence of cancer.</li>
+</ul>
+<p>For a moment, we’re not going say what <span class="math inline">\(X_{1}\)</span> is.</p>
+<div class="rmdnote">
+<p>Does a positive correlation between power lines and cancer imply that living near power lines <em>causes</em> cancer?</p>
+<p>Does a positive correlation between power lines and cancer imply that cancer <em>causes</em> people to live near power lines? (Okay, that one is a little ridiculous, but we’re making a point here?)</p>
+<p>So if <span class="math inline">\(Y_{1}\)</span> doesn’t cause <span class="math inline">\(Y_{2}\)</span> and <span class="math inline">\(Y_{2}\)</span> doesn’t cause <span class="math inline">\(Y_{1}\)</span>, why else might they be correlated?</p>
+</div>
+<p>There may be several plausible answers to the last question above, but here is one possibility:</p>
+<ul>
+<li>
+<span class="math inline">\(X_{1}\)</span> is poverty.</li>
+</ul>
+<div class="rmdnote">
+<p>Give a plausible explanation for how poverty might be correlated to <em>both</em> living near power lines and cancer.</p>
+</div>
+<p>Now we turn our attention to the mathematics. The sample covariance matrix will look exactly the same as it did for the mediation model above.</p>
 <p><span class="math display">\[
 \begin{bmatrix}
 Var(X_{1})          &amp;   \bullet             &amp;   \bullet \\
@@ -351,7 +385,7 @@ b_{21}v_{1}  &amp;   b_{11}b_{21}v_{1}          &amp;  b_{21}^{2}v_{1} + e_{2}
 <p>Now calculate the standardized solution. In other words, solve for all the free parameters using the sample correlation matrix.</p>
 <p>You should get the following:</p>
 <p><span class="math display">\[\begin{align}
-v_{1}   &amp;= 1                        \\
+v_{1}   &amp;= 1                          \\
 b_{11}  &amp;= Corr(Y_{1}, X_{1})         \\
 e_{1}   &amp;= 1 - Corr(Y_{1}, X_{1})^{2} \\
 e_{2}   &amp;= 1 - Corr(Y_{2}, X_{1})^{2}
@@ -389,7 +423,7 @@ e_{2}   &amp;= 1 - Corr(Y_{2}, X_{1})^{2}   \\
 b_{11}  &amp;= Corr(Y_{1}, X_{1})           \\
 b_{21}  &amp;= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
 \end{align}\]</span></p>
-<p>Other than just a change of notation—owing to the fact that the roles of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{1}\)</span> are reverse in the collider example—the solutions are <em>identical</em>.</p>
+<p>Other than just a change of notation—owing to the fact that the roles of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{1}\)</span> are reversed in the collider example—the solutions are <em>identical</em>.</p>
 </div>
 <div id="mediation-colliders" class="section level2" number="6.6">
 <h2>
