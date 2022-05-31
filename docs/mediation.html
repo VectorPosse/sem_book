@@ -482,66 +482,18 @@ And, yet, there is still an association between <span class="math inline">\(Y_{1
 <div class="rmdnote">
 <p>Are there any restrictions on the value of <span class="math inline">\(c_{12}\)</span> in a multiple regression model?</p>
 </div>
-<p>While the value of <span class="math inline">\(c_{12}\)</span> does change the interpretation of the path coefficients in a multiple regression model, the model-implied matrix always results in</p>
+<p>While the value of <span class="math inline">\(c_{12}\)</span> does change the interpretation of the path coefficients in a multiple regression model, analysis of the model-implied matrix always results in</p>
 <p><span class="math display">\[
 c_{12} = Cov(X_{1}, X_{2})
 \]</span></p>
-<p>That value is just calculated directly from the data. It does not depend on any other parameter of the model. Since <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are exogenous, the source of this covariance is independent of anything else in the model.</p>
+<p>That value is just calculated directly from the data. It does not depend on any other parameter of the model. Since <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are exogenous, the source of this covariance is independent of anything else in the model. In particular, it’s possible that <span class="math inline">\(c_{12} = 0\)</span>.</p>
 <p>There’s no math to do in this section. All the math we need was already done in the <a href="multiple.html#multiple">previous chapter</a>.</p>
 <p>The takeaway message here is that colliders do not transmit association through them. Pathways like the following do not imply anything about the association between <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>:</p>
 <p><span class="math display">\[
 X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\leftarrow} X_{2}
 \]</span></p>
-<p>This does not mean that <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are uncorrelated. They may be correlated, but this correlation arises from the covariance they share “in nature” and not accounted for by any variables of the model.</p>
-<p>Colliders are particularly dangerous due to a phenomenon called <em>collider bias</em>. We return to the basketball example to illustrate.</p>
-<p>Suppose there is no association in the population between the height and the shooting accuracy of basketball players. (That may or not be true, but let’s assume it for the time being.) Here is some simulated data of shooting percentages and height in inches:</p>
-<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="va">height</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">500</span>, mean <span class="op">=</span> <span class="fl">68</span>, sd <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>
-<span class="va">shooting</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">500</span>, mean <span class="op">=</span> <span class="fl">0.5</span>, sd <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>
-<span class="va">fake_basketball_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">height</span>, <span class="va">shooting</span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">fake_basketball_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">shooting</span>, x <span class="op">=</span> <span class="va">height</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-105-1.png" width="672"></div>
-<p>There is no correlation between these two variables:</p>
-<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">fake_basketball_data</span><span class="op">$</span><span class="va">height</span>, <span class="va">fake_basketball_data</span><span class="op">$</span><span class="va">shooting</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] -0.04122944</code></pre>
-<p>But now we’ll figure out who makes it into the professional league:</p>
-<div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fake_basketball_data</span> <span class="op">&lt;-</span> <span class="va">fake_basketball_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>pro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="op">(</span><span class="va">shooting</span> <span class="op">&gt;</span> <span class="fl">0.75</span> <span class="op">&amp;</span> <span class="va">height</span> <span class="op">&gt;</span> <span class="fl">72</span><span class="op">)</span> <span class="op">|</span>
-                        <span class="op">(</span><span class="va">shooting</span> <span class="op">&gt;</span> <span class="fl">0.50</span> <span class="op">&amp;</span> <span class="va">height</span> <span class="op">&gt;</span> <span class="fl">80</span><span class="op">)</span>,
-                        <span class="st">"Pro"</span>, <span class="st">"Non-pro"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>The condition here for making it into the pros is that <em>either</em> the player is a very good shooter (and is reasonably tall), or is very tall (and is a reasonably good shooter).</p>
-<p>Here is the plot, with the pros colored with red points.</p>
-<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">fake_basketball_data</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">shooting</span>, x <span class="op">=</span> <span class="va">height</span>, color <span class="op">=</span> <span class="va">pro</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-108-1.png" width="672"></div>
-<p>We’ll isolate those pro players in the graph:</p>
-<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fake_basketball_data_pros</span> <span class="op">&lt;-</span> <span class="va">fake_basketball_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">pro</span> <span class="op">==</span> <span class="st">"Pro"</span><span class="op">)</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">fake_basketball_data_pros</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">shooting</span>, x <span class="op">=</span> <span class="va">height</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-109-1.png" width="672"></div>
-<p>Now there is a pretty large negative correlation.</p>
-<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">fake_basketball_data_pros</span><span class="op">$</span><span class="va">shooting</span>,
-    <span class="va">fake_basketball_data_pros</span><span class="op">$</span><span class="va">height</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] -0.6451966</code></pre>
-<p>So incorporating information into the model about the collider (the probability of going pro) induces an association that wasn’t present in the population.</p>
-<div class="rmdnote">
-<p>Here’s another way to think about this. If you know someone’s height, do you know anything about their shooting ability? Or vice versa? In the population at large, probably not much.</p>
-<p>But what if I tell you the person is a professional basketball player? And what if I tell you this person is quite short (at least for a pro player). What information does that provide about their shooting ability?</p>
-<p>And what if I tell you that a professional basketball player is not a very good shooter. What information does that provide about their height?</p>
-</div>
-<p>Collider bias is often called <em>selection bias</em> because it happens most often when you control for a variable that ends up selecting for certain traits in the population. In this example, if you try to “control” for the pro league variable <span class="math inline">\(Y_{1}\)</span>, you end up looking at a set of players who have the same probability of going pro. In that set, players will vary in their height and shooting ability, but shorter players are forced to be better shooters, and players who don’t shoot well may fare better if they are tall.</p>
-<p>It is not a problem to have colliders in our model. The goal here is just to understand that they do not provide indirect paths for associations to be transmitted from one variable to another. Any such association must be accounted for some other way (like another indirect path with a mediator or a confounder, or perhaps through exogenous covariance like in this example). And we need to be especially careful not to “control” for colliders when writing down our regression models. (If we follow the arrows carefully, this shouldn’t be a problem.)</p>
+<p>This does not mean that <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are uncorrelated. They may be correlated, but this correlation must arise from the some other source—either “nature”, external to the model, or some other path (perhaps a mediator or confounder) in the model along a path that doesn’t pass through <span class="math inline">\(Y_{1}\)</span>.</p>
+<p>It is not a problem to have colliders in a model. In fact, as we’ll see below, every model we have analyzed in this course so far contains collider variables! The goal here is just to understand that they do not provide indirect paths for associations to be transmitted from one variable to another. Any such association must be accounted for some other way.</p>
 <div class="rmdnote">
 <p>Consider a simple regression model:</p>
 <div class="inline-figure"><img src="graphics/simple_regression_params.png" width="337" style="display: block; margin: auto;"></div>

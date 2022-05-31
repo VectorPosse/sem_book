@@ -559,13 +559,13 @@ Are there any restrictions on the value of $c_{12}$ in a multiple regression mod
 
 :::
 
-While the value of $c_{12}$ does change the interpretation of the path coefficients in a multiple regression model, the model-implied matrix always results in
+While the value of $c_{12}$ does change the interpretation of the path coefficients in a multiple regression model, analysis of the model-implied matrix always results in
 
 $$
 c_{12} = Cov(X_{1}, X_{2})
 $$
 
-That value is just calculated directly from the data. It does not depend on any other parameter of the model. Since $X_{1}$ and $X_{2}$ are exogenous, the source of this covariance is independent of anything else in the model.
+That value is just calculated directly from the data. It does not depend on any other parameter of the model. Since $X_{1}$ and $X_{2}$ are exogenous, the source of this covariance is independent of anything else in the model. In particular, it's possible that $c_{12} = 0$.
 
 There's no math to do in this section. All the math we need was already done in the [previous chapter](#multiple).
 
@@ -575,78 +575,9 @@ $$
 X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\leftarrow} X_{2}
 $$
 
-This does not mean that $X_{1}$ and $X_{2}$ are uncorrelated. They may be correlated, but this correlation arises from the covariance they share "in nature" and not accounted for by any variables of the model.
+This does not mean that $X_{1}$ and $X_{2}$ are uncorrelated. They may be correlated, but this correlation must arise from the some other source---either "nature", external to the model, or some other path (perhaps a mediator or confounder) in the model along a path that doesn't pass through $Y_{1}$.
 
-Colliders are particularly dangerous due to a phenomenon called *collider bias*. We return to the basketball example to illustrate.
-
-Suppose there is no association in the population between the height and the shooting accuracy of basketball players. (That may or not be true, but let's assume it for the time being.) Here is some simulated data of shooting percentages and height in inches:
-
-```{r}
-set.seed(1)
-height <- rnorm(500, mean = 68, sd = 8)
-shooting <- rnorm(500, mean = 0.5, sd = 0.2)
-fake_basketball_data <- tibble(height, shooting)
-ggplot(fake_basketball_data, aes(y = shooting, x = height)) +
-    geom_point()
-```
-
-There is no correlation between these two variables:
-
-```{r}
-cor(fake_basketball_data$height, fake_basketball_data$shooting)
-```
-But now we'll figure out who makes it into the professional league:
-
-```{r}
-fake_basketball_data <- fake_basketball_data %>%
-    mutate(pro = ifelse((shooting > 0.75 & height > 72) |
-                        (shooting > 0.50 & height > 80),
-                        "Pro", "Non-pro"))
-```
-
-The condition here for making it into the pros is that *either* the player is a very good shooter (and is reasonably tall), or is very tall (and is a reasonably good shooter).
-
-Here is the plot, with the pros colored with red points.
-
-```{r}
-ggplot(fake_basketball_data,
-       aes(y = shooting, x = height, color = pro)) +
-    geom_point() +
-    scale_color_manual(values = c("black", "red"))
-```
-
-We'll isolate those pro players in the graph:
-
-```{r}
-fake_basketball_data_pros <- fake_basketball_data %>%
-    filter(pro == "Pro")
-ggplot(fake_basketball_data_pros,
-       aes(y = shooting, x = height)) +
-    geom_point(color = "red")
-```
-
-Now there is a pretty large negative correlation.
-
-```{r}
-cor(fake_basketball_data_pros$shooting,
-    fake_basketball_data_pros$height)
-```
-
-So incorporating information into the model about the collider (the probability of going pro) induces an association that wasn't present in the population.
-
-::: {.rmdnote}
-
-Here's another way to think about this. If you know someone's height, do you know anything about their shooting ability? Or vice versa? In the population at large, probably not much.
-
-But what if I tell you the person is a professional basketball player? And what if I tell you this person is quite short (at least for a pro player). What information does that provide about their shooting ability?
-
-And what if I tell you that a professional basketball player is not a very good shooter. What information does that provide about their height?
-
-:::
-
-Collider bias is often called *selection bias* because it happens most often when you control for a variable that ends up selecting for certain traits in the population. In this example, if you try to "control" for the pro league variable $Y_{1}$, you end up looking at a set of players who have the same probability of going pro. In that set, players will vary in their height and shooting ability, but shorter players are forced to be better shooters, and players who don't shoot well may fare better if they are tall.
-
-It is not a problem to have colliders in our model. The goal here is just to understand that they do not provide indirect paths for associations to be transmitted from one variable to another. Any such association must be accounted for some other way (like another indirect path with a mediator or a confounder, or perhaps through exogenous covariance like in this example). And we need to be especially careful not to "control" for colliders when writing down our regression models. (If we follow the arrows carefully, this shouldn't be a problem.)
+It is not a problem to have colliders in a model. In fact, as we'll see below, every model we have analyzed in this course so far contains collider variables! The goal here is just to understand that they do not provide indirect paths for associations to be transmitted from one variable to another. Any such association must be accounted for some other way.
 
 ::: {.rmdnote}
 

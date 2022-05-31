@@ -6,15 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Chapter 11 Structural causal models | Demystifying Structural Equation Modeling</title>
 <meta name="author" content="Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)">
-<meta name="description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta name="description" content="[COLLIDER BIAS EXAMPLE] library(tidyverse) Colliders are particularly dangerous due to a phenomenon called collider bias. We return to the basketball example to illustrate. Suppose there is no...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="Chapter 11 Structural causal models | Demystifying Structural Equation Modeling">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://vectorposse.github.io/sem_book/scm.html">
-<meta property="og:description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta property="og:description" content="[COLLIDER BIAS EXAMPLE] library(tidyverse) Colliders are particularly dangerous due to a phenomenon called collider bias. We return to the basketball example to illustrate. Suppose there is no...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chapter 11 Structural causal models | Demystifying Structural Equation Modeling">
-<meta name="twitter:description" content="A textbook on structural equation modeling written from first priciples for undergraduates with minimal statistics prerequisites.">
+<meta name="twitter:description" content="[COLLIDER BIAS EXAMPLE] library(tidyverse) Colliders are particularly dangerous due to a phenomenon called collider bias. We return to the basketball example to illustrate. Suppose there is no...">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -70,6 +70,57 @@
 <h1>
 <span class="header-section-number">11</span> Structural causal models<a class="anchor" aria-label="anchor" href="#scm"><i class="fas fa-link"></i></a>
 </h1>
+<p>[COLLIDER BIAS EXAMPLE]</p>
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></code></pre></div>
+<p>Colliders are particularly dangerous due to a phenomenon called <em>collider bias</em>. We return to the basketball example to illustrate.</p>
+<p>Suppose there is no association in the population between the height and the shooting accuracy of basketball players. (That may or not be true, but let’s assume it for the time being.) Here is some simulated data of shooting percentages and height in inches:</p>
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">height</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">500</span>, mean <span class="op">=</span> <span class="fl">68</span>, sd <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>
+<span class="va">shooting</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">500</span>, mean <span class="op">=</span> <span class="fl">0.5</span>, sd <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>
+<span class="va">fake_basketball_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">height</span>, <span class="va">shooting</span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">fake_basketball_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">shooting</span>, x <span class="op">=</span> <span class="va">height</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-109-1.png" width="672"></div>
+<p>There is no correlation between these two variables:</p>
+<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">fake_basketball_data</span><span class="op">$</span><span class="va">height</span>, <span class="va">fake_basketball_data</span><span class="op">$</span><span class="va">shooting</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] -0.04122944</code></pre>
+<p>But now we’ll figure out who makes it into the professional league:</p>
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fake_basketball_data</span> <span class="op">&lt;-</span> <span class="va">fake_basketball_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>pro <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="op">(</span><span class="va">shooting</span> <span class="op">&gt;</span> <span class="fl">0.75</span> <span class="op">&amp;</span> <span class="va">height</span> <span class="op">&gt;</span> <span class="fl">72</span><span class="op">)</span> <span class="op">|</span>
+                        <span class="op">(</span><span class="va">shooting</span> <span class="op">&gt;</span> <span class="fl">0.50</span> <span class="op">&amp;</span> <span class="va">height</span> <span class="op">&gt;</span> <span class="fl">80</span><span class="op">)</span>,
+                        <span class="st">"Pro"</span>, <span class="st">"Non-pro"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>The condition here for making it into the pros is that <em>either</em> the player is a very good shooter (and is reasonably tall), or is very tall (and is a reasonably good shooter).</p>
+<p>Here is the plot, with the pros colored with red points.</p>
+<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">fake_basketball_data</span>,
+       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">shooting</span>, x <span class="op">=</span> <span class="va">height</span>, color <span class="op">=</span> <span class="va">pro</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-112-1.png" width="672"></div>
+<p>We’ll isolate those pro players in the graph:</p>
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fake_basketball_data_pros</span> <span class="op">&lt;-</span> <span class="va">fake_basketball_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">pro</span> <span class="op">==</span> <span class="st">"Pro"</span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">fake_basketball_data_pros</span>,
+       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">shooting</span>, x <span class="op">=</span> <span class="va">height</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="sem_book_files/figure-html/unnamed-chunk-113-1.png" width="672"></div>
+<p>Now there is a pretty large negative correlation.</p>
+<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">fake_basketball_data_pros</span><span class="op">$</span><span class="va">shooting</span>,
+    <span class="va">fake_basketball_data_pros</span><span class="op">$</span><span class="va">height</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] -0.6451966</code></pre>
+<p>So incorporating information into the model about the collider (the probability of going pro) induces an association that wasn’t present in the population.</p>
+<div class="rmdnote">
+<p>Here’s another way to think about this. If you know someone’s height, do you know anything about their shooting ability? Or vice versa? In the population at large, probably not much.</p>
+<p>But what if I tell you the person is a professional basketball player? And what if I tell you this person is quite short (at least for a pro player). What information does that provide about their shooting ability?</p>
+<p>And what if I tell you that a professional basketball player is not a very good shooter. What information does that provide about their height?</p>
+</div>
+<p>Collider bias is often called <em>selection bias</em> because it happens most often when you control for a variable that ends up selecting for certain traits in the population. In this example, if you try to “control” for the pro league variable <span class="math inline">\(Y_{1}\)</span>, you end up looking at a set of players who have the same probability of going pro. In that set, players will vary in their height and shooting ability, but shorter players are forced to be better shooters, and players who don’t shoot well may fare better if they are tall.</p>
 
 </div>
 
