@@ -567,6 +567,8 @@ $$
 
 That value is just calculated directly from the data. It does not depend on any other parameter of the model. Since $X_{1}$ and $X_{2}$ are exogenous, the source of this covariance is independent of anything else in the model. In particular, it's possible that $c_{12} = 0$.
 
+For example, in the basketball scenario, there's no reason to believe that height and shooting ability are correlated in the general population. The fact that they are both correlated with a higher probability of being in a professional league is irrelevant to their correlation in the population. Even if they were correlated in the population ($c_{12} \neq 0$), this would have nothing to do with the collider variable.
+
 There's no math to do in this section. All the math we need was already done in the [previous chapter](#multiple).
 
 The takeaway message here is that colliders do not transmit association through them. Pathways like the following do not imply anything about the association between $X_{1}$ and $X_{2}$:
@@ -575,7 +577,7 @@ $$
 X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\leftarrow} X_{2}
 $$
 
-This does not mean that $X_{1}$ and $X_{2}$ are uncorrelated. They may be correlated, but this correlation must arise from the some other source---either "nature", external to the model, or some other path (perhaps a mediator or confounder) in the model along a path that doesn't pass through $Y_{1}$.
+This does not mean that $X_{1}$ and $X_{2}$ are uncorrelated. They may be correlated, but this correlation must arise from some other source---either "nature", external to the model (exogenous covariance), or some other path in the model (perhaps through a mediator or confounder).
 
 It is not a problem to have colliders in a model. In fact, as we'll see below, every model we have analyzed in this course so far contains collider variables! The goal here is just to understand that they do not provide indirect paths for associations to be transmitted from one variable to another. Any such association must be accounted for some other way.
 
