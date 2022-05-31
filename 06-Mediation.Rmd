@@ -329,7 +329,7 @@ Identify which variables are exogenous or endogenous.
 
 Following the Really Important Rules, draw in all variances, covariances, or error terms that should be present in the diagram.
 
-Finally, see if you can label all path with letters and subscripts according to the naming conventions described earlier.
+Finally, see if you can label all paths with letters and subscripts according to the naming conventions described earlier.
 
 :::
 
