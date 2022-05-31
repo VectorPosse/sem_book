@@ -529,6 +529,106 @@ Why is that path not a problem?</p>
 <h2>
 <span class="header-section-number">6.7</span> The simple mediation model<a class="anchor" aria-label="anchor" href="#mediation-simple"><i class="fas fa-link"></i></a>
 </h2>
+<p>We learned above that an indirect path through a mediator
+<span class="math display">\[
+X_{1} \rightarrow Y_{1} \boldsymbol{\rightarrow} Y_{2}
+\]</span>
+implies a mathematical relationship among the correlations:
+<span class="math display">\[
+Corr(Y_{1}, X_{1}) Corr(Y_{2}, Y_{1}) = Corr(Y_{2}, X_{1})
+\]</span></p>
+<p>If the correlations among these variables in the data do <em>not</em> satisfy this equation, then there is a problem with the model. There is some “left-over” association that isn’t explain by this pathway.</p>
+<p>To accommodate this possibility (which, for real-world data, is almost always the case), we can simply add a direct path between <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span> that will “soak up” any remaining association. The following model will be called the “simple mediation” model:</p>
+<div class="inline-figure"><img src="graphics/mediation_vars.png" width="536" style="display: block; margin: auto;"></div>
+<p>Another way to look at this model—maybe one that is more in line with typical scientific hypotheses—is to focus on the relationship between two variables, <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span>. A simple regression will produce an estimate for the slope <span class="math inline">\(b\)</span>. But is that path coefficient meaningful?</p>
+<p>Yes, it represents the “total effect” of <span class="math inline">\(X_{1}\)</span> on <span class="math inline">\(Y_{2}\)</span>. (If we’re being careful about causal language, however, we might simply say that all covariance between <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span> is accounted for by <span class="math inline">\(b\)</span>.)</p>
+<p>But does that one path coefficient tell the whole story? Maybe not. There could be other variables that account for some of that covariance. Controlling for those variables will tell a richer story about the sources of covariation in our response variable.</p>
+<p>To reprise the example from earlier, a scientist may want to know if smoking is associated with lung cancer. (Actually, that scientist probably wants to know if smoking <em>causes</em> lung cancer, but let’s set aside causal questions for now.) A study shows a strong association. But by what mechanism is that association created? What aspect of smoking is associated with lung cancer?</p>
+<p>Someone posits that smoking leaves tar deposits in the lungs. So more data is collected and analyzed. The model above can now tell us how much of the association between smoking and lung cancer might be accounted for through an indirect pathway that passes through <span class="math inline">\(Y_{1}\)</span>, tar deposits in the lungs.</p>
+<p>That’s not the end of the story, either, but to keep things simple, we’ll work with this simple mediation model with only three variables.</p>
+<p>Here comes the math.</p>
+<p>The regression equations are</p>
+<p><span class="math display">\[\begin{align}
+Y_{1}   &amp;= b_{11}X_{1} + E_{1}              \\
+Y_{2}   &amp;= b_{21}X_{1} + a_{21}Y_{1} + E_{2}  
+\end{align}\]</span></p>
+<p>The sample correlation matrix is the same as for any three variables:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+1                   &amp;   \bullet             &amp;   \bullet \\
+Corr(Y_{1}, X_{1})  &amp;   1                   &amp;   \bullet \\
+Corr(Y_{2}, X_{1})  &amp;   Corr(Y_{2}, Y_{1})   &amp;   1
+\end{bmatrix}
+\]</span></p>
+<p>But the model-implied matrix is involved enough that it doesn’t even fit on the screen (nor are we making you compute it by hand). Here are the six equations separately:</p>
+<p><span class="math display">\[\begin{align}
+1                   &amp;= v_{1}                                \\
+Corr(Y_{1}, X_{1})  &amp;= b_{11}v_{1}                          \\
+1                   &amp;= b_{11}^{2}v_{1} + e_{1}              \\
+Corr(Y_{2}, X_{1})  &amp;= b_{21}v_{1} + a_{21}b_{11}v_{1}      \\
+Corr(Y_{2}, Y_{1})  &amp;= b_{11}b_{21}v_{1} +
+                        a_{21}b_{11}^{2}v_{1} +
+                        a_{21}e_{1}                         \\
+1                   &amp;= b_{21}^2v_{1} +
+                        a_{21}^{2}b_{11}^{2}v_{1} +
+                        a_{21}^{2}e_{1} +
+                        2a_{21}b_{11}b_{21}v_{1} +
+                        e_{2}
+\end{align}\]</span></p>
+<p>Skipping some algebra, we get the following (standardized) solution:</p>
+<p><span class="math display">\[\begin{align}
+v_{1}               &amp;= 1                                \\
+b_{11}              &amp;= Corr(Y_{1}, X_{1})               \\
+e_{1}               &amp;= 1 - Corr(Y_{1}, X_{1})^{2}       \\
+e_{2}               &amp;= 1 - \left(b_{21}^2 +
+                        a_{21}^{2}b_{11}^{2} +
+                        a_{21}^{2}e_{1} +
+                        2a_{21}b_{11}b_{21}\right)      \\
+a_{21}  &amp;= \frac{Corr(Y_{2}, Y_{1}) -
+                    Corr(Y_{2}, X_{1})Corr(Y_{1}, X_{1})}
+                {1 - Corr(Y_{1}, X_{1})^{2}}                \\
+b_{21}  &amp;= \frac{Corr(Y_{2}, X_{1}) -
+                    Corr(Y_{2}, Y_{1})Corr(Y_{1}, X_{1})}
+                {1 - Corr(Y_{1}, X_{1})^{2}}
+\end{align}\]</span></p>
+<p>A few observations.</p>
+<div class="rmdnote">
+<p>The expressions for <span class="math inline">\(v_{1}\)</span>, <span class="math inline">\(b_{11}\)</span>, and <span class="math inline">\(e_{1}\)</span> are totally expected. Explain why.</p>
+</div>
+<p>The expression for <span class="math inline">\(e_{2}\)</span> is the only one not expressed in terms of all correlations. But substituting in the values of <span class="math inline">\(a_{21}\)</span>, <span class="math inline">\(b_{11}\)</span>, and <span class="math inline">\(b_{21}\)</span> would not be instructive in the slightest.</p>
+<p>The expressions for <span class="math inline">\(a_{21}\)</span> and <span class="math inline">\(b_{21}\)</span> have some intuitive content.</p>
+<div class="rmdnote">
+<p>Review the content from last chapter called <a href="multiple.html#multiple-standardized">Regression with standardized variables</a>, in particular the formulas given for <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span>.</p>
+<p>Even though we had to make the notation a little more complicated, do you see any similarities between those formulas and the ones shown above for <span class="math inline">\(a_{21}\)</span> and <span class="math inline">\(b_{21}\)</span>?</p>
+<p>Why might that be? Compare the diagrams for the simple mediation model in this chapter and the multiple regression model from the last chapter. What are the similarities and differences?</p>
+</div>
+<p>Hopefully you could see past the notation to realize that the formulas for <span class="math inline">\(b_{1}\)</span> and <span class="math inline">\(b_{2}\)</span> in a multiple regression model are <em>identical</em> to the formulas for <span class="math inline">\(a_{21}\)</span> and <span class="math inline">\(b_{21}\)</span> in our simple mediation model.</p>
+<p>This is useful because it helps us interpret these path coefficients. As they were for multiple regression, they are simply that part of the correlation due to a direct path, controlling for the correlation along the indirect path.</p>
+<div class="rmdnote">
+<p>If the main path of interest to our scientific hypothesis is
+<span class="math display">\[
+X_{1} \boldsymbol{\rightarrow} Y_{2}
+\]</span>
+the path coefficient <span class="math inline">\(b_{21}\)</span> is the estimate of interest. What other indirect path is being “controlled for” in that estimate?</p>
+</div>
+<p>For a mediation model, the activity above tells us the right way to think about the path coefficient <span class="math inline">\(b_{21}\)</span>. But it’s also instructive to consider <span class="math inline">\(a_{21}\)</span>.</p>
+<div class="rmdnote">
+<p>Suppose the substantive path of scientific interest was
+<span class="math display">\[
+Y_{1} \boldsymbol{\rightarrow} Y_{2}
+\]</span></p>
+<p>In that case, how do we interpret its path coefficient <span class="math inline">\(a_{21}\)</span>? It is the strength of the association between <span class="math inline">\(Y_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span> controlling for the indirect path where?</p>
+<p>What kind of indirect path is that? In other words, what role does <span class="math inline">\(X_{1}\)</span> play along the indirect path from <span class="math inline">\(Y_{1}\)</span> to <span class="math inline">\(Y_{2}\)</span>? (Go back and look at the diagram and the arrows.)</p>
+</div>
+<div class="rmdnote">
+<p>Suppose the substantive path of scientific interest was
+<span class="math display">\[
+X_{1} \boldsymbol{\rightarrow} Y_{1}
+\]</span></p>
+<p>In that case, how do we interpret its path coefficient <span class="math inline">\(b_{11}\)</span>? It is the strength of the association between <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span>, but does it account for any indirect paths?</p>
+<p>The answer is “no”, but why not? What role does <span class="math inline">\(Y_{2}\)</span> play along an indirect path from <span class="math inline">\(X_{1}\)</span> to <span class="math inline">\(Y_{1}\)</span> and why does that not introduce any additional association between them?</p>
+</div>
+<p>The three activities above illustrate the remarkable fact that the simple mediation model is actually an example of all three models we’ve studied in this chapter: there’s a mediator, a confounder, and a collider! (Each variable plays one of those roles with respect to the relationship between the other two.) So while we call it the “simple mediation model”, we can actually use the implications of the model for any of the three.</p>
 </div>
 <div id="mediation-r" class="section level2" number="6.8">
 <h2>
@@ -570,7 +670,7 @@ Why is that path not a problem?</p>
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-30.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-31.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">

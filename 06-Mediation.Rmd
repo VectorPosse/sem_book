@@ -643,6 +643,156 @@ Why do we have to be more careful about making assumptions about possible covari
 
 ## The simple mediation model {#mediation-simple}
 
+We learned above that an indirect path through a mediator
+$$
+X_{1} \rightarrow Y_{1} \boldsymbol{\rightarrow} Y_{2}
+$$
+implies a mathematical relationship among the correlations:
+$$
+Corr(Y_{1}, X_{1}) Corr(Y_{2}, Y_{1}) = Corr(Y_{2}, X_{1})
+$$
+
+If the correlations among these variables in the data do *not* satisfy this equation, then there is a problem with the model. There is some "left-over" association that isn't explain by this pathway.
+
+To accommodate this possibility (which, for real-world data, is almost always the case), we can simply add a direct path between $X_{1}$ and $Y_{2}$ that will "soak up" any remaining association. The following model will be called the "simple mediation" model:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/mediation_vars.png")
+```
+
+Another way to look at this model---maybe one that is more in line with typical scientific hypotheses---is to focus on the relationship between two variables, $X_{1}$ and $Y_{2}$. A simple regression will produce an estimate for the slope $b$. But is that path coefficient meaningful?
+
+Yes, it represents the "total effect" of $X_{1}$ on $Y_{2}$. (If we're being careful about causal language, however, we might simply say that all covariance between $X_{1}$ and $Y_{2}$ is accounted for by $b$.) 
+
+But does that one path coefficient tell the whole story? Maybe not. There could be other variables that account for some of that covariance. Controlling for those variables will tell a richer story about the sources of covariation in our response variable.
+
+To reprise the example from earlier, a scientist may want to know if smoking is associated with lung cancer. (Actually, that scientist probably wants to know if smoking *causes* lung cancer, but let's set aside causal questions for now.) A study shows a strong association. But by what mechanism is that association created? What aspect of smoking is associated with lung cancer?
+
+Someone posits that smoking leaves tar deposits in the lungs. So more data is collected and analyzed. The model above can now tell us how much of the association between smoking and lung cancer might be accounted for through an indirect pathway that passes through $Y_{1}$, tar deposits in the lungs.
+
+That's not the end of the story, either, but to keep things simple, we'll work with this simple mediation model with only three variables.
+
+Here comes the math.
+
+The regression equations are
+
+\begin{align}
+Y_{1}   &= b_{11}X_{1} + E_{1}              \\
+Y_{2}   &= b_{21}X_{1} + a_{21}Y_{1} + E_{2}  
+\end{align}
+
+The sample correlation matrix is the same as for any three variables:
+
+$$
+\begin{bmatrix}
+1                   &   \bullet             &   \bullet \\
+Corr(Y_{1}, X_{1})  &   1                   &   \bullet \\
+Corr(Y_{2}, X_{1})  &   Corr(Y_{2}, Y_{1})   &   1
+\end{bmatrix}
+$$
+
+But the model-implied matrix is involved enough that it doesn't even fit on the screen (nor are we making you compute it by hand). Here are the six equations separately:
+
+\begin{align}
+1                   &= v_{1}                                \\
+Corr(Y_{1}, X_{1})  &= b_{11}v_{1}                          \\
+1                   &= b_{11}^{2}v_{1} + e_{1}              \\
+Corr(Y_{2}, X_{1})  &= b_{21}v_{1} + a_{21}b_{11}v_{1}      \\
+Corr(Y_{2}, Y_{1})  &= b_{11}b_{21}v_{1} +
+                        a_{21}b_{11}^{2}v_{1} +
+                        a_{21}e_{1}                         \\
+1                   &= b_{21}^2v_{1} +
+                        a_{21}^{2}b_{11}^{2}v_{1} +
+                        a_{21}^{2}e_{1} +
+                        2a_{21}b_{11}b_{21}v_{1} +
+                        e_{2}
+\end{align}
+
+Skipping some algebra, we get the following (standardized) solution:
+
+\begin{align}
+v_{1}               &= 1                                \\
+b_{11}              &= Corr(Y_{1}, X_{1})               \\
+e_{1}               &= 1 - Corr(Y_{1}, X_{1})^{2}       \\
+e_{2}               &= 1 - \left(b_{21}^2 +
+                        a_{21}^{2}b_{11}^{2} +
+                        a_{21}^{2}e_{1} +
+                        2a_{21}b_{11}b_{21}\right)      \\
+a_{21}  &= \frac{Corr(Y_{2}, Y_{1}) - 
+                    Corr(Y_{2}, X_{1})Corr(Y_{1}, X_{1})}
+                {1 - Corr(Y_{1}, X_{1})^{2}}                \\
+b_{21}  &= \frac{Corr(Y_{2}, X_{1}) - 
+                    Corr(Y_{2}, Y_{1})Corr(Y_{1}, X_{1})}
+                {1 - Corr(Y_{1}, X_{1})^{2}}
+\end{align}
+
+A few observations.
+
+::: {.rmdnote}
+
+The expressions for $v_{1}$, $b_{11}$, and $e_{1}$ are totally expected. Explain why.
+
+:::
+
+The expression for $e_{2}$ is the only one not expressed in terms of all correlations. But substituting in the values of $a_{21}$, $b_{11}$, and $b_{21}$ would not be instructive in the slightest.
+
+The expressions for $a_{21}$ and $b_{21}$ have some intuitive content.
+
+::: {.rmdnote}
+
+Review the content from last chapter called [Regression with standardized variables](#multiple-standardized), in particular the formulas given for $b_{1}$ and $b_{2}$.
+
+Even though we had to make the notation a little more complicated, do you see any similarities between those formulas and the ones shown above for $a_{21}$ and $b_{21}$?
+
+Why might that be? Compare the diagrams for the simple mediation model in this chapter and the multiple regression model from the last chapter. What are the similarities and differences?
+
+:::
+
+Hopefully you could see past the notation to realize that the formulas for $b_{1}$ and $b_{2}$ in a multiple regression model are *identical* to the formulas for $a_{21}$ and $b_{21}$ in our simple mediation model.
+
+This is useful because it helps us interpret these path coefficients. As they were for multiple regression, they are simply that part of the correlation due to a direct path, controlling for the correlation along the indirect path.
+
+::: {.rmdnote}
+
+If the main path of interest to our scientific hypothesis is
+$$
+X_{1} \boldsymbol{\rightarrow} Y_{2}
+$$
+the path coefficient $b_{21}$ is the estimate of interest. What other indirect path is being "controlled for" in that estimate?
+
+:::
+
+For a mediation model, the activity above tells us the right way to think about the path coefficient $b_{21}$. But it's also instructive to consider $a_{21}$.
+
+::: {.rmdnote}
+
+Suppose the substantive path of scientific interest was
+$$
+Y_{1} \boldsymbol{\rightarrow} Y_{2}
+$$
+
+In that case, how do we interpret its path coefficient $a_{21}$? It is the strength of the association between $Y_{1}$ and $Y_{2}$ controlling for the indirect path where?
+
+What kind of indirect path is that? In other words, what role does $X_{1}$ play along the indirect path from $Y_{1}$ to $Y_{2}$? (Go back and look at the diagram and the arrows.)
+
+:::
+
+
+::: {.rmdnote}
+
+Suppose the substantive path of scientific interest was
+$$
+X_{1} \boldsymbol{\rightarrow} Y_{1}
+$$
+
+In that case, how do we interpret its path coefficient $b_{11}$? It is the strength of the association between $X_{1}$ and $Y_{2}$, but does it account for any indirect paths?
+
+The answer is "no", but why not? What role does $Y_{2}$ play along an indirect path from $X_{1}$ to $Y_{1}$ and why does that not introduce any additional association between them?
+
+:::
+
+The three activities above illustrate the remarkable fact that the simple mediation model is actually an example of all three models we've studied in this chapter: there's a mediator, a confounder, and a collider! (Each variable plays one of those roles with respect to the relationship between the other two.) So while we call it the "simple mediation model", we can actually use the implications of the model for any of the three.
+
 
 ## Simple mediation in R {#mediation-r}
 

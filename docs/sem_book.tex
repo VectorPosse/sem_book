@@ -124,7 +124,7 @@
 
 \title{Demystifying Structural Equation Modeling}
 \author{Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)}
-\date{2022-05-30}
+\date{2022-05-31}
 
 \begin{document}
 \maketitle
@@ -2386,7 +2386,7 @@ The only possible path goes through \(Y\) and looks like
 \[
 X \boldsymbol{\rightarrow} Y \leftarrow E
 \]
-For reasons that we won't explain here (but will be explained in Chapter \ref{path}), this type of path does \emph{not} imply any kind of association between \(X\) and \(E\). Therefore, the model \emph{does} imply that \(X\) and \(E\) are independent, and, therefore, \(Cov(E, X) = 0\).
+For reasons that we won't explain here (but will be explained in Chapter \ref{mediation}), this type of path does \emph{not} imply any kind of association between \(X\) and \(E\). Therefore, the model \emph{does} imply that \(X\) and \(E\) are independent, and, therefore, \(Cov(E, X) = 0\).
 
 Next, because \(Y\) is the combination of \(X\) and \(E\), we've already seen that we can write
 
@@ -3805,6 +3805,20 @@ With all the rules in place for our diagrams, we can now revisit the model from 
 
 Why did we not include any covariances in the model above?
 
+As a concrete example to illustrate this phenomenon, imagine that the variables measure the following:
+
+\begin{itemize}
+\tightlist
+\item
+  \(X_{1}\) is smoking.
+\item
+  \(Y_{1}\) is tar deposits in the lungs.
+\item
+  \(Y_{2}\) is lung cancer.
+\end{itemize}
+
+The idea is that smoking is associated with lung cancer. But what smoking \emph{really} does is cause specific chemical processes in the lungs (including the deposition of tar), and that---among other factors---is what contributes to lung cancer. Tar serves as a ``mediator'' for the process that connects smoking to lung cancer.
+
 Since there are two endogenous variables present in this model, there are two regression equations we have to write down:
 
 \begin{align}
@@ -3866,7 +3880,7 @@ pretty much for free.
 Now solve for \(b_{11}\) and \(e_{1}\) next using the two terms in the second row of the matrix. You should get:
 
 \begin{align}
-b_{11}  &= Corr(X_{1}, Y_{1})       \\
+b_{11}  &= Corr(Y_{1}, X_{1})       \\
 e_{1}   &= 1 - Corr(Y_{1}, X_{1})^{2}
 \end{align}
 
@@ -3930,16 +3944,410 @@ In fact, this will almost never be true with real data.
 
 So if the model \emph{implies} that there must be a mathematical relationship among the correlations, but the data does not support that implication, what does that say about the model?
 
-We'll return to this example in a moment. But first, let's explore some of the other model configurations set up at the beginning of the chapter.
+Think about the ramifications of the above discussion for smoking and lung cancer. Smoking is correlated to tar deposits, and tar deposits are correlated with lung cancer. But if the product of those two correlations doesn't equal the overall correlation between smoking and lung cancer, what does that say about the model? What other ``path'' might be missing in the model that would help account for the discrepancy?
+
+We'll return to this example in a moment. But first, let's explore the other model configurations set up at the beginning of the chapter.
 
 \hypertarget{mediation-confounders}{%
 \section{Confounders}\label{mediation-confounders}}
 
+The variable in the middle of the diagram below is called a ``confounder'':
+
+\begin{center}\includegraphics{graphics/confounder} \end{center}
+
+Draw this model on your own piece of paper.
+
+Identify which variables are exogenous or endogenous.
+
+Following the Really Important Rules, draw in all variances, covariances, or error terms that should be present in the diagram.
+
+Finally, see if you can label all paths with letters and subscripts according to the naming conventions described earlier.
+
+Here is the final model:
+
+\begin{center}\includegraphics{graphics/confounder_vars} \end{center}
+
+As a concrete example to illustrate this phenomenon, imagine that the variables measure the following:
+
+\begin{itemize}
+\tightlist
+\item
+  \(Y_{1}\) is the presence of power lines near homes.
+\item
+  \(Y_{2}\) is the incidence of cancer.
+\end{itemize}
+
+For a moment, we're not going say what \(X_{1}\) is.
+
+Does a positive correlation between power lines and cancer imply that living near power lines \emph{causes} cancer?
+
+Does a positive correlation between power lines and cancer imply that cancer \emph{causes} people to live near power lines? (Okay, that one is a little ridiculous, but we're making a point here.)
+
+So if \(Y_{1}\) doesn't cause \(Y_{2}\) and \(Y_{2}\) doesn't cause \(Y_{1}\), why else might they be correlated?
+
+There may be several plausible answers to the last question above, but here is one possibility:
+
+\begin{itemize}
+\tightlist
+\item
+  \(X_{1}\) is poverty.
+\end{itemize}
+
+Give a plausible explanation for how poverty might be correlated to \emph{both} living near power lines and cancer.
+
+Now we turn our attention to the mathematics.
+
+The two regression equations are
+
+\begin{align}
+Y_{1} &= b_{11}X_{1} + E_{1}        \\
+Y_{2} &= b_{21}X_{1} + E_{2}
+\end{align}
+
+The sample covariance matrix will look exactly the same as it did for the mediation model above.
+
+\[
+\begin{bmatrix}
+Var(X_{1})          &   \bullet             &   \bullet \\
+Cov(Y_{1}, X_{1})   &   Var(Y_{1})          &   \bullet \\
+Cov(Y_{2}, X_{1})   &   Cov(Y_{2}, Y_{1})   &   Var(Y_{2})
+\end{bmatrix}
+\]
+This is because there are still three observed variables and they have the same three names, even if they are connected with arrows in a different way.
+
+This also means the sample correlation matrix is the same:
+
+\[
+\begin{bmatrix}
+1                   &   \bullet             &   \bullet \\
+Corr(Y_{1}, X_{1})  &   1                   &   \bullet \\
+Corr(Y_{2}, X_{1})  &   Corr(Y_{2}, Y_{1})   &   1
+\end{bmatrix}
+\]
+
+Calculate the full model-implied matrix. You should get the following:
+
+\[
+\begin{bmatrix}
+v_{1}   &   \bullet &  \bullet  \\
+b_{11}v_{1}  &   b_{11}^{2}v_{1} + e_{1}    &  \bullet \\
+b_{21}v_{1}  &   b_{11}b_{21}v_{1}          &  b_{21}^{2}v_{1} + e_{2}
+\end{bmatrix}
+\]
+
+Don't slack off on this one! Unlike the mediation example, all these terms are very straightforward to compute.
+
+Now calculate the standardized solution. In other words, solve for all the free parameters using the sample correlation matrix.
+
+You should get the following:
+
+\begin{align}
+v_{1}   &= 1                          \\
+b_{11}  &= Corr(Y_{1}, X_{1})         \\
+e_{1}   &= 1 - Corr(Y_{1}, X_{1})^{2} \\
+e_{2}   &= 1 - Corr(Y_{2}, X_{1})^{2}
+\end{align}
+
+Check that two of the equations give two different solutions for \(b_{21}\):
+
+\begin{align}
+b_{21}  &= Corr(Y_{2}, X_{1})                             \\
+b_{21}  &= \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
+\end{align}
+
+The last calculation implies that
+
+\[
+Corr(Y_{1}, X_{1}) Corr(Y_{2}, X_{1}) = Corr(Y_{2}, Y_{1}) 
+\]
+
+Another way to state this is that the correlation along the first path (\(b_{11}\)) and the correlation along the second path (\(b_{21}\)) multiply to give the correlation along both paths combined.
+
+But these three correlations are numbers that are measured using the data. Is there any guarantee that the product of two of the correlations will necessarily equal the third?
+
+\textbf{No!}
+
+In fact, this will almost never be true with real data.
+
+So if the model \emph{implies} that there must be a mathematical relationship among the correlations, but the data does not support that implication, what does that say about the model?
+
+Does this all sound familiar? It's even more déjà vu than you think. Here are the standardized parameter solutions from the mediator example:
+
+\begin{align}
+v_{1}   &= 1                            \\
+e_{1}   &= 1 - Corr(Y_{1}, X_{1})^{2}   \\
+e_{2}   &= 1 - Corr(Y_{2}, Y_{1})^{2}      \\
+b_{11}  &= Corr(Y_{1}, X_{1})           \\
+a_{21}  &= Corr(Y_{2}, Y_{1}) = \frac{Corr(Y_{2}, X_{1})}{Corr(Y_{1}, X_{1})}
+\end{align}
+
+And here are the standardized parameter solutions from the confounder example:
+
+\begin{align}
+v_{1}   &= 1                            \\
+e_{1}   &= 1 - Corr(Y_{1}, X_{1})^{2}   \\
+e_{2}   &= 1 - Corr(Y_{2}, X_{1})^{2}   \\
+b_{11}  &= Corr(Y_{1}, X_{1})           \\
+b_{21}  &= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
+\end{align}
+
+Other than just a change of notation---owing to the fact that the roles of \(X_{1}\) and \(Y_{1}\) are reversed in the collider example---the solutions are \emph{identical}.
+
+Think about the ramifications of the above discussion for living near power lines and cancer. Living near power lines is correlated to poverty, and poverty is correlated with cancer. But if the product of those two correlations doesn't equal the overall correlation between power lines and cancer, what does that say about the model? What other ``path'' might be missing in the model that would help account for the discrepancy?
+
+Now suppose that scientists are able to use a carefully controlled experiment (ethical considerations aside) to prove that there is no direct effect of power lines on cancer. Note that this is \emph{not} the same thing as saying that the correlation between power lines and cancer is zero. How does the model explain this?
+
+When a confounder accounts for all (or nearly all) the covariance between two variables, the resulting association is called \emph{spurious}. The association exists, but it doesn't exist due to any direct pathway.
+
+Given that the mediator model and the confounder model are \emph{statistically identical}, why would you use one model versus the other? Are there ``philosophical'' differences between mediators and confounders, even though the two models give the same results?
+
+One of the most important takeaways from this section is the realization that the arrows along an indirect path between two variables need not go in the same direction to imply a statistical relationship between those variables.
+
+For a mediator, the arrows do go the same way:
+
+\[
+X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\rightarrow} Y_{2}
+\]
+And it's no surprise to anyone that \(X_{1}\) and \(Y_{2}\) are associated. The association is ``transmitted'' from \(X_{1}\) to \(Y_{1}\) and then from \(Y_{1}\) to \(Y_{2}\) in an obvious way.
+
+But for a collider, the arrows don't go the same way:
+
+\[
+Y_{1} \boldsymbol{\leftarrow} X_{1} \boldsymbol{\rightarrow} Y_{2}
+\]
+And, yet, there is still an association between \(Y_{1}\) and \(Y_{2}\). Sometimes even ``backwards'' arrows can ``transmit'' an association through indirect pathways. This is often called a ``backdoor path''.
+
+But there are limits to that logic. The next example will illustrate.
+
 \hypertarget{mediation-colliders}{%
 \section{Colliders}\label{mediation-colliders}}
 
+The variable in the middle of the diagram below is called a ``collider'':
+
+\begin{center}\includegraphics{graphics/collider} \end{center}
+
+Draw this model on your own piece of paper.
+
+Identify which variables are exogenous or endogenous.
+
+Following the Really Important Rules, draw in all variances, covariances, or error terms that should be present in the diagram.
+
+Finally, see if you can label all path with letters and subscripts according to the naming conventions described earlier.
+
+Here is the final model:
+
+\begin{center}\includegraphics{graphics/collider_vars} \end{center}
+
+As a concrete example to illustrate this phenomenon, imagine that the variables measure the following:
+
+\begin{itemize}
+\tightlist
+\item
+  \(X_{1}\) is the height of basketball players.
+\item
+  \(X_{2}\) is the shooting accuracy of basketball players.
+\item
+  \(Y_{1}\) is the probability of being selected to play in a professional league.
+\end{itemize}
+
+The paths \(b_{11}\) and \(b_{12}\) make sense. Taller players and players who shoot the ball better are more likely to make it to a professional level of play. These are positive associations. Do these two paths together create an indirect path between height and shooting that accounts for covariance between them?
+
+It turns out the answer is no!
+
+This collider model is masquerading as another model that you have already studied in a previous chapter. It was drawn a little differently there, but the relationships among the variables and arrows are exactly the same. What is that model?
+
+Are there any restrictions on the value of \(c_{12}\) in a multiple regression model?
+
+While the value of \(c_{12}\) does change the interpretation of the path coefficients in a multiple regression model, analysis of the model-implied matrix always results in
+
+\[
+c_{12} = Cov(X_{1}, X_{2})
+\]
+
+That value is just calculated directly from the data. It does not depend on any other parameter of the model. Since \(X_{1}\) and \(X_{2}\) are exogenous, the source of this covariance is independent of anything else in the model. In particular, it's possible that \(c_{12} = 0\).
+
+For example, in the basketball scenario, there's no reason to believe that height and shooting ability are correlated in the general population. The fact that they are both correlated with a higher probability of being in a professional league is irrelevant to their correlation in the population. Even if they were correlated in the population (\(c_{12} \neq 0\)), this would have nothing to do with the collider variable.
+
+There's no math to do in this section. All the math we need was already done in the \protect\hyperlink{multiple}{previous chapter}.
+
+The takeaway message here is that colliders do not transmit association through them. Pathways like the following do not imply anything about the association between \(X_{1}\) and \(X_{2}\):
+
+\[
+X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\leftarrow} X_{2}
+\]
+
+This does not mean that \(X_{1}\) and \(X_{2}\) are uncorrelated. They may be correlated, but this correlation must arise from some other source---either ``nature'', external to the model (exogenous covariance), or some other path in the model (perhaps through a mediator or confounder).
+
+It is not a problem to have colliders in a model. In fact, as we'll see below, every model we have analyzed in this course so far contains collider variables! The goal here is just to understand that they do not provide indirect paths for associations to be transmitted from one variable to another. Any such association must be accounted for some other way.
+
+Consider a simple regression model:
+
+\begin{center}\includegraphics{graphics/simple_regression_params} \end{center}
+
+In the \protect\hyperlink{simple}{simple regression chapter}, we explained that the error term \(E\) is uncorrelated with the exogenous variable \(X\) because there is no arrow connecting \(X\) and \(E\). We can now admit that, while the fact about lack of correlation is true, the explanation we gave was a little misleading. Correlations can be created indirectly through sequences of paths. \(X\) and and \(E\) are connected through Y as follows:
+
+\[
+X \boldsymbol{\rightarrow} Y \boldsymbol{\leftarrow} E
+\]
+
+But why does this path not imply a correlation between \(X\) and \(E\)?
+
+Consider the multiple regression model:
+
+\begin{center}\includegraphics{graphics/multiple_regression_2} \end{center}
+
+How do we know that the only covariance between \(X_{1}\) and \(X_{2}\) is captured by \(c_{12}\)? In other words, why is no additional covariance explained by the following path?
+
+\[
+X_{1} \boldsymbol{\rightarrow} Y \boldsymbol{\leftarrow} X_{2}
+\]
+
+Consider the mediator example again:
+
+\begin{center}\includegraphics{graphics/mediator_vars} \end{center}
+
+One of the Really Important Rules was that the error terms should not (at least not by default) be correlated.
+
+It's true that we haven't specified a double-headed arrow between \(E_{1}\) and \(E_{2}\), but how do we know there isn't an indirect path accounting for some covariance between them?
+
+Hint: the only possible path would be
+
+\[
+E_{1} \rightarrow Y_{1} \boldsymbol{\rightarrow} Y_{2} \leftarrow E_{2}
+\]
+Why is that path not a problem?
+
+Why do we have to be more careful about making assumptions about possible covariances between \(E_{1}\) and \(Y_{2}\)?
+
 \hypertarget{mediation-simple}{%
 \section{The simple mediation model}\label{mediation-simple}}
+
+We learned above that an indirect path through a mediator
+\[
+X_{1} \rightarrow Y_{1} \boldsymbol{\rightarrow} Y_{2}
+\]
+implies a mathematical relationship among the correlations:
+\[
+Corr(Y_{1}, X_{1}) Corr(Y_{2}, Y_{1}) = Corr(Y_{2}, X_{1})
+\]
+
+If the correlations among these variables in the data do \emph{not} satisfy this equation, then there is a problem with the model. There is some ``left-over'' association that isn't explain by this pathway.
+
+To accommodate this possibility (which, for real-world data, is almost always the case), we can simply add a direct path between \(X_{1}\) and \(Y_{2}\) that will ``soak up'' any remaining association. The following model will be called the ``simple mediation'' model:
+
+\begin{center}\includegraphics{graphics/mediation_vars} \end{center}
+
+Another way to look at this model---maybe one that is more in line with typical scientific hypotheses---is to focus on the relationship between two variables, \(X_{1}\) and \(Y_{2}\). A simple regression will produce an estimate for the slope \(b\). But is that path coefficient meaningful?
+
+Yes, it represents the ``total effect'' of \(X_{1}\) on \(Y_{2}\). (If we're being careful about causal language, however, we might simply say that all covariance between \(X_{1}\) and \(Y_{2}\) is accounted for by \(b\).)
+
+But does that one path coefficient tell the whole story? Maybe not. There could be other variables that account for some of that covariance. Controlling for those variables will tell a richer story about the sources of covariation in our response variable.
+
+To reprise the example from earlier, a scientist may want to know if smoking is associated with lung cancer. (Actually, that scientist probably wants to know if smoking \emph{causes} lung cancer, but let's set aside causal questions for now.) A study shows a strong association. But by what mechanism is that association created? What aspect of smoking is associated with lung cancer?
+
+Someone posits that smoking leaves tar deposits in the lungs. So more data is collected and analyzed. The model above can now tell us how much of the association between smoking and lung cancer might be accounted for through an indirect pathway that passes through \(Y_{1}\), tar deposits in the lungs.
+
+That's not the end of the story, either, but to keep things simple, we'll work with this simple mediation model with only three variables.
+
+Here comes the math.
+
+The regression equations are
+
+\begin{align}
+Y_{1}   &= b_{11}X_{1} + E_{1}              \\
+Y_{2}   &= b_{21}X_{1} + a_{21}Y_{1} + E_{2}  
+\end{align}
+
+The sample correlation matrix is the same as for any three variables:
+
+\[
+\begin{bmatrix}
+1                   &   \bullet             &   \bullet \\
+Corr(Y_{1}, X_{1})  &   1                   &   \bullet \\
+Corr(Y_{2}, X_{1})  &   Corr(Y_{2}, Y_{1})   &   1
+\end{bmatrix}
+\]
+
+But the model-implied matrix is involved enough that it doesn't even fit on the screen (nor are we making you compute it by hand). Here are the six equations separately:
+
+\begin{align}
+1                   &= v_{1}                                \\
+Corr(Y_{1}, X_{1})  &= b_{11}v_{1}                          \\
+1                   &= b_{11}^{2}v_{1} + e_{1}              \\
+Corr(Y_{2}, X_{1})  &= b_{21}v_{1} + a_{21}b_{11}v_{1}      \\
+Corr(Y_{2}, Y_{1})  &= b_{11}b_{21}v_{1} +
+                        a_{21}b_{11}^{2}v_{1} +
+                        a_{21}e_{1}                         \\
+1                   &= b_{21}^2v_{1} +
+                        a_{21}^{2}b_{11}^{2}v_{1} +
+                        a_{21}^{2}e_{1} +
+                        2a_{21}b_{11}b_{21}v_{1} +
+                        e_{2}
+\end{align}
+
+Skipping some algebra, we get the following (standardized) solution:
+
+\begin{align}
+v_{1}               &= 1                                \\
+b_{11}              &= Corr(Y_{1}, X_{1})               \\
+e_{1}               &= 1 - Corr(Y_{1}, X_{1})^{2}       \\
+e_{2}               &= 1 - \left(b_{21}^2 +
+                        a_{21}^{2}b_{11}^{2} +
+                        a_{21}^{2}e_{1} +
+                        2a_{21}b_{11}b_{21}\right)      \\
+a_{21}  &= \frac{Corr(Y_{2}, Y_{1}) - 
+                    Corr(Y_{2}, X_{1})Corr(Y_{1}, X_{1})}
+                {1 - Corr(Y_{1}, X_{1})^{2}}                \\
+b_{21}  &= \frac{Corr(Y_{2}, X_{1}) - 
+                    Corr(Y_{2}, Y_{1})Corr(Y_{1}, X_{1})}
+                {1 - Corr(Y_{1}, X_{1})^{2}}
+\end{align}
+
+A few observations.
+
+The expressions for \(v_{1}\), \(b_{11}\), and \(e_{1}\) are totally expected. Explain why.
+
+The expression for \(e_{2}\) is the only one not expressed in terms of all correlations. But substituting in the values of \(a_{21}\), \(b_{11}\), and \(b_{21}\) would not be instructive in the slightest.
+
+The expressions for \(a_{21}\) and \(b_{21}\) have some intuitive content.
+
+Review the content from last chapter called \protect\hyperlink{multiple-standardized}{Regression with standardized variables}, in particular the formulas given for \(b_{1}\) and \(b_{2}\).
+
+Even though we had to make the notation a little more complicated, do you see any similarities between those formulas and the ones shown above for \(a_{21}\) and \(b_{21}\)?
+
+Why might that be? Compare the diagrams for the simple mediation model in this chapter and the multiple regression model from the last chapter. What are the similarities and differences?
+
+Hopefully you could see past the notation to realize that the formulas for \(b_{1}\) and \(b_{2}\) in a multiple regression model are \emph{identical} to the formulas for \(a_{21}\) and \(b_{21}\) in our simple mediation model.
+
+This is useful because it helps us interpret these path coefficients. As they were for multiple regression, they are simply that part of the correlation due to a direct path, controlling for the correlation along the indirect path.
+
+If the main path of interest to our scientific hypothesis is
+\[
+X_{1} \boldsymbol{\rightarrow} Y_{2}
+\]
+the path coefficient \(b_{21}\) is the estimate of interest. What other indirect path is being ``controlled for'' in that estimate?
+
+For a mediation model, the activity above tells us the right way to think about the path coefficient \(b_{21}\). But it's also instructive to consider \(a_{21}\).
+
+Suppose the substantive path of scientific interest was
+\[
+Y_{1} \boldsymbol{\rightarrow} Y_{2}
+\]
+
+In that case, how do we interpret its path coefficient \(a_{21}\)? It is the strength of the association between \(Y_{1}\) and \(Y_{2}\) controlling for the indirect path where?
+
+What kind of indirect path is that? In other words, what role does \(X_{1}\) play along the indirect path from \(Y_{1}\) to \(Y_{2}\)? (Go back and look at the diagram and the arrows.)
+
+Suppose the substantive path of scientific interest was
+\[
+X_{1} \boldsymbol{\rightarrow} Y_{1}
+\]
+
+In that case, how do we interpret its path coefficient \(b_{11}\)? It is the strength of the association between \(X_{1}\) and \(Y_{2}\), but does it account for any indirect paths?
+
+The answer is ``no'', but why not? What role does \(Y_{2}\) play along an indirect path from \(X_{1}\) to \(Y_{1}\) and why does that not introduce any additional association between them?
+
+The three activities above illustrate the remarkable fact that the simple mediation model is actually an example of all three models we've studied in this chapter: there's a mediator, a confounder, and a collider! (Each variable plays one of those roles with respect to the relationship between the other two.) So while we call it the ``simple mediation model'', we can actually use the implications of the model for any of the three.
 
 \hypertarget{mediation-r}{%
 \section{Simple mediation in R}\label{mediation-r}}
@@ -3958,6 +4366,106 @@ We'll return to this example in a moment. But first, let's explore some of the o
 
 \hypertarget{scm}{%
 \chapter{Structural causal models}\label{scm}}
+
+{[}COLLIDER BIAS EXAMPLE{]}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+Colliders are particularly dangerous due to a phenomenon called \emph{collider bias}. We return to the basketball example to illustrate.
+
+Suppose there is no association in the population between the height and the shooting accuracy of basketball players. (That may or not be true, but let's assume it for the time being.) Here is some simulated data of shooting percentages and height in inches:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{1}\NormalTok{)}
+\NormalTok{height }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{500}\NormalTok{, }\AttributeTok{mean =} \DecValTok{68}\NormalTok{, }\AttributeTok{sd =} \DecValTok{8}\NormalTok{)}
+\NormalTok{shooting }\OtherTok{\textless{}{-}} \FunctionTok{rnorm}\NormalTok{(}\DecValTok{500}\NormalTok{, }\AttributeTok{mean =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{sd =} \FloatTok{0.2}\NormalTok{)}
+\NormalTok{fake\_basketball\_data }\OtherTok{\textless{}{-}} \FunctionTok{tibble}\NormalTok{(height, shooting)}
+\FunctionTok{ggplot}\NormalTok{(fake\_basketball\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ shooting, }\AttributeTok{x =}\NormalTok{ height)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-110-1.pdf}
+
+There is no correlation between these two variables:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(fake\_basketball\_data}\SpecialCharTok{$}\NormalTok{height, fake\_basketball\_data}\SpecialCharTok{$}\NormalTok{shooting)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -0.04122944
+\end{verbatim}
+
+But now we'll figure out who makes it into the professional league:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fake\_basketball\_data }\OtherTok{\textless{}{-}}\NormalTok{ fake\_basketball\_data }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{mutate}\NormalTok{(}\AttributeTok{pro =} \FunctionTok{ifelse}\NormalTok{((shooting }\SpecialCharTok{\textgreater{}} \FloatTok{0.75} \SpecialCharTok{\&}\NormalTok{ height }\SpecialCharTok{\textgreater{}} \DecValTok{72}\NormalTok{) }\SpecialCharTok{|}
+\NormalTok{                        (shooting }\SpecialCharTok{\textgreater{}} \FloatTok{0.50} \SpecialCharTok{\&}\NormalTok{ height }\SpecialCharTok{\textgreater{}} \DecValTok{80}\NormalTok{),}
+                        \StringTok{"Pro"}\NormalTok{, }\StringTok{"Non{-}pro"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+The condition here for making it into the pros is that \emph{either} the player is a very good shooter (and is reasonably tall), or is very tall (and is a reasonably good shooter).
+
+Here is the plot, with the pros colored with red points.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(fake\_basketball\_data,}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ shooting, }\AttributeTok{x =}\NormalTok{ height, }\AttributeTok{color =}\NormalTok{ pro)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"red"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-113-1.pdf}
+
+We'll isolate those pro players in the graph:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fake\_basketball\_data\_pros }\OtherTok{\textless{}{-}}\NormalTok{ fake\_basketball\_data }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{filter}\NormalTok{(pro }\SpecialCharTok{==} \StringTok{"Pro"}\NormalTok{)}
+\FunctionTok{ggplot}\NormalTok{(fake\_basketball\_data\_pros,}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{y =}\NormalTok{ shooting, }\AttributeTok{x =}\NormalTok{ height)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{color =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-114-1.pdf}
+
+Now there is a pretty large negative correlation.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(fake\_basketball\_data\_pros}\SpecialCharTok{$}\NormalTok{shooting,}
+\NormalTok{    fake\_basketball\_data\_pros}\SpecialCharTok{$}\NormalTok{height)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -0.6451966
+\end{verbatim}
+
+So incorporating information into the model about the collider (the probability of going pro) induces an association that wasn't present in the population.
+
+Here's another way to think about this. If you know someone's height, do you know anything about their shooting ability? Or vice versa? In the population at large, probably not much.
+
+But what if I tell you the person is a professional basketball player? And what if I tell you this person is quite short (at least for a pro player). What information does that provide about their shooting ability?
+
+And what if I tell you that a professional basketball player is not a very good shooter. What information does that provide about their height?
+
+Collider bias is often called \emph{selection bias} because it happens most often when you control for a variable that ends up selecting for certain traits in the population. In this example, if you try to ``control'' for the pro league variable \(Y_{1}\), you end up looking at a set of players who have the same probability of going pro. In that set, players will vary in their height and shooting ability, but shorter players are forced to be better shooters, and players who don't shoot well may fare better if they are tall.
 
 \hypertarget{appendix-appendix}{%
 \appendix}
