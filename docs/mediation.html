@@ -429,7 +429,7 @@ e_{2}   &amp;= 1 - Corr(Y_{2}, X_{1})^{2}   \\
 b_{11}  &amp;= Corr(Y_{1}, X_{1})           \\
 b_{21}  &amp;= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
 \end{align}\]</span></p>
-<p>Other than just a change of notation—owing to the fact that the roles of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{1}\)</span> are reversed in the collider example—the solutions are <em>identical</em>.</p>
+<p>Other than just a change of notation—owing to the fact that the roles of <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{1}\)</span> are reversed in the confounder example—the solutions are <em>identical</em>.</p>
 <div class="rmdnote">
 <p>Think about the ramifications of the above discussion for living near power lines and cancer. Living near power lines is correlated to poverty, and poverty is correlated with cancer. But if the product of those two correlations doesn’t equal the overall correlation between power lines and cancer, what does that say about the model? What other “path” might be missing in the model that would help account for the discrepancy?</p>
 <p>Now suppose that scientists are able to use a carefully controlled experiment (ethical considerations aside) to prove that there is no direct effect of power lines on cancer. Note that this is <em>not</em> the same thing as saying that the correlation between power lines and cancer is zero. How does the model explain this?</p>
@@ -444,7 +444,7 @@ b_{21}  &amp;= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})
 X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\rightarrow} Y_{2}
 \]</span>
 And it’s no surprise to anyone that <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(Y_{2}\)</span> are associated. The association is “transmitted” from <span class="math inline">\(X_{1}\)</span> to <span class="math inline">\(Y_{1}\)</span> and then from <span class="math inline">\(Y_{1}\)</span> to <span class="math inline">\(Y_{2}\)</span> in an obvious way.</p>
-<p>But for a collider, the arrows don’t go the same way:</p>
+<p>But for a confounder, the arrows don’t go the same way:</p>
 <p><span class="math display">\[
 Y_{1} \boldsymbol{\leftarrow} X_{1} \boldsymbol{\rightarrow} Y_{2}
 \]</span>

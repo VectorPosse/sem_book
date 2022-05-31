@@ -474,7 +474,7 @@ b_{11}  &= Corr(Y_{1}, X_{1})           \\
 b_{21}  &= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
 \end{align}
 
-Other than just a change of notation---owing to the fact that the roles of $X_{1}$ and $Y_{1}$ are reversed in the collider example---the solutions are *identical*.
+Other than just a change of notation---owing to the fact that the roles of $X_{1}$ and $Y_{1}$ are reversed in the confounder example---the solutions are *identical*.
 
 ::: {.rmdnote}
 
@@ -501,7 +501,7 @@ X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\rightarrow} Y_{2}
 $$
 And it's no surprise to anyone that $X_{1}$ and $Y_{2}$ are associated. The association is "transmitted" from $X_{1}$ to $Y_{1}$ and then from $Y_{1}$ to $Y_{2}$ in an obvious way.
 
-But for a collider, the arrows don't go the same way:
+But for a confounder, the arrows don't go the same way:
 
 $$
 Y_{1} \boldsymbol{\leftarrow} X_{1} \boldsymbol{\rightarrow} Y_{2}
