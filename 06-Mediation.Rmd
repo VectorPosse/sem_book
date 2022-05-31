@@ -157,7 +157,7 @@ As a concrete example to illustrate this phenomenon, imagine that the variables 
 * $Y_{1}$ is tar deposits in the lungs.
 * $Y_{2}$ is lung cancer.
 
-The idea is that smoking is associated with lung cancer. But what smoking *really* does is cause specific chemical processes in the lungs (including the deposition of tar) and that---among other factors---is what contributes to lung cancer. Tar serves as a "mediator" for the process that connects smoking to lung cancer.
+The idea is that smoking is associated with lung cancer. But what smoking *really* does is cause specific chemical processes in the lungs (including the deposition of tar), and that---among other factors---is what contributes to lung cancer. Tar serves as a "mediator" for the process that connects smoking to lung cancer.
 
 Since there are two endogenous variables present in this model, there are two regression equations we have to write down:
 
@@ -325,7 +325,7 @@ knitr::include_graphics("graphics/confounder.png")
 
 Draw this model on your own piece of paper.
 
-Identify if the variables are exogenous or endogenous.
+Identify which variables are exogenous or endogenous.
 
 Following the Really Important Rules, draw in all variances, covariances, or error terms that should be present in the diagram.
 
@@ -484,6 +484,8 @@ Now suppose that scientists are able to use a carefully controlled experiment (e
 
 :::
 
+When a confounder accounts for all (or nearly all) the covariance between two variables, the resulting association is called *spurious*. The association exists, but it doesn't exist due to any direct pathway.
+
 ::: {.rmdnote}
 
 Given that the mediator model and the confounder model are *statistically identical*, why would you use one model versus the other? Are there "philosophical" differences between mediators and confounders, even though the two models give the same results?
@@ -504,12 +506,206 @@ But for a collider, the arrows don't go the same way:
 $$
 Y_{1} \boldsymbol{\leftarrow} X_{1} \boldsymbol{\rightarrow} Y_{2}
 $$
-And,yet, there is still an association between $Y_{1}$ and $Y_{2}$. Sometimes even "backwards" arrows can "transmit" an association through indirect pathways. This is often called a "backdoor path".
+And, yet, there is still an association between $Y_{1}$ and $Y_{2}$. Sometimes even "backwards" arrows can "transmit" an association through indirect pathways. This is often called a "backdoor path".
 
 But there are limits to that logic. The next example will illustrate.
 
 
 ## Colliders {#mediation-colliders}
+
+The variable in the middle of the diagram below is called a "collider": 
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/collider.png")
+```
+
+::: {.rmdnote}
+
+Draw this model on your own piece of paper.
+
+Identify which variables are exogenous or endogenous.
+
+Following the Really Important Rules, draw in all variances, covariances, or error terms that should be present in the diagram.
+
+Finally, see if you can label all path with letters and subscripts according to the naming conventions described earlier.
+
+:::
+
+Here is the final model:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/collider_vars.png")
+```
+
+As a concrete example to illustrate this phenomenon, imagine that the variables measure the following:
+
+* $X_{1}$ is the height of basketball players.
+* $X_{2}$ is the shooting accuracy of basketball players.
+* $Y_{1}$ is the probability of being selected to play in a professional league.
+
+The paths $b_{11}$ and $b_{12}$ make sense. Taller players and players who shoot the ball better are more likely to make it to a professional level of play. These are positive associations. Do these two paths together create an indirect path between height and shooting that accounts for covariance between them?
+
+It turns out the answer is no!
+
+::: {.rmdnote}
+
+This collider model is masquerading as another model that you have already studied in a previous chapter. It was drawn a little differently there, but the relationships among the variables and arrows are exactly the same. What is that model?
+
+:::
+
+::: {.rmdnote}
+
+Are there any restrictions on the value of $c_{12}$ in a multiple regression model?
+
+:::
+
+While the value of $c_{12}$ does change the interpretation of the path coefficients in a multiple regression model, the model-implied matrix always results in
+
+$$
+c_{12} = Cov(X_{1}, X_{2})
+$$
+
+That value is just calculated directly from the data. It does not depend on any other parameter of the model. Since $X_{1}$ and $X_{2}$ are exogenous, the source of this covariance is independent of anything else in the model.
+
+There's no math to do in this section. All the math we need was already done in the [previous chapter](#multiple).
+
+The takeaway message here is that colliders do not transmit association through them. Pathways like the following do not imply anything about the association between $X_{1}$ and $X_{2}$:
+
+$$
+X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\leftarrow} X_{2}
+$$
+
+This does not mean that $X_{1}$ and $X_{2}$ are uncorrelated. They may be correlated, but this correlation arises from the covariance they share "in nature" and not accounted for by any variables of the model.
+
+Colliders are particularly dangerous due to a phenomenon called *collider bias*. We return to the basketball example to illustrate.
+
+Suppose there is no association in the population between the height and the shooting accuracy of basketball players. (That may or not be true, but let's assume it for the time being.) Here is some simulated data of shooting percentages and height in inches:
+
+```{r}
+set.seed(1)
+height <- rnorm(500, mean = 68, sd = 8)
+shooting <- rnorm(500, mean = 0.5, sd = 0.2)
+fake_basketball_data <- tibble(height, shooting)
+ggplot(fake_basketball_data, aes(y = shooting, x = height)) +
+    geom_point()
+```
+
+There is no correlation between these two variables:
+
+```{r}
+cor(fake_basketball_data$height, fake_basketball_data$shooting)
+```
+But now we'll figure out who makes it into the professional league:
+
+```{r}
+fake_basketball_data <- fake_basketball_data %>%
+    mutate(pro = ifelse((shooting > 0.75 & height > 72) |
+                        (shooting > 0.50 & height > 80),
+                        "Pro", "Non-pro"))
+```
+
+The condition here for making it into the pros is that *either* the player is a very good shooter (and is reasonably tall), or is very tall (and is a reasonably good shooter).
+
+Here is the plot, with the pros colored with red points.
+
+```{r}
+ggplot(fake_basketball_data,
+       aes(y = shooting, x = height, color = pro)) +
+    geom_point() +
+    scale_color_manual(values = c("black", "red"))
+```
+
+We'll isolate those pro players in the graph:
+
+```{r}
+fake_basketball_data_pros <- fake_basketball_data %>%
+    filter(pro == "Pro")
+ggplot(fake_basketball_data_pros,
+       aes(y = shooting, x = height)) +
+    geom_point(color = "red")
+```
+
+Now there is a pretty large negative correlation.
+
+```{r}
+cor(fake_basketball_data_pros$shooting,
+    fake_basketball_data_pros$height)
+```
+
+So incorporating information into the model about the collider (the probability of going pro) induces an association that wasn't present in the population.
+
+::: {.rmdnote}
+
+Here's another way to think about this. If you know someone's height, do you know anything about their shooting ability? Or vice versa? In the population at large, probably not much.
+
+But what if I tell you the person is a professional basketball player? And what if I tell you this person is quite short (at least for a pro player). What information does that provide about their shooting ability?
+
+And what if I tell you that a professional basketball player is not a very good shooter. What information does that provide about their height?
+
+:::
+
+Collider bias is often called *selection bias* because it happens most often when you control for a variable that ends up selecting for certain traits in the population. In this example, if you try to "control" for the pro league variable $Y_{1}$, you end up looking at a set of players who have the same probability of going pro. In that set, players will vary in their height and shooting ability, but shorter players are forced to be better shooters, and players who don't shoot well may fare better if they are tall.
+
+It is not a problem to have colliders in our model. The goal here is just to understand that they do not provide indirect paths for associations to be transmitted from one variable to another. Any such association must be accounted for some other way (like another indirect path with a mediator or a confounder, or perhaps through exogenous covariance like in this example). And we need to be especially careful not to "control" for colliders when writing down our regression models. (If we follow the arrows carefully, this shouldn't be a problem.)
+
+::: {.rmdnote}
+
+Consider a simple regression model:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/simple_regression_params.png")
+```
+
+In the [simple regression chapter](#simple), we explained that the error term $E$ is uncorrelated with the exogenous variable $X$ because there is no arrow connecting $X$ and $E$. We can now admit that, while the fact about lack of correlation is true, the explanation we gave was a little misleading. Correlations can be created indirectly through sequences of paths. $X$ and and $E$ are connected through Y as follows:
+
+$$
+X \boldsymbol{\rightarrow} Y \boldsymbol{\leftarrow} E
+$$
+
+But why does this path not imply a correlation between $X$ and $E$?
+
+:::
+
+::: {.rmdnote}
+
+Consider the multiple regression model:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/multiple_regression_2.png")
+```
+
+How do we know that the only covariance between $X_{1}$ and $X_{2}$ is captured by $c_{12}$? In other words, why is no additional covariance explained by the following path?
+
+$$
+X_{1} \boldsymbol{\rightarrow} Y \boldsymbol{\leftarrow} X_{2}
+$$
+
+:::
+
+
+::: {.rmdnote}
+
+Consider the mediator example again:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/mediator_vars.png")
+```
+
+
+One of the Really Important Rules was that the error terms should not (at least not by default) be correlated.
+
+It's true that we haven't specified a double-headed arrow between $E_{1}$ and $E_{2}$, but how do we know there isn't an indirect path accounting for some covariance between them?
+
+Hint: the only possible path would be
+
+$$
+E_{1} \rightarrow Y_{1} \boldsymbol{\rightarrow} Y_{2} \leftarrow E_{2}
+$$
+Why is that path not a problem?
+
+Why do we have to be more careful about making assumptions about possible covariances between $E_{1}$ and $Y_{2}$?
+
+:::
 
 
 ## The simple mediation model {#mediation-simple}
