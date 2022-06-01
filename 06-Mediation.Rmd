@@ -796,3 +796,141 @@ The three activities above illustrate the remarkable fact that the simple mediat
 
 ## Simple mediation in R {#mediation-r}
 
+The data set we will use comes from the [National Longitudinal Survey of Youth (1997)](https://www.bls.gov/nls/nlsy97.htm) representing "a nationally representative sample of 8,984 men and women born during the years 1980 through 1984 and living in the United States at the time of the initial survey in 1997."
+
+The data set below is a small set of variables taken from the larger survey. Rows with missing data have been removed, leaving a sample size of 3861.
+
+```{r}
+nls97 <- read_csv("https://raw.githubusercontent.com/VectorPosse/sem_book/main/data/nls_math_verb.csv")
+nls97
+```
+
+The three variables are as follows:
+
+* $X_{1}$: `MOTHER_ED`
+    * This is the highest grade completed by respondent's residential mother (includes both biological and non-biological mothers). (Numbers over 12 refer to years in college as well.)
+* $Y_{1}$: `EERI`
+    * This is the Enriching Environment Risk Index. Scores range from 0 to 3; higher scores indicate a more enriching environment.
+* $Y_{2}$: `MATH_VERB`
+     * This is the ASVAB Math/Verbal Score computed by combining tests of mathematical knowledge, arithmetic reasoning, word knowledge, and paragraph comprehension. The values are from 0 to 1 and---when multiplied by 100---should be interpreted as percentiles.
+
+The model we propose is the following:
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/mediation_nls97.png")
+```
+
+::: {.rmdnote}
+
+Explain the research hypothesis implied by this model. In other words, what relationship is this model trying to study and what role could the mediator possibly play?
+
+:::
+
+The `lm` function is no longer adequate for this model. It's more complex than the `lm` function was designed to handle. So we will fit the model (and all future models) in `lavaan`.
+
+Since there are two endogenous variables, there are two regression equations implied by this model:
+
+\begin{align}
+\text{EERI}         &= b_{11}\text{MOTHER_ED} + E_{1}        \\
+\text{MATH_VERB}    &= b_{21}\text{MOTHER_ED} + 
+                        a_{21}\text{EERI} + E_{2}  
+\end{align}
+
+These are translated into two separate lines of the `lavaan` model. Note that we still require quotation marks around the model specification, but to make it easier to read, the quotes are on different lines from the model text.
+
+```{r}
+nls_model <- "
+    EERI ~ MOTHER_ED
+    MATH_VERB ~ MOTHER_ED + EERI
+"
+```
+
+Then we fit the model with the `sem` command:
+
+```{r}
+nls_fit <- sem(nls_model, data = nls97)
+```
+
+Here are the unstandardized parameter estimates:
+
+```{r}
+parameterEstimates(nls_fit)
+```
+
+The path coefficients are interpretable as slopes, just like in multiple regression.
+
+::: {.rmdnote}
+
+In the second line of the output (labeled `MATH_VERB ~ MOTHER_ED`), what does 0.031 mean? In other words, what does it mean to change `MOTHER_ED` by 1, and what is the predicted change in `MATH_VERB`? What does that mean on the 0--1 scale of that test?
+
+Are there are other sources of covariance between `MOTHER_ED` and `MATH_VERB` in the model? (Another way to ask this: are there any indirect paths from `MOTHER_ED` to `MATH_VERB` that transmit covariance?)
+
+:::
+
+The activity above highlights the main source of our interest, the direct path from `MOTHER_ED` to `MATH_VERB` after controlling for the mediator `EERI`. In other words, how much of the relationship between mother's education and test scores is accounted for "directly"? The theory is that some of that association might be due to the fact that a mother's education level influences how enriching the environment might be for their child. And that, in turn, may be what accounts for increases in test scores. If that were the case, then the "direct" pathway would be "reduced" by that influence (presumably while keeping the influence of other factors that are not explicitly part of the model).
+
+::: {.rmdnote}
+
+In the second line of the output (labeled `EERI ~ MOTHER_ED`), what does 0.096 mean? What is the predicted change in `EERI`? What does that mean on the 0--3 scale of that test?
+
+Are there are other sources of covariance between `MOTHER_ED` and `EERI` in the model? Another way to ask this: are there any indirect paths from `MOTHER_ED` to `EERI` that transmit covariance? (The answer is no. Make sure you understand why.)
+
+:::
+
+::: {.rmdnote}
+
+In the third line of the output (labeled `MATH_VERB ~ EERI`), what does 0.108 mean?
+
+Are there are other sources of covariance between `EERI` and `MATH_VERB` in the model? Another way to ask this: are there any indirect paths from `EERI` to `MATH_VERB` that transmit covariance? (The answer is yes. Make sure you understand why.)
+
+:::
+
+::: {.rmdnote}
+
+Lines 4, 5, and 6 are labeled very similarly (all of the form `VARIABLE ~~ VARIABLE`). But---in the immortal words of Sesame Street---one of these lines is not like the other.
+
+Explain why line 6 is estimating one type of parameter while lines 4 and 5 are estimating a completely different type of parameter.
+
+:::
+
+Unstandardized variables have one advantage in that they are interpretable using the units of the raw data. However, because all three variables are measured using totally different units, it's hard to make comparisons among them.
+
+For that purpose, it's often easier to use standardized variables:
+
+```{r}
+standardizedSolution(nls_fit)
+```
+
+These are now correlation coefficients---or, more properly, they are "part" correlations that have had the influence of indirect paths removed from them.
+
+::: {.rmdnote}
+
+One entry of the model-implied matrix is this:
+
+$$
+Corr(Y_{2}, X_{1})  = b_{21}v_{1} + a_{21}b_{11}v_{1}
+$$
+
+We know that for standardized variables, $v_{1} = 1$, so that goes away:
+
+$$
+Corr(Y_{2}, X_{1})  = b_{21} + a_{21}b_{11}
+$$
+
+Check that both sides of this equation match. That, for the left-hand side, calculate the correlation of `MATH_VERB` and `MOTHER_ED` in R. Then, for the right-hand side, plug in the standardized path coefficients from the table above.
+
+:::
+
+The expression $b_{21} + a_{21}b_{11}$ gives a very clean and intuitive way to understand the correlation here. The "total" correlation is decomposed into two pieces. One piece---$b_{21}$ is the "direct effect". The other piece---the *product* of the two correlations $b_{11}$ and $a_{21}$---is the "indirect effect".
+
+::: {.rmdnote}
+
+Which is stronger in this model, the direct effect or the indirect effect? (For the latter, don't forget that you need the product of two parameters.)
+
+:::
+
+Here is the final model. It is customary and strongly recommended (though not universally observed) to report both unstandardized and standardized parameters in the model diagram. When both are reported, you'll often see the standardized estimates appear in parentheses right after the unstandardized ones.
+
+```{r, echo = FALSE, fig.align= "center"}
+knitr::include_graphics("graphics/mediation_nls97_params.png")
+```
