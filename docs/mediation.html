@@ -634,6 +634,132 @@ X_{1} \boldsymbol{\rightarrow} Y_{1}
 <h2>
 <span class="header-section-number">6.8</span> Simple mediation in R<a class="anchor" aria-label="anchor" href="#mediation-r"><i class="fas fa-link"></i></a>
 </h2>
+<p>The data set we will use comes from the <a href="https://www.bls.gov/nls/nlsy97.htm">National Longitudinal Survey of Youth (1997)</a> representing “a nationally representative sample of 8,984 men and women born during the years 1980 through 1984 and living in the United States at the time of the initial survey in 1997.”</p>
+<p>The data set below is a small set of variables taken from the larger survey. Rows with missing data have been removed, leaving a sample size of 3861.</p>
+<div class="sourceCode" id="cb135"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nls97</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/VectorPosse/sem_book/main/data/nls_math_verb.csv"</span><span class="op">)</span></code></pre></div>
+<pre><code>## Rows: 3861 Columns: 3
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: ","
+## dbl (3): MOTHER_ED, EERI, MATH_VERB
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb137"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nls97</span></code></pre></div>
+<pre><code>## # A tibble: 3,861 × 3
+##    MOTHER_ED  EERI MATH_VERB
+##        &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
+##  1        15     2    0.585 
+##  2        12     2    0.280 
+##  3        12     1    0.220 
+##  4        12     1    0.0358
+##  5        14     1    0.306 
+##  6         6     3    0.675 
+##  7        12     2    0.260 
+##  8        11     2    0.445 
+##  9        15     1    0.0934
+## 10        15     1    0.0833
+## # … with 3,851 more rows</code></pre>
+<p>The three variables are as follows:</p>
+<ul>
+<li>
+<span class="math inline">\(X_{1}\)</span>: <code>MOTHER_ED</code>
+<ul>
+<li>This is the highest grade completed by respondent’s residential mother (includes both biological and non-biological mothers). (Numbers over 12 refer to years in college as well.)</li>
+</ul>
+</li>
+<li>
+<span class="math inline">\(Y_{1}\)</span>: <code>EERI</code>
+<ul>
+<li>This is the Enriching Environment Risk Index. Scores range from 0 to 3; higher scores indicate a more enriching environment.</li>
+</ul>
+</li>
+<li>
+<span class="math inline">\(Y_{2}\)</span>: <code>MATH_VERB</code>
+<ul>
+<li>This is the ASVAB Math/Verbal Score computed by combining tests of mathematical knowledge, arithmetic reasoning, word knowledge, and paragraph comprehension. The values are from 0 to 1 and—when multiplied by 100—should be interpreted as percentiles.</li>
+</ul>
+</li>
+</ul>
+<p>The model we propose is the following:</p>
+<div class="inline-figure"><img src="graphics/mediation_nls97.png" width="704" style="display: block; margin: auto;"></div>
+<div class="rmdnote">
+<p>Explain the research hypothesis implied by this model. In other words, what relationship is this model trying to study and what role could the mediator possibly play?</p>
+</div>
+<p>The <code>lm</code> function is no longer adequate for this model. It’s more complex than the <code>lm</code> function was designed to handle. So we will fit the model (and all future models) in <code>lavaan</code>.</p>
+<p>Since there are two endogenous variables, there are two regression equations implied by this model:</p>
+<p><span class="math display">\[\begin{align}
+\text{EERI}         &amp;= b_{11}\text{MOTHER_ED} + E_{1}        \\
+\text{MATH_VERB}    &amp;= b_{21}\text{MOTHER_ED} +
+                        a_{21}\text{EERI} + E_{2}  
+\end{align}\]</span></p>
+<p>These are translated into two separate lines of the <code>lavaan</code> model. Note that we still require quotation marks around the model specification, but to make it easier to read, the quotes are on different lines from the model text.</p>
+<div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nls_model</span> <span class="op">&lt;-</span> <span class="st">"
+    EERI ~ MOTHER_ED
+    MATH_VERB ~ MOTHER_ED + EERI
+"</span></code></pre></div>
+<p>Then we fit the model with the <code>sem</code> command:</p>
+<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nls_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/sem.html">sem</a></span><span class="op">(</span><span class="va">nls_model</span>, data <span class="op">=</span> <span class="va">nls97</span><span class="op">)</span></code></pre></div>
+<p>Here are the unstandardized parameter estimates:</p>
+<div class="sourceCode" id="cb141"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/parameterEstimates.html">parameterEstimates</a></span><span class="op">(</span><span class="va">nls_fit</span><span class="op">)</span></code></pre></div>
+<pre><code>##         lhs op       rhs   est    se      z pvalue ci.lower ci.upper
+## 1      EERI  ~ MOTHER_ED 0.096 0.004 24.043      0    0.088    0.104
+## 2 MATH_VERB  ~ MOTHER_ED 0.031 0.002 20.506      0    0.028    0.034
+## 3 MATH_VERB  ~      EERI 0.108 0.006 19.004      0    0.097    0.119
+## 4      EERI ~~      EERI 0.517 0.012 43.937      0    0.494    0.540
+## 5 MATH_VERB ~~ MATH_VERB 0.064 0.001 43.937      0    0.062    0.067
+## 6 MOTHER_ED ~~ MOTHER_ED 8.372 0.000     NA     NA    8.372    8.372</code></pre>
+<p>The path coefficients are interpretable as slopes, just like in multiple regression.</p>
+<div class="rmdnote">
+<p>In the second line of the output (labeled <code>MATH_VERB ~ MOTHER_ED</code>), what does 0.031 mean? In other words, what does it mean to change <code>MOTHER_ED</code> by 1, and what is the predicted change in <code>MATH_VERB</code>? What does that mean on the 0–1 scale of that test?</p>
+<p>Are there are other sources of covariance between <code>MOTHER_ED</code> and <code>MATH_VERB</code> in the model? (Another way to ask this: are there any indirect paths from <code>MOTHER_ED</code> to <code>MATH_VERB</code> that transmit covariance?)</p>
+</div>
+<p>The activity above highlights the main source of our interest, the direct path from <code>MOTHER_ED</code> to <code>MATH_VERB</code> after controlling for the mediator <code>EERI</code>. In other words, how much of the relationship between mother’s education and test scores is accounted for “directly”? The theory is that some of that association might be due to the fact that a mother’s education level influences how enriching the environment might be for their child. And that, in turn, may be what accounts for increases in test scores. If that were the case, then the “direct” pathway would be “reduced” by that influence (presumably while keeping the influence of other factors that are not explicitly part of the model).</p>
+<div class="rmdnote">
+<p>In the second line of the output (labeled <code>EERI ~ MOTHER_ED</code>), what does 0.096 mean? What is the predicted change in <code>EERI</code>? What does that mean on the 0–3 scale of that test?</p>
+<p>Are there are other sources of covariance between <code>MOTHER_ED</code> and <code>EERI</code> in the model? Another way to ask this: are there any indirect paths from <code>MOTHER_ED</code> to <code>EERI</code> that transmit covariance? (The answer is no. Make sure you understand why.)</p>
+</div>
+<div class="rmdnote">
+<p>In the third line of the output (labeled <code>MATH_VERB ~ EERI</code>), what does 0.108 mean?</p>
+<p>Are there are other sources of covariance between <code>EERI</code> and <code>MATH_VERB</code> in the model? Another way to ask this: are there any indirect paths from <code>EERI</code> to <code>MATH_VERB</code> that transmit covariance? (The answer is yes. Make sure you understand why.)</p>
+</div>
+<div class="rmdnote">
+<p>Lines 4, 5, and 6 are labeled very similarly (all of the form <code>VARIABLE ~~ VARIABLE</code>). But—in the immortal words of Sesame Street—one of these lines is not like the other.</p>
+<p>Explain why line 6 is estimating one type of parameter while lines 4 and 5 are estimating a completely different type of parameter.</p>
+</div>
+<p>Unstandardized variables have one advantage in that they are interpretable using the units of the raw data. However, because all three variables are measured using totally different units, it’s hard to make comparisons among them.</p>
+<p>For that purpose, it’s often easier to use standardized variables:</p>
+<div class="sourceCode" id="cb143"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/lavaan/man/standardizedSolution.html">standardizedSolution</a></span><span class="op">(</span><span class="va">nls_fit</span><span class="op">)</span></code></pre></div>
+<pre><code>##         lhs op       rhs est.std    se      z pvalue ci.lower ci.upper
+## 1      EERI  ~ MOTHER_ED   0.361 0.014 26.663      0    0.334    0.387
+## 2 MATH_VERB  ~ MOTHER_ED   0.308 0.014 21.768      0    0.281    0.336
+## 3 MATH_VERB  ~      EERI   0.286 0.015 19.636      0    0.257    0.314
+## 4      EERI ~~      EERI   0.870 0.010 89.042      0    0.851    0.889
+## 5 MATH_VERB ~~ MATH_VERB   0.760 0.012 65.343      0    0.737    0.782
+## 6 MOTHER_ED ~~ MOTHER_ED   1.000 0.000     NA     NA    1.000    1.000</code></pre>
+<p>These are now correlation coefficients—or, more properly, they are “part” correlations that have had the influence of indirect paths removed from them.</p>
+<div class="rmdnote">
+<p>One entry of the model-implied matrix is this:</p>
+<p><span class="math display">\[
+Corr(Y_{2}, X_{1})  = b_{21}v_{1} + a_{21}b_{11}v_{1}
+\]</span></p>
+<p>We know that for standardized variables, <span class="math inline">\(v_{1} = 1\)</span>, so that goes away:</p>
+<p><span class="math display">\[
+Corr(Y_{2}, X_{1})  = b_{21} + a_{21}b_{11}
+\]</span></p>
+<p>Check that both sides of this equation match. That, for the left-hand side, calculate the correlation of <code>MATH_VERB</code> and <code>MOTHER_ED</code> in R. Then, for the right-hand side, plug in the standardized path coefficients from the table above.</p>
+</div>
+<p>The expression <span class="math inline">\(b_{21} + a_{21}b_{11}\)</span> gives a very clean and intuitive way to understand the correlation here. The “total” correlation is decomposed into two pieces. One piece—<span class="math inline">\(b_{21}\)</span> is the “direct effect”. The other piece—the <em>product</em> of the two correlations <span class="math inline">\(b_{11}\)</span> and <span class="math inline">\(a_{21}\)</span>—is the “indirect effect”.</p>
+<div class="rmdnote">
+<p>Which is stronger in this model, the direct effect or the indirect effect? (For the latter, don’t forget that you need the product of two parameters.)</p>
+</div>
+<p>Here is the final model. It is customary and strongly recommended (though not universally observed) to report both unstandardized and standardized parameters in the model diagram. When both are reported, you’ll often see the standardized estimates appear in parentheses right after the unstandardized ones.</p>
+<div class="inline-figure"><img src="graphics/mediation_nls97_params.png" width="748" style="display: block; margin: auto;"></div>
 
 </div>
 </div>
