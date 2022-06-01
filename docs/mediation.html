@@ -690,9 +690,9 @@ X_{1} \boldsymbol{\rightarrow} Y_{1}
 <p>The <code>lm</code> function is no longer adequate for this model. It’s more complex than the <code>lm</code> function was designed to handle. So we will fit the model (and all future models) in <code>lavaan</code>.</p>
 <p>Since there are two endogenous variables, there are two regression equations implied by this model:</p>
 <p><span class="math display">\[\begin{align}
-\text{EERI}         &amp;= b_{11}\text{MOTHER_ED} + E_{1}        \\
-\text{MATH_VERB}    &amp;= b_{21}\text{MOTHER_ED} +
-                        a_{21}\text{EERI} + E_{2}  
+\textit{EERI}       &amp;= b_{11}\textit{MOTHER_ED} + E_{1}     \\
+\textit{MATH_VERB}  &amp;= b_{21}\textit{MOTHER_ED} +
+                        a_{21}\textit{EERI} + E_{2}  
 \end{align}\]</span></p>
 <p>These are translated into two separate lines of the <code>lavaan</code> model. Note that we still require quotation marks around the model specification, but to make it easier to read, the quotes are on different lines from the model text.</p>
 <div class="sourceCode" id="cb139"><pre class="downlit sourceCode r">
@@ -720,7 +720,7 @@ X_{1} \boldsymbol{\rightarrow} Y_{1}
 </div>
 <p>The activity above highlights the main source of our interest, the direct path from <code>MOTHER_ED</code> to <code>MATH_VERB</code> after controlling for the mediator <code>EERI</code>. In other words, how much of the relationship between mother’s education and test scores is accounted for “directly”? The theory is that some of that association might be due to the fact that a mother’s education level influences how enriching the environment might be for their child. And that, in turn, may be what accounts for increases in test scores. If that were the case, then the “direct” pathway would be “reduced” by that influence (presumably while keeping the influence of other factors that are not explicitly part of the model).</p>
 <div class="rmdnote">
-<p>In the second line of the output (labeled <code>EERI ~ MOTHER_ED</code>), what does 0.096 mean? What is the predicted change in <code>EERI</code>? What does that mean on the 0–3 scale of that test?</p>
+<p>In the first line of the output (labeled <code>EERI ~ MOTHER_ED</code>), what does 0.096 mean? What is the predicted change in <code>EERI</code>? What does that mean on the 0–3 scale of that test?</p>
 <p>Are there are other sources of covariance between <code>MOTHER_ED</code> and <code>EERI</code> in the model? Another way to ask this: are there any indirect paths from <code>MOTHER_ED</code> to <code>EERI</code> that transmit covariance? (The answer is no. Make sure you understand why.)</p>
 </div>
 <div class="rmdnote">
@@ -752,9 +752,9 @@ Corr(Y_{2}, X_{1})  = b_{21}v_{1} + a_{21}b_{11}v_{1}
 <p><span class="math display">\[
 Corr(Y_{2}, X_{1})  = b_{21} + a_{21}b_{11}
 \]</span></p>
-<p>Check that both sides of this equation match. That, for the left-hand side, calculate the correlation of <code>MATH_VERB</code> and <code>MOTHER_ED</code> in R. Then, for the right-hand side, plug in the standardized path coefficients from the table above.</p>
+<p>Check that both sides of this equation match. That is, for the left-hand side, calculate the correlation of <code>MATH_VERB</code> and <code>MOTHER_ED</code> in R. Then, for the right-hand side, plug in the standardized path coefficients from the table above.</p>
 </div>
-<p>The expression <span class="math inline">\(b_{21} + a_{21}b_{11}\)</span> gives a very clean and intuitive way to understand the correlation here. The “total” correlation is decomposed into two pieces. One piece—<span class="math inline">\(b_{21}\)</span> is the “direct effect”. The other piece—the <em>product</em> of the two correlations <span class="math inline">\(b_{11}\)</span> and <span class="math inline">\(a_{21}\)</span>—is the “indirect effect”.</p>
+<p>The expression <span class="math inline">\(b_{21} + a_{21}b_{11}\)</span> gives a very clean and intuitive way to understand the correlation here. The “total” correlation is decomposed into two pieces. One piece—<span class="math inline">\(b_{21}\)</span>—is the “direct effect”. The other piece—the <em>product</em> of the two correlations <span class="math inline">\(b_{11}\)</span> and <span class="math inline">\(a_{21}\)</span>—is the “indirect effect”.</p>
 <div class="rmdnote">
 <p>Which is stronger in this model, the direct effect or the indirect effect? (For the latter, don’t forget that you need the product of two parameters.)</p>
 </div>
