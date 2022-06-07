@@ -831,8 +831,8 @@ The `lm` function is no longer adequate for this model. It's more complex than t
 Since there are two endogenous variables, there are two regression equations implied by this model:
 
 \begin{align}
-\textit{EERI}       &= b_{11}\textit{MOTHER_ED} + E_{1}     \\
-\textit{MATH_VERB}  &= b_{21}\textit{MOTHER_ED} + 
+\textit{EERI}       &= b_{11}\textit{MOTHER\textunderscore ED} + E_{1}     \\
+\textit{MATH\textunderscore VERB}  &= b_{21}\textit{MOTHER\textunderscore ED} + 
                         a_{21}\textit{EERI} + E_{2}  
 \end{align}
 

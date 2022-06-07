@@ -124,7 +124,7 @@
 
 \title{Demystifying Structural Equation Modeling}
 \author{Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT)}
-\date{2022-05-31}
+\date{2022-06-06}
 
 \begin{document}
 \maketitle
@@ -147,7 +147,7 @@ If you want, you can also download this book as a PDF or EPUB file. Be aware tha
 \section*{Some history}\label{intro-history}}
 \addcontentsline{toc}{section}{Some history}
 
-In 2016, Jonathan and Sean embarked upon a bold experiment, asking the question, ``Is is possible to teach structural equation modeling (SEM) to undergraduates with little statistical background?'' To make things even more exciting, we attempted to do so in a special topics course lasting only one month during our May Term at Westminster College (Salt Lake City, UT).
+In 2016, Jonathan and Sean embarked upon a bold experiment, asking the question, ``Is is possible to teach structural equation modeling (SEM) to undergraduates with little statistical background?'' To make things even more exciting, we attempted to do so in a special topics course lasting only one month during our May Term at \href{https://westminstercollege.edu/}{Westminster College} (Salt Lake City, UT).
 
 In such an endeavor, we had to temper our expectations, of course. The goal was not to produce competent practitioners who would subsequently go on to do serious research using SEM techniques. We were quite happy that, at the end of May, we had undergraduates who were able to put together a simple final project that required them to find some data, posit a model, fit the model in R, interpret the output, and check a few model fit statistics. Some exposure to the topic and some appreciation of its power were satisfying enough. In fact, we think we got a little more out of it than that: we are reasonably confident that most of our students had developed---at that point right after taking the course---the ability to read a research article with an SEM model and have at least some idea what the article was talking about. We called it a win!
 
@@ -4091,7 +4091,7 @@ b_{11}  &= Corr(Y_{1}, X_{1})           \\
 b_{21}  &= Corr(Y_{2}, X_{1}) = \frac{Corr(Y_{2}, Y_{1})}{Corr(Y_{1}, X_{1})}
 \end{align}
 
-Other than just a change of notation---owing to the fact that the roles of \(X_{1}\) and \(Y_{1}\) are reversed in the collider example---the solutions are \emph{identical}.
+Other than just a change of notation---owing to the fact that the roles of \(X_{1}\) and \(Y_{1}\) are reversed in the confounder example---the solutions are \emph{identical}.
 
 Think about the ramifications of the above discussion for living near power lines and cancer. Living near power lines is correlated to poverty, and poverty is correlated with cancer. But if the product of those two correlations doesn't equal the overall correlation between power lines and cancer, what does that say about the model? What other ``path'' might be missing in the model that would help account for the discrepancy?
 
@@ -4110,7 +4110,7 @@ X_{1} \boldsymbol{\rightarrow} Y_{1} \boldsymbol{\rightarrow} Y_{2}
 \]
 And it's no surprise to anyone that \(X_{1}\) and \(Y_{2}\) are associated. The association is ``transmitted'' from \(X_{1}\) to \(Y_{1}\) and then from \(Y_{1}\) to \(Y_{2}\) in an obvious way.
 
-But for a collider, the arrows don't go the same way:
+But for a confounder, the arrows don't go the same way:
 
 \[
 Y_{1} \boldsymbol{\leftarrow} X_{1} \boldsymbol{\rightarrow} Y_{2}
@@ -4352,6 +4352,196 @@ The three activities above illustrate the remarkable fact that the simple mediat
 \hypertarget{mediation-r}{%
 \section{Simple mediation in R}\label{mediation-r}}
 
+The data set we will use comes from the \href{https://www.bls.gov/nls/nlsy97.htm}{National Longitudinal Survey of Youth (1997)} representing ``a nationally representative sample of 8,984 men and women born during the years 1980 through 1984 and living in the United States at the time of the initial survey in 1997.''
+
+The data set below is a small set of variables taken from the larger survey. Rows with missing data have been removed, leaving a sample size of 3861.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nls97 }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/VectorPosse/sem\_book/main/data/nls\_math\_verb.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 3861 Columns: 3
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## dbl (3): MOTHER_ED, EERI, MATH_VERB
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nls97}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3,861 x 3
+##    MOTHER_ED  EERI MATH_VERB
+##        <dbl> <dbl>     <dbl>
+##  1        15     2    0.585 
+##  2        12     2    0.280 
+##  3        12     1    0.220 
+##  4        12     1    0.0358
+##  5        14     1    0.306 
+##  6         6     3    0.675 
+##  7        12     2    0.260 
+##  8        11     2    0.445 
+##  9        15     1    0.0934
+## 10        15     1    0.0833
+## # ... with 3,851 more rows
+\end{verbatim}
+
+The three variables are as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \(X_{1}\): \texttt{MOTHER\_ED}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is the highest grade completed by respondent's residential mother (includes both biological and non-biological mothers). (Numbers over 12 refer to years in college as well.)
+  \end{itemize}
+\item
+  \(Y_{1}\): \texttt{EERI}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is the Enriching Environment Risk Index. Scores range from 0 to 3; higher scores indicate a more enriching environment.
+  \end{itemize}
+\item
+  \(Y_{2}\): \texttt{MATH\_VERB}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is the ASVAB Math/Verbal Score computed by combining tests of mathematical knowledge, arithmetic reasoning, word knowledge, and paragraph comprehension. The values are from 0 to 1 and---when multiplied by 100---should be interpreted as percentiles.
+  \end{itemize}
+\end{itemize}
+
+The model we propose is the following:
+
+\begin{center}\includegraphics{graphics/mediation_nls97} \end{center}
+
+Explain the research hypothesis implied by this model. In other words, what relationship is this model trying to study and what role could the mediator possibly play?
+
+The \texttt{lm} function is no longer adequate for this model. It's more complex than the \texttt{lm} function was designed to handle. So we will fit the model (and all future models) in \texttt{lavaan}.
+
+Since there are two endogenous variables, there are two regression equations implied by this model:
+
+\begin{align}
+\textit{EERI}       &= b_{11}\textit{MOTHER\textunderscore ED} + E_{1}     \\
+\textit{MATH\textunderscore VERB}  &= b_{21}\textit{MOTHER\textunderscore ED} + 
+                        a_{21}\textit{EERI} + E_{2}  
+\end{align}
+
+These are translated into two separate lines of the \texttt{lavaan} model. Note that we still require quotation marks around the model specification, but to make it easier to read, the quotes are on different lines from the model text.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nls\_model }\OtherTok{\textless{}{-}} \StringTok{"}
+\StringTok{    EERI \textasciitilde{} MOTHER\_ED}
+\StringTok{    MATH\_VERB \textasciitilde{} MOTHER\_ED + EERI}
+\StringTok{"}
+\end{Highlighting}
+\end{Shaded}
+
+Then we fit the model with the \texttt{sem} command:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{nls\_fit }\OtherTok{\textless{}{-}} \FunctionTok{sem}\NormalTok{(nls\_model, }\AttributeTok{data =}\NormalTok{ nls97)}
+\end{Highlighting}
+\end{Shaded}
+
+Here are the unstandardized parameter estimates:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{parameterEstimates}\NormalTok{(nls\_fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         lhs op       rhs   est    se      z pvalue ci.lower ci.upper
+## 1      EERI  ~ MOTHER_ED 0.096 0.004 24.043      0    0.088    0.104
+## 2 MATH_VERB  ~ MOTHER_ED 0.031 0.002 20.506      0    0.028    0.034
+## 3 MATH_VERB  ~      EERI 0.108 0.006 19.004      0    0.097    0.119
+## 4      EERI ~~      EERI 0.517 0.012 43.937      0    0.494    0.540
+## 5 MATH_VERB ~~ MATH_VERB 0.064 0.001 43.937      0    0.062    0.067
+## 6 MOTHER_ED ~~ MOTHER_ED 8.372 0.000     NA     NA    8.372    8.372
+\end{verbatim}
+
+The path coefficients are interpretable as slopes, just like in multiple regression.
+
+In the second line of the output (labeled \texttt{MATH\_VERB\ \textasciitilde{}\ MOTHER\_ED}), what does 0.031 mean? In other words, what does it mean to change \texttt{MOTHER\_ED} by 1, and what is the predicted change in \texttt{MATH\_VERB}? What does that mean on the 0--1 scale of that test?
+
+Are there are other sources of covariance between \texttt{MOTHER\_ED} and \texttt{MATH\_VERB} in the model? (Another way to ask this: are there any indirect paths from \texttt{MOTHER\_ED} to \texttt{MATH\_VERB} that transmit covariance?)
+
+The activity above highlights the main source of our interest, the direct path from \texttt{MOTHER\_ED} to \texttt{MATH\_VERB} after controlling for the mediator \texttt{EERI}. In other words, how much of the relationship between mother's education and test scores is accounted for ``directly''? The theory is that some of that association might be due to the fact that a mother's education level influences how enriching the environment might be for their child. And that, in turn, may be what accounts for increases in test scores. If that were the case, then the ``direct'' pathway would be ``reduced'' by that influence (presumably while keeping the influence of other factors that are not explicitly part of the model).
+
+In the first line of the output (labeled \texttt{EERI\ \textasciitilde{}\ MOTHER\_ED}), what does 0.096 mean? What is the predicted change in \texttt{EERI}? What does that mean on the 0--3 scale of that test?
+
+Are there are other sources of covariance between \texttt{MOTHER\_ED} and \texttt{EERI} in the model? Another way to ask this: are there any indirect paths from \texttt{MOTHER\_ED} to \texttt{EERI} that transmit covariance? (The answer is no. Make sure you understand why.)
+
+In the third line of the output (labeled \texttt{MATH\_VERB\ \textasciitilde{}\ EERI}), what does 0.108 mean?
+
+Are there are other sources of covariance between \texttt{EERI} and \texttt{MATH\_VERB} in the model? Another way to ask this: are there any indirect paths from \texttt{EERI} to \texttt{MATH\_VERB} that transmit covariance? (The answer is yes. Make sure you understand why.)
+
+Lines 4, 5, and 6 are labeled very similarly (all of the form \texttt{VARIABLE\ \textasciitilde{}\textasciitilde{}\ VARIABLE}). But---in the immortal words of Sesame Street---one of these lines is not like the other.
+
+Explain why line 6 is estimating one type of parameter while lines 4 and 5 are estimating a completely different type of parameter.
+
+Unstandardized variables have one advantage in that they are interpretable using the units of the raw data. However, because all three variables are measured using totally different units, it's hard to make comparisons among them.
+
+For that purpose, it's often easier to use standardized variables:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{standardizedSolution}\NormalTok{(nls\_fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         lhs op       rhs est.std    se      z pvalue ci.lower ci.upper
+## 1      EERI  ~ MOTHER_ED   0.361 0.014 26.663      0    0.334    0.387
+## 2 MATH_VERB  ~ MOTHER_ED   0.308 0.014 21.768      0    0.281    0.336
+## 3 MATH_VERB  ~      EERI   0.286 0.015 19.636      0    0.257    0.314
+## 4      EERI ~~      EERI   0.870 0.010 89.042      0    0.851    0.889
+## 5 MATH_VERB ~~ MATH_VERB   0.760 0.012 65.343      0    0.737    0.782
+## 6 MOTHER_ED ~~ MOTHER_ED   1.000 0.000     NA     NA    1.000    1.000
+\end{verbatim}
+
+These are now correlation coefficients---or, more properly, they are ``part'' correlations that have had the influence of indirect paths removed from them.
+
+One entry of the model-implied matrix is this:
+
+\[
+Corr(Y_{2}, X_{1})  = b_{21}v_{1} + a_{21}b_{11}v_{1}
+\]
+
+We know that for standardized variables, \(v_{1} = 1\), so that goes away:
+
+\[
+Corr(Y_{2}, X_{1})  = b_{21} + a_{21}b_{11}
+\]
+
+Check that both sides of this equation match. That is, for the left-hand side, calculate the correlation of \texttt{MATH\_VERB} and \texttt{MOTHER\_ED} in R. Then, for the right-hand side, plug in the standardized path coefficients from the table above.
+
+The expression \(b_{21} + a_{21}b_{11}\) gives a very clean and intuitive way to understand the correlation here. The ``total'' correlation is decomposed into two pieces. One piece---\(b_{21}\)---is the ``direct effect''. The other piece---the \emph{product} of the two correlations \(b_{11}\) and \(a_{21}\)---is the ``indirect effect''.
+
+Which is stronger in this model, the direct effect or the indirect effect? (For the latter, don't forget that you need the product of two parameters.)
+
+Here is the final model. It is customary and strongly recommended (though not universally observed) to report both unstandardized and standardized parameters in the model diagram. When both are reported, you'll often see the standardized estimates appear in parentheses right after the unstandardized ones.
+
+\begin{center}\includegraphics{graphics/mediation_nls97_params} \end{center}
+
 \hypertarget{path}{%
 \chapter{Path analysis}\label{path}}
 
@@ -4390,7 +4580,7 @@ Suppose there is no association in the population between the height and the sho
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{sem_book_files/figure-latex/unnamed-chunk-110-1.pdf}
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-117-1.pdf}
 
 There is no correlation between these two variables:
 
@@ -4428,7 +4618,7 @@ Here is the plot, with the pros colored with red points.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{sem_book_files/figure-latex/unnamed-chunk-113-1.pdf}
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-120-1.pdf}
 
 We'll isolate those pro players in the graph:
 
@@ -4442,7 +4632,7 @@ We'll isolate those pro players in the graph:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{sem_book_files/figure-latex/unnamed-chunk-114-1.pdf}
+\includegraphics{sem_book_files/figure-latex/unnamed-chunk-121-1.pdf}
 
 Now there is a pretty large negative correlation.
 

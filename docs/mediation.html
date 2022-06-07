@@ -690,8 +690,8 @@ X_{1} \boldsymbol{\rightarrow} Y_{1}
 <p>The <code>lm</code> function is no longer adequate for this model. It’s more complex than the <code>lm</code> function was designed to handle. So we will fit the model (and all future models) in <code>lavaan</code>.</p>
 <p>Since there are two endogenous variables, there are two regression equations implied by this model:</p>
 <p><span class="math display">\[\begin{align}
-\textit{EERI}       &amp;= b_{11}\textit{MOTHER_ED} + E_{1}     \\
-\textit{MATH_VERB}  &amp;= b_{21}\textit{MOTHER_ED} +
+\textit{EERI}       &amp;= b_{11}\textit{MOTHER\textunderscore ED} + E_{1}     \\
+\textit{MATH\textunderscore VERB}  &amp;= b_{21}\textit{MOTHER\textunderscore ED} +
                         a_{21}\textit{EERI} + E_{2}  
 \end{align}\]</span></p>
 <p>These are translated into two separate lines of the <code>lavaan</code> model. Note that we still require quotation marks around the model specification, but to make it easier to read, the quotes are on different lines from the model text.</p>
@@ -796,7 +796,7 @@ Corr(Y_{2}, X_{1})  = b_{21} + a_{21}b_{11}
 <footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
 
   <div class="col-12 col-md-6 mt-3">
-    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-05-31.</p>
+    <p>"<strong>Demystifying Structural Equation Modeling</strong>" was written by Jonathan Amburgey and Sean Raleigh, Westminster College (Salt Lake City, UT). It was last built on 2022-06-06.</p>
   </div>
 
   <div class="col-12 col-md-6 mt-3">
