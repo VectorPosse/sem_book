@@ -21,7 +21,7 @@ options(knitr.graphics.auto_pdf = TRUE)
 
 Welcome to our book on structural equation modeling!
 
-[THIS BOOK IS A WORK IN PROGRESS. FEEL FREE TO PERUSE WHATEVER CONTENT YOU FIND HERE, BUT THE FINAL VERSION WILL NOT BE READY UNTIL SOMETIME IN 2023.]
+[THIS BOOK IS A WORK IN PROGRESS. FEEL FREE TO PERUSE WHATEVER CONTENT YOU FIND HERE, BUT THE FINAL VERSION WILL NOT BE READY UNTIL SOMETIME IN 2024.]
 
 If you want, you can also download this book as a <a href="https://vectorposse.github.io/sem_book/sem_book.pdf" target="_blank">PDF</a> or <a href="https://vectorposse.github.io/sem_book/sem_book.epub" target="_blank">EPUB</a> file. Be aware that the print versions are missing some of the richer formatting of the online version.
 
@@ -45,7 +45,7 @@ Once the pandemic subsided enough for us to offer the course in person again, we
 
 As we mentioned before, our motivation for writing the book was driven by the difficulty we had finding readings for the students. Perhaps that begs the question, should one even try teaching a topic as "difficult" or "advanced" as structural equation modeling to the audience we had? To be sure, the traditional approaches already on the market seem to assume a lot more background than we had at our disposal. And the books that claim to assume less background...well, sometimes they require more than they let on.^["Oh, you don't know anything about matrix algebra or maximum likelihood fitting algorithms? No problem. Go read three or four pages in an appendix and then you'll be 'prepared' to read this book." 😕]
 
-The prerequisite for our class at Westminster College is an intro stats class that covers pretty standard material for such a course: hypothesis testing and confidence intervals for one and two proportions, one and two means (and paired means), ANOVA, chi-squared, and simple linear regression. In some technical sense, very little of that material is truly required to understand our book. Having said that, though, some prior exposure to statistical ideas is helpful for motivating a rationale for building the kinds of models we teach in our course.
+The prerequisite for our class at Westminster University (formerly Westminster College) is an intro stats class that covers pretty standard material for such a course: hypothesis testing and confidence intervals for one and two proportions, one and two means (and paired means), ANOVA, chi-squared, and simple linear regression. In some technical sense, very little of that material is truly required to understand our book. Having said that, though, some prior exposure to statistical ideas is helpful for motivating a rationale for building the kinds of models we teach in our course.
 
 We also benefit in that our intro course introduces students to R. For those lacking R background, the first five chapters [here](https://github.com/VectorPosse/Intro_Stats) [FIX THIS LINK ONCE THE DATA 220 BOOK IS ALSO FULLY ONLINE] should suffice as a basic introduction to R and R Markdown, graphing with `ggplot`, and some basic `tidyverse` stuff about tibbles and data manipulation. We try hard to give lots of fully worked-out code examples in this book that students should be able to copy, paste, and modify slightly to meet their own modeling needs. But know that we make no attempt to be language agnostic here; R is the one and only tool we use.
 
@@ -95,6 +95,6 @@ We use this book to teach a 2-credit-hour course. (Even though it's a special to
 
 We hope you enjoy our textbook. Please send us your feedback!
 
---Jonathan Amburgey ([jamburgey\@westminstercollege.edu](mailto:jamburgey@westminstercollege.edu){.email})
+--Jonathan Amburgey, Ph.D. ([jamburgey\@westminsteru.edu](mailto:jamburgey@westminstercollege.edu){.email})
 
---Sean Raleigh ([sraleigh\@westminstercollege.edu](mailto:sraleigh@westminstercollege.edu){.email})
+--Sean Raleigh, Ph.D. ([sraleigh\@westminsteru.edu](mailto:sraleigh@westminstercollege.edu){.email})
